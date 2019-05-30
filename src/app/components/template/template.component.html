@@ -1,0 +1,101 @@
+<div class="row">
+    <div class="col">
+        <h1>Template Builder</h1>
+    </div>
+    <div class="col">
+        <button class="btn btn-danger" (click)="backClicked()" style="float: right">Back</button>
+    </div>
+</div>
+<hr>
+<ul class="nav nav-tabs fast fadeIn">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#build">Build Your Template</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#upload">Upload Your Template</a>
+    </li>
+</ul>
+<div class="tab-content fast fadeIn">
+    <div class="tab-pane container active" id="build">
+        <div class="row mt-3">
+            <div class="col-10">
+                <ngx-codemirror #codeeditor [(ngModel)]="content" [options]="{
+                            value: 'asd',
+                            lineNumbers: true,
+                            theme: 'material',
+                            mode: 'htmlmixed',
+                            autoCloseTags: true,
+                            autofocus: true
+                          }" [autoFocus]=true (change)="show()"></ngx-codemirror>
+
+            </div>
+            <div class="col-2">
+                <button class="btn btn-success" (click)="show()">Compile</button>
+            </div>
+        </div>
+        <hr>
+        <div class="jumbotron">
+            {{a}}
+        </div>
+    </div>
+    <div class="tab-pane container fade" id="upload">
+        <div class="row mt-3 card-deck">
+            <div class="card text-center" style="width: 18rem;">
+                <div class="card-body">
+                    <!-- <img src="assets/img/fase1.PNG" alt=""> -->
+                    <h5 class="card-title">Locale</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <button class="btn btn-secondary btn-block">Example</button>
+                    <button class="btn btn-primary btn-block">Upload Locale</button>
+                    <button class="btn btn-info btn-block" (click)="fillAssetsList(1)">My Locales</button>
+                </div>
+            </div>
+            <div class="card text-center" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Modal</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <button class="btn btn-secondary btn-block">Example</button>
+                    <button class="btn btn-primary btn-block">Upload Modal</button>
+                    <button class="btn btn-info btn-block" (click)="fillAssetsList(2)">My Modals</button>
+                </div>
+            </div>
+            <div class="card text-center" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Template</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <button class="btn btn-secondary btn-block">Example</button>
+                    <button class="btn btn-primary btn-block">Upload Template</button>
+                    <button class="btn btn-info btn-block" (click)="fillAssetsList(3)">My Templates</button>
+                </div>
+            </div>
+            <div class="card text-center" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Image</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <button class="btn btn-primary btn-block">Upload Image</button>
+                    <button class="btn btn-info btn-block" (click)="fillAssetsList(4)">My Images</button>
+                </div>
+            </div>
+        </div>
+
+
+        <hr>
+
+        <div class="list-group row">
+            <div class="list-group-item list-group-item-action row" *ngFor="let asset of assetsList">
+                <div class="col">
+
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{asset.Name}}</h5>
+                    </div>
+                    <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                </div>
+                <div class="col">
+                    <button class="btn btn-success mr-3">Download</button>
+                    <button class="btn btn-info mr-3">View</button>
+                    <button class="btn btn-danger" (click)="deleteQuestion(question)">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

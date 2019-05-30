@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col">
+        <h1>Quick Builder</h1>
+    </div>
+    <div class="col">
+        <button class="btn btn-danger" (click)="backClicked()" style="float: right">Back</button>
+    </div>
+</div>
+<hr>
+
+<mat-vertical-stepper labelPosition="bottom" linear class="border bg-light animated fadeIn">
+    <mat-step [stepControl]="profileFormGroup">
+        <form [formGroup]="profileFormGroup">
+            <ng-template matStepLabel>Profile</ng-template>
+
+            <mat-form-field>
+                <input matInput placeholder="Nombre" formControlName="name" required>
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+                <input matInput placeholder="Apellido" formControlName="name">
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+                <input matInput placeholder="Rut" formControlName="name" required>
+            </mat-form-field>
+            <br>
+            <div>
+                <button class="btn btn-success" matStepperNext type="button">Siguiente</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step [stepControl]="addressFormGroup">
+        <form [formGroup]="addressFormGroup">
+            <ng-template matStepLabel>Address</ng-template>
+            <mat-form-field>
+                <input matInput placeholder="Calle" formControlName="address" required>
+            </mat-form-field>
+            <div>
+                <button class="btn btn-danger" matStepperPrevious>Atrás</button>
+                <button class="btn btn-success" matStepperNext>Siguiente</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Done</ng-template>
+        <p>Finalizado</p>
+        <div>
+            <button class="btn btn-danger" matStepperPrevious>Atrás</button>
+            <button class="btn btn-success" matStepperNext>Ver mis contenidos</button>
+        </div>
+    </mat-step>
+</mat-vertical-stepper>

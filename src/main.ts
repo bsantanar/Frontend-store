@@ -3,6 +3,8 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
+import 'codemirror/mode/htmlmixed/htmlmixed';
+import 'codemirror/addon/edit/closetag.js';
 
 if (environment.production) {
   enableProdMode();

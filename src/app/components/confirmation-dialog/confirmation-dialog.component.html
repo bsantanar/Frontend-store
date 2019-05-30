@@ -1,0 +1,7 @@
+<div mat-dialog-content>
+    Do you confirm the <b>deletion</b> of this <b>{{message}}</b>
+</div>
+<div mat-dialog-actions align="end">
+    <button class="btn btn-danger mr-2" (click)="onNoClick()" cdkFocusInitial>No</button>
+    <button class="btn btn-success " [mat-dialog-close]="true">Yes</button>
+</div>

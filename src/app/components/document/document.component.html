@@ -1,0 +1,131 @@
+<div class="row">
+    <div class="col">
+        <h1>Document Loader</h1>
+    </div>
+    <div class="col">
+        <button class="btn btn-danger" (click)="backClicked()" style="float: right">Back</button>
+    </div>
+</div>
+<hr>
+
+
+<form class="needs-validation fast fadeIn" (ngSubmit)="onSubmit()" [formGroup]="documentForm">
+    <div class="form-group row">
+        <label>Document URL</label>
+        <input type="url" formControlName="docURL" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.docURL.errors }" required url>
+        <div *ngIf="submitted && f.docURL.errors" class="invalid-feedback">
+            <div *ngIf="f.docURL.errors.required">URL is required</div>
+        </div>
+    </div>
+    <div class="form-group row">
+
+        <button class="btn btn-primary d-flex mr-2"><i class="material-icons">
+                cached
+                </i>&nbsp; Load URL</button>
+        <button class="btn btn-secondary d-flex" *ngIf="submitted"><i class="material-icons">
+                    visibility
+                    </i>&nbsp; Preview</button>
+    </div>
+    <div *ngIf="submitted">
+        <div class="row">
+            <div class="form-group col">
+                <label class="">Document Name</label>
+                <div class="">
+
+                    <input class="form-control" type="text" placeholder="docname-01" name="correo" required>
+                </div>
+            </div>
+            <div class="form-group col">
+                <label class="">Locale Code</label>
+                <div class="">
+
+                    <select class="form-control">
+                            <option value="cl">es-CL</option>
+                        </select>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="form-group col">
+                <label class="">Document Title</label>
+                <div class="">
+
+                    <input class="form-control" type="text" placeholder="doctitle" name="correo" required>
+                </div>
+            </div>
+            <div class="form-group col">
+                <label class="">Domain </label>
+                <div class="">
+                    <!-- <mat-label>Select one or more</mat-label> -->
+                    <mat-select class="form-control" multiple>
+                        <mat-option value="cheese">Cheese</mat-option>
+                        <mat-option value="tomatoes">Tomatoes</mat-option>
+                        <mat-option value="mozarella">Mozzarella</mat-option>
+                        <mat-option value="mushrooms">Mushrooms</mat-option>
+                        <mat-option value="pepperoni">Pepperoni</mat-option>
+                        <mat-option value="onions">Onions</mat-option>
+                    </mat-select>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="form-group col">
+                <label class="">Masked URL</label>
+                <div class="">
+
+                    <input class="form-control" type="text" placeholder="www.123.cl" name="correo" required>
+                </div>
+            </div>
+            <div class="form-group col">
+                <label class="">Task </label>
+                <div class="">
+                    <!-- <mat-label>Select one or more</mat-label> -->
+                    <mat-select class="form-control" multiple>
+                        <mat-option value="cheese">Cheese</mat-option>
+                        <mat-option value="tomatoes">Tomatoes</mat-option>
+                        <mat-option value="mozarella">Mozzarella</mat-option>
+                        <mat-option value="mushrooms">Mushrooms</mat-option>
+                        <mat-option value="pepperoni">Pepperoni</mat-option>
+                        <mat-option value="onions">Onions</mat-option>
+                    </mat-select>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="form-group col">
+                <label class="">Search Snippet </label>
+                <div class="">
+
+                    <textarea class="form-control" placeholder="Description...." required></textarea>
+                </div>
+            </div>
+            <div class="form-group col">
+                <label class="">Keywords </label>
+                <div class="row">
+                    <div class="col-6">
+
+                        <input class="form-control" type="text" placeholder="" required>
+                    </div>
+                    <div class="col-6">
+
+                        <button class="btn btn-success d-flex"><i class="material-icons">
+                                    add
+                                    </i>Add</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <div class="row">
+
+                <button class="btn btn-success d-flex mr-2 ml-2"><i class="material-icons">
+                        backup
+                        </i> &nbsp; Upload Document</button>
+            </div>
+        </div>
+    </div>
+</form>
