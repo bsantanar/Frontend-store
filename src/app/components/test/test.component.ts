@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {MatDialog, MatDialogRef} from '@angular/material';
 import { TitleEditComponent } from './title-edit.component';
 import { CdkDragDrop, moveItemInArray  } from '@angular/cdk/drag-drop';
-import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component'
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-test',

@@ -20,6 +20,7 @@ import { TitleEditComponent } from './components/test/title-edit.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { TemplateComponent } from './components/template/template.component';
 import { DocumentComponent } from './components/document/document.component';
+import { StudyComponent } from './components/study/study.component';
 
 @NgModule({
   entryComponents: [
@@ -36,7 +37,8 @@ import { DocumentComponent } from './components/document/document.component';
     TitleEditComponent,
     ConfirmationDialogComponent,
     TemplateComponent,
-    DocumentComponent
+    DocumentComponent,
+    StudyComponent
   ],
   imports: [
     BrowserModule,

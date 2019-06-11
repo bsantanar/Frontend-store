@@ -9,7 +9,7 @@
 <hr>
 <ul class="nav nav-tabs fast fadeIn">
     <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" href="#build">Build Your Template</a>
+        <a class="nav-link active" data-toggle="tab" href="#build">Code Your Template</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" data-toggle="tab" href="#upload">Upload Your Template</a>
@@ -34,8 +34,9 @@
             </div>
         </div>
         <hr>
+        <h3>Result</h3>
         <div class="jumbotron">
-            {{a}}
+            <div [innerHTML]="a"></div>
         </div>
     </div>
     <div class="tab-pane container fade" id="upload">

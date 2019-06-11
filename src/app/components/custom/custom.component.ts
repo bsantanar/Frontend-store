@@ -25,4 +25,7 @@ export class CustomComponent implements OnInit {
     this.router.navigate(['document']);
   }
 
+  newStudy(){
+    this.router.navigate(['study']);
+  }
 }

@@ -7,6 +7,7 @@ import { CustomComponent } from './components/custom/custom.component';
 import { TestComponent } from './components/test/test.component';
 import { TemplateComponent } from './components/template/template.component';
 import { DocumentComponent } from './components/document/document.component';
+import { StudyComponent } from './components/study/study.component';
 
 
 
@@ -19,6 +20,7 @@ const routes: Routes = [
   {path: 'test', component: TestComponent},
   {path: 'template', component: TemplateComponent},
   {path: 'document', component: DocumentComponent},
+  {path: 'study', component: StudyComponent},
   {path: '**', pathMatch: 'full', redirectTo: 'home'}
 ]
 
