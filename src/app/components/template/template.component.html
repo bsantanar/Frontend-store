@@ -9,14 +9,29 @@
 <hr>
 <ul class="nav nav-tabs fast fadeIn">
     <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" href="#build">Code Your Template</a>
+        <a class="nav-link active" data-toggle="tab" href="#simple">Simple Template Builder</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" data-toggle="tab" href="#upload">Upload Your Template</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#build">Code Your Template</a>
+    </li>
 </ul>
 <div class="tab-content fast fadeIn">
-    <div class="tab-pane container active" id="build">
+    <div class="tab-pane container active" id="simple">
+        <div class="row mt-3">
+            <form [formGroup]="editorForm" (ngSubmit)="submitRichText()">
+                <div class="form-group">
+
+                    <quill-editor [styles]="{height: '250px'}" formControlName="editor"></quill-editor>
+                </div>
+
+                <button class="btn btn-success mt-2">Save</button>
+            </form>
+        </div>
+    </div>
+    <div class="tab-pane container" id="build">
         <div class="row mt-3">
             <div class="col-10">
                 <ngx-codemirror #codeeditor [(ngModel)]="content" [options]="{
@@ -36,7 +51,7 @@
         <hr>
         <h3>Result</h3>
         <div class="jumbotron">
-            <div [innerHTML]="a"></div>
+            <div [innerHTML]="codedTemplate"></div>
         </div>
     </div>
     <div class="tab-pane container fade" id="upload">

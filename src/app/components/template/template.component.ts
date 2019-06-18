@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Location } from '@angular/common';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-template',
@@ -8,56 +9,25 @@ import { Location } from '@angular/common';
 })
 export class TemplateComponent implements OnInit, AfterViewInit {
   @ViewChild('codeeditor') private codeEditor;
-  a:string = `<h1>Press compile button</h1>`;
+  codedTemplate:string = `<h1>Press compile button</h1>`;
   viewBuilder: boolean = false;
   viewUploader: boolean = false;
   assetsList: any[] = [];
+  editorForm: FormGroup;
+
   constructor( private location: Location) { }
 
   ngOnInit() {
+    this.editorForm = new FormGroup({
+      'editor': new FormControl(null)
+    })
   }
   ngAfterViewInit(): void {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
     const editor = this.codeEditor.codeMirror;
     const doc = editor.getDoc();
-    /*doc.setValue(`<div class="container">
-    <div class="row">
-      <div class="col-md-2 col-sm-2 col-xs-2">
-        <b>{{"tutorial.email.inbox" | translate}} (1)</b><br>
-        {{"tutorial.email.drafts" | translate}}<br>
-        {{"tutorial.email.sent" | translate}}<br>
-        {{"tutorial.email.allMail" | translate}}
-      </div>
-      <div class="col-md-10 col-sm-10 col-xs-10">
-        <div class="row">
-          <div class="col-md-2 col-sm-2 col-xs-2">
-            <img src="images/avatars/{{instructions.avatar}}_portrait.png" class="img-circle img-responsive">
-          </div>
-          <div class="col-md-10 col-sm-10 col-xs-10">
-            <b>{{"tutorial.email.from" | translate}}:</b> Sarah Jones <sarah.jones@myemail.com><br>
-            <b>{{"tutorial.email.to" | translate}}:</b> You<br>
-            <b>{{"tutorial.email.subject" | translate}}:</b> Need help with our newspaper article! 
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <h2>Hey! I need your help!</h2>
-            
-          <p>We are making an article for our school newspaper and we need some help recovering information from our local network.</p>
-    
-          <p>Don't worry, in the following step I will give you some advice for making this task.</p>
-    
-          <p>Your help will be very appreciated.</p>
-    
-          <p>Sarah Jones<br>
-          School Newspaper Chief Editor</p>
-        </div>
-      </div>
-    </div>
-  </div>
-      `);*/
-      doc.setValue(`<div class="container" style="margin-top:30px">
+    doc.setValue(`<div class="container" style="margin-top:30px">
       <div class="row">
         <div class="col-sm-4">
           <h2>About Me</h2>
@@ -103,7 +73,7 @@ export class TemplateComponent implements OnInit, AfterViewInit {
     this.location.back();
   }
   show(){
-    this.a = this.codeEditor.codeMirror.getDoc().getValue(); 
+    this.codedTemplate = this.codeEditor.codeMirror.getDoc().getValue(); 
   }
 
   activeBuilder(){
@@ -144,6 +114,10 @@ export class TemplateComponent implements OnInit, AfterViewInit {
         break;
       }
     }
+  }
+
+  submitRichText(){
+    console.log(this.editorForm.get("editor").value);
   }
 
 }

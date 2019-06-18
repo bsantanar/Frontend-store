@@ -8,6 +8,7 @@ import { TestComponent } from './components/test/test.component';
 import { TemplateComponent } from './components/template/template.component';
 import { DocumentComponent } from './components/document/document.component';
 import { StudyComponent } from './components/study/study.component';
+import { LoginComponent } from './components/login/login.component';
 
 
 
@@ -21,6 +22,7 @@ const routes: Routes = [
   {path: 'template', component: TemplateComponent},
   {path: 'document', component: DocumentComponent},
   {path: 'study', component: StudyComponent},
+  {path: 'login', component: LoginComponent},
   {path: '**', pathMatch: 'full', redirectTo: 'home'}
 ]
 
