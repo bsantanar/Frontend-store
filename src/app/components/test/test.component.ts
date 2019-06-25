@@ -6,6 +6,9 @@ import {MatDialog, MatDialogRef} from '@angular/material';
 import { TitleEditComponent } from './title-edit.component';
 import { CdkDragDrop, moveItemInArray  } from '@angular/cdk/drag-drop';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { NewQuestionComponent } from '../new-question/new-question.component';
+import { QuestionsService } from 'src/app/services/questions.service';
+import { SynthesisService } from 'src/app/services/synthesis.service';
 
 @Component({
   selector: 'app-test',
@@ -61,6 +64,11 @@ export class TestComponent implements OnInit {
 
   questions:any[] = [];
 
+  questionsDB:any[] = [];
+  synthesisDB:any[] = [];
+
+  createdQuestions:any[] = [];
+
   question: object = {
       id: null as number,
       title: null as string,
@@ -72,23 +80,54 @@ export class TestComponent implements OnInit {
   myForm: FormGroup;
   synthesisForm: FormGroup;
 
-  constructor(private location: Location, private modalService: NgbModal, private formBuilder: FormBuilder, public dialog: MatDialog) { }
+  constructor(private location: Location, private modalService: NgbModal, private formBuilder: FormBuilder, 
+    public dialog: MatDialog, private questionsService: QuestionsService, private synthesisService: SynthesisService) { }
 
   ngOnInit() {
     this.synthesisForm = this.formBuilder.group({
       id: ['', Validators.required],
       title: ['', Validators.required]
     })
+    this.questionsService.getAllQuestions().subscribe(
+      res => {
+        this.questionsDB = res['questions'];
+        this.createdQuestions = this.questionsDB;
+      },
+      err => {
+        console.log(err);
+      }
+    );
+    this.synthesisService.getAllSynthesis().subscribe(
+      res => {
+        this.synthesisDB = res['synthesis'];
+      },
+      err => {
+        console.log(err);
+      }
+    );
+
   }
 
   submitSynthesis() {
-
-    // stop here if form is invalid
-    if (this.synthesisForm.invalid) {
-      alert('Invalid data.')
-      return;
-    }
-    alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.synthesisForm.value))
+    let newSynth = {};
+    newSynth["title"] = this.synthesisForm.get('title').value;
+    newSynth["synthesisId"] = this.synthesisForm.get('id').value;
+    this.synthesisService.newSynthesis(newSynth).subscribe(
+      res => {
+        this.synthesisService.getAllSynthesis().subscribe(
+          res => {
+            this.synthesisDB = res['synthesis'];
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      },
+      err => {
+        console.log(err);
+      }
+    );
+    
   }
 
   saveTitle(value:string){
@@ -120,14 +159,24 @@ export class TestComponent implements OnInit {
     });
   }
 
-  addQuestion(type:number){
-    let typeName = this.typesQuestions.find(a => a.id===type).type;
-    let aux = {
-      title: `${typeName} question`,
-      id: this.idAux
-    };
-    this.idAux++;
-    this.questions.push(aux);
+  addQuestion(type:any){
+    const dialogRef = this.dialog.open(NewQuestionComponent, {
+      width: '350px',
+      data: type
+    });
+    dialogRef.afterClosed().subscribe(newQuestion => {
+      if(newQuestion){
+        let aux = {
+          title: newQuestion.title,
+          questionId: newQuestion.questionId,
+          hint: newQuestion.hint,
+          required: newQuestion.required,
+          idAux: this.idAux
+        };
+        this.idAux++;
+        this.questions.push(aux);
+      }
+    });
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -142,11 +191,17 @@ export class TestComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
         if(result) {
           let index = this.questions.map( a => {
-              return a.id;
-            } ).indexOf(question.id);
+              return a.idAux;
+            } ).indexOf(question.idAux);
           this.questions.splice(index, 1);
         }
       });
   }
 
+
+  searchQuestion(name: string){
+    this.createdQuestions = this.questionsDB.filter(
+      word => word.title.toLocaleLowerCase().includes(name.toLocaleLowerCase())
+      );
+  }
 }

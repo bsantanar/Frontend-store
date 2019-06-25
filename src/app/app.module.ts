@@ -1,10 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-//Services
-import { AuthService } from './services/auth.service';
+//services
+import { TokenInterceptorService } from './services/token-interceptor.service';
 
 //npm packages
 import { MatStepperModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatDialogModule, MatSelectModule, MatOptionModule } from '@angular/material';
@@ -28,11 +28,14 @@ import { TemplateComponent } from './components/template/template.component';
 import { DocumentComponent } from './components/document/document.component';
 import { StudyComponent } from './components/study/study.component';
 import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { NewQuestionComponent } from './components/new-question/new-question.component';
 
 @NgModule({
   entryComponents: [
     TitleEditComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    NewQuestionComponent
   ],
   declarations: [
     AppComponent,
@@ -46,7 +49,9 @@ import { LoginComponent } from './components/login/login.component';
     TemplateComponent,
     DocumentComponent,
     StudyComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent,
+    NewQuestionComponent
   ],
   imports: [
     HttpClientModule,
@@ -67,8 +72,11 @@ import { LoginComponent } from './components/login/login.component';
     CodemirrorModule,
     QuillModule
   ],
-  providers: [
-  ],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptorService,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

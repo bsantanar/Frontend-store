@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +14,7 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
 
-  constructor(private location: Location, private fb: FormBuilder, private auth: AuthService) { }
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.loginForm = this.fb.group({
@@ -21,19 +23,36 @@ export class LoginComponent implements OnInit {
         Validators.pattern('[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}')]
         )],
       password: ['', Validators.required]
-    })
+    });
   }
 
-  backClicked() {
-    this.location.back();
-  }
 
   login(){
     let loggedUser = {};
     loggedUser["email"] = this.loginForm.get('email').value;
     loggedUser["password"] = this.loginForm.get('password').value;
-    console.log(loggedUser);
-    this.auth.loginUser(loggedUser).subscribe(res => console.log(res), err => console.log(err));
+    //console.log(loggedUser);
+    this.auth.loginUser(loggedUser).subscribe(
+      res => {
+        //console.log(res);
+        localStorage.setItem('token', res['token']);
+        Swal.fire({
+          type: 'success',
+          title: 'Logged in successfully'
+        })
+        this.router.navigate(['/create'])
+      }, 
+      err => {
+        //console.log(err);
+        if(err instanceof HttpErrorResponse){
+            Swal.fire({
+              type: 'error',
+              title: 'Oops...',
+              text: err.error.message
+            });
+        }
+      }
+      );
   }
 
 }

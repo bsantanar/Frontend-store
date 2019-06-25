@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>New Question {{data.type}}</h2>
+<div mat-dialog-content>
+    <form [formGroup]="newQuestionForm">
+        <div class="form-group">
+            <label for="title">Title of the question</label>
+            <input type="text" class="form-control" name="title" placeholder="How old are you?" formControlName="title" [ngClass]="{ 'is-invalid': newQuestionForm.controls.title.errors, 'is-valid': !newQuestionForm.controls.title.errors}">
+        </div>
+        <div class="form-group">
+            <label for="hint">Hint for users</label>
+            <input type="text" class="form-control" name="hint" placeholder="Answer your age in number" formControlName="hint">
+        </div>
+        <div class="form-group">
+            <label for="questionId">Id of your question</label>
+            <input type="text" class="form-control" name="question-age-01" placeholder="How old are you?" formControlName="questionId" [ngClass]="{ 'is-invalid': newQuestionForm.controls.questionId.errors, 'is-valid': !newQuestionForm.controls.questionId.errors}">
+
+        </div>
+        <div class="form-group" *ngIf="isOptions">
+            <label for="options">Options for your question</label>
+            <input type="text" class="form-control" name="question-age-01" formControlName="options">
+
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="required" formControlName="required">
+            <label for="required" class="form-check-label">Required</label>
+        </div>
+
+    </form>
+</div>
+<div mat-dialog-actions align="end">
+    <button class="btn btn-danger mr-2" (click)="onNoClick()" cdkFocusInitial>No</button>
+    <button class="btn btn-success " (click)="save()" [ngClass]="{'disabled': !newQuestionForm.valid}">Yes</button>
+</div>
