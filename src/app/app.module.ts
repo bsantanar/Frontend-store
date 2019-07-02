@@ -30,6 +30,7 @@ import { StudyComponent } from './components/study/study.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { NewQuestionComponent } from './components/new-question/new-question.component';
+import { ErrorInterceptorService } from './services/error-interceptor.service';
 
 @NgModule({
   entryComponents: [
@@ -75,6 +76,11 @@ import { NewQuestionComponent } from './components/new-question/new-question.com
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptorService,
+    multi: true
+  },
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: ErrorInterceptorService,
     multi: true
   }],
   bootstrap: [AppComponent]

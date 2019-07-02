@@ -65,6 +65,7 @@ export class RegisterComponent implements OnInit {
       res => {
         //console.log(res);
         localStorage.setItem('token', res['token']);
+        localStorage.setItem('userId', res['user']._id);
         this.router.navigate(['/create'])
       }, 
       err => {
