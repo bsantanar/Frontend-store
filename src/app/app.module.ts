@@ -13,6 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { QuillModule } from 'ngx-quill';
+import { TagInputModule } from 'ngx-chips';
 
 //project components
 import { AppComponent } from './app.component';
@@ -71,7 +72,8 @@ import { ErrorInterceptorService } from './services/error-interceptor.service';
     MatSelectModule, 
     MatOptionModule,
     CodemirrorModule,
-    QuillModule
+    QuillModule,
+    TagInputModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

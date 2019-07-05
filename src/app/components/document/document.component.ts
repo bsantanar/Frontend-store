@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-document',
@@ -10,7 +10,7 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 export class DocumentComponent implements OnInit {
 
   documentForm: FormGroup;
-  submitted = false;
+  tags = ['asd', 'qwe'];
 
   constructor(private location: Location, private formBuilder: FormBuilder) { }
 
@@ -18,13 +18,15 @@ export class DocumentComponent implements OnInit {
     this.documentForm = this.formBuilder.group({
       docName: ['', Validators.required],
       docURL: ['', Validators.required],
-      maskedURL: ['', [Validators.required, Validators.email]],
+      maskedURL: [''],
       docTitle: ['', [Validators.required, Validators.minLength(6)]],
       localeCode: ['', Validators.required],
       domain: ['', Validators.required],
       task: ['', Validators.required],
-      keywords: [[], Validators.required],
-      searchSnippet: ['', Validators.required]
+      keywords: this.formBuilder.array([]),
+      searchSnippet: [''],
+      relevant: [false],
+      tags: new FormControl()
 
     });
   }
@@ -32,15 +34,35 @@ export class DocumentComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.documentForm.controls; }
 
-  onSubmit() {
+  get getKeywords(){ return this.documentForm.get('keywords') as FormArray }
 
-    // stop here if form is invalid
-    if (this.documentForm.controls.docURL.errors) {
-      alert('Invalid data.')
-      return;
+  addKeyword(){
+    this.getKeywords.push(this.formBuilder.control(''));
+  }
+
+  onSubmit() {
+    let keyAux = [];
+    this.documentForm.controls['tags'].value.forEach(tag => {
+      keyAux.push(tag.value);
+    });
+    let docObj = {
+      docName: this.documentForm.controls['docName'].value,
+      title: this.documentForm.controls['docTitle'].value,
+      locale: this.documentForm.controls['localeCode'].value,
+      relevant: this.documentForm.controls['relevant'].value,
+      task: this.documentForm.controls['task'].value,
+      domain: this.documentForm.controls['domain'].value,
+      keywords: keyAux,
+      date: new Date(),
+      url: this.documentForm.controls['docURL'].value,
+      maskedUrl: this.documentForm.controls['maskedURL'].value,
+      searchSnippet: this.documentForm.controls['searchSnippet'].value,
     }
-    this.submitted = true;
-    alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.documentForm.value))
+    console.log(docObj);
+  }
+
+  show(){
+    console.log(this.documentForm.controls['localeCode'].value);
   }
 
   backClicked() {

@@ -45,13 +45,13 @@ export class LoginComponent implements OnInit {
       }, 
       err => {
         //console.log(err);
-        if(err instanceof HttpErrorResponse){
+        //if(err instanceof HttpErrorResponse){
             Swal.fire({
               type: 'error',
               title: 'Oops...',
-              text: err.error.message
+              text: err
             });
-        }
+        //}
       }
       );
   }

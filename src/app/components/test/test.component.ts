@@ -176,20 +176,22 @@ export class TestComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(newQuestion => {
       if(newQuestion){
-        let aux = {
-          title: newQuestion.title,
-          questionId: newQuestion.questionId,
-          hint: newQuestion.hint,
-          required: newQuestion.required,
-          idAux: this.idAux,
-          type: type.type,
-          _id: newQuestion.id,
-          options: newQuestion.options
-        };
+        // let aux = {
+        //   title: newQuestion.title,
+        //   questionId: newQuestion.questionId,
+        //   hint: newQuestion.hint,
+        //   required: newQuestion.required,
+        //   idAux: this.idAux,
+        //   type: type.type,
+        //   _id: newQuestion.id,
+        //   options: newQuestion.options
+        // };
+        //console.log(newQuestion);
+        newQuestion['idAux'] = this.idAux;
         this.idAux++;
-        this.questions.push(aux);
+        this.questions.push(newQuestion);
         this.getMyQuestions();
-        this.getQuestions.push(new FormControl(newQuestion.id));
+        this.getQuestions.push(new FormControl(newQuestion._id));
       }
     });
   }
@@ -312,6 +314,9 @@ export class TestComponent implements OnInit {
           this.questionnaireService.deleteQuestionnaire(questionnaire._id).subscribe(
             res => {
               this.questionnairesDB = this.questionnairesDB.filter(q => q._id !== questionnaire._id);
+              this.questionnaireForm.reset();
+              this.questionnaireForm.controls['questionnaireId'].setValue("New Questionnaire");
+              this.questions = [];
             },
             err => {
               console.log(err);

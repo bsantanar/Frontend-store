@@ -95,67 +95,98 @@ export class NewQuestionComponent implements OnInit {
     this.getOptions.push(this.fb.control(''));
   }
 
+  deleteOption(i:number){
+    this.getOptions.removeAt(i);
+  }
+
+  scaleCheck(){
+    if(this.isScale){
+      let max = this.newQuestionForm.get('max').value;
+      let min = this.newQuestionForm.get('min').value;
+      if(max > min && max > 0 && min >= 0){
+        return true;
+      }
+      return false;
+    }
+    return true;
+  }
+
+  stepCheck(){
+    if(this.isScale){
+      let step = this.newQuestionForm.get('step').value;
+      let max = this.newQuestionForm.get('max').value;
+      let min = this.newQuestionForm.get('min').value;
+      if(step >= min && step <= max && step !== 0){
+        return true;
+      }
+      return false;
+    }
+    return true;
+  }
+
   save(){
-    let question = {};
-    question['title'] = this.newQuestionForm.get('title').value;
-    question['questionId'] = this.newQuestionForm.get('questionId').value;
-    question['hint'] = this.newQuestionForm.get('hint').value;
-    question['required'] = this.newQuestionForm.get('required').value;
-    if(this.isOptions){
-      question['options'] = this.newQuestionForm.get('options').value;
-    } else if(this.isScale){
-      question['min'] = this.newQuestionForm.get('min').value;
-      question['max'] = this.newQuestionForm.get('max').value;
-      question['step'] = this.newQuestionForm.get('step').value;
-      question['minLabel'] = this.newQuestionForm.get('minLabel').value;
-      question['maxLabel'] = this.newQuestionForm.get('maxLabel').value;
-    } else if(this.isRating){
-      question['maxStars'] = this.newQuestionForm.get('maxStars').value;
-    }
-    //console.log(this.newQuestionForm.get('options').value);
-    //console.log(question);
-    if(!this.isEdit){
-      question['user'] = localStorage.getItem('userId');
-      question['type'] = this.data.type.toLowerCase();
-      this.questionService.newQuestion(question).subscribe(
-        res => {
-          //console.log(res);
-          question['id'] = res['question']._id;
-        },
-        err => {
-          if(err instanceof HttpErrorResponse){
-            if(err.status){
-              Swal.fire({
-                type: 'error',
-                title: 'Oops...',
-                text: `Error! ${err.status}`
-              });
+    if(this.scaleCheck() && this.stepCheck()){
+      let question = {};
+      question['title'] = this.newQuestionForm.get('title').value;
+      question['questionId'] = this.newQuestionForm.get('questionId').value;
+      question['hint'] = this.newQuestionForm.get('hint').value;
+      question['required'] = this.newQuestionForm.get('required').value;
+      if(this.isOptions){
+        question['options'] = this.newQuestionForm.get('options').value;
+      } else if(this.isScale){
+        question['min'] = this.newQuestionForm.get('min').value;
+        question['max'] = this.newQuestionForm.get('max').value;
+        question['step'] = this.newQuestionForm.get('step').value;
+        question['minLabel'] = this.newQuestionForm.get('minLabel').value;
+        question['maxLabel'] = this.newQuestionForm.get('maxLabel').value;
+      } else if(this.isRating){
+        question['maxStars'] = this.newQuestionForm.get('maxStars').value;
+      }
+      //console.log(this.newQuestionForm.get('options').value);
+      //console.log(question);
+      if(!this.isEdit){
+        question['user'] = localStorage.getItem('userId');
+        question['type'] = this.data.type.toLowerCase();
+        this.questionService.newQuestion(question).subscribe(
+          res => {
+            //console.log(res);
+            question['_id'] = res['question']._id;
+          },
+          err => {
+            if(err instanceof HttpErrorResponse){
+              if(err.status){
+                Swal.fire({
+                  type: 'error',
+                  title: 'Oops...',
+                  text: `Error! ${err.status}`
+                });
+              }
             }
+            //console.log(err);
           }
-          //console.log(err);
-        }
-      );
-    }else {
-      this.questionService.editQuestion(this.data._id, question).subscribe(
-        res => {
-          //console.log(res);
-        },
-        err => {
-          if(err instanceof HttpErrorResponse){
-            if(err.status){
-              Swal.fire({
-                type: 'error',
-                title: 'Oops...',
-                text: `Error! ${err.status}`
-              });
+        );
+      }else {
+        this.questionService.editQuestion(this.data._id, question).subscribe(
+          res => {
+            //console.log(res);
+          },
+          err => {
+            if(err instanceof HttpErrorResponse){
+              if(err.status){
+                Swal.fire({
+                  type: 'error',
+                  title: 'Oops...',
+                  text: `Error! ${err.status}`
+                });
+              }
             }
+            //console.log(err);
           }
-          //console.log(err);
-        }
-      )
+        )
+      }
+      //console.log(this.newQuestionForm.value);
+      this.dialogRef.close(question)
     }
-    //console.log(this.newQuestionForm.value);
-    this.dialogRef.close(question);
   }
 
   onNoClick(): void {

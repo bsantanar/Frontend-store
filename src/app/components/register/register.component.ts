@@ -70,15 +70,15 @@ export class RegisterComponent implements OnInit {
       }, 
       err => {
         //console.log(err);
-        if(err instanceof HttpErrorResponse){
-          if(err.status === 409){
+        // if(err instanceof HttpErrorResponse){
+        //   if(err.status === 409){
             Swal.fire({
               type: 'error',
               title: 'Oops...',
-              text: 'Email already exists!'
+              text: err
             })
-          }
-        }
+         // }
+        //}
       }
     );
   }
