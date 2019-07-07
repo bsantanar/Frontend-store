@@ -148,14 +148,14 @@
 <hr>
 <h3>Your Documents</h3>
 <div class="list-group mt-3 mb-3">
-    <div class="list-group-item row">
+    <div class="list-group-item row" *ngFor="let doc of myDocuments">
         <div class="col">
 
             <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">Document Title</h5>
+                <h5 class="mb-1">{{doc.title}}</h5>
             </div>
             <b></b>
-            <p class="mb-1">URL <b>www.test.cl</b></p>
+            <p class="mb-1">URL <b>{{doc.url}}</b></p>
         </div>
         <div class="col">
             <button type="button" class="btn btn-success mr-3">Edit</button>

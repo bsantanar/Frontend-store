@@ -86,6 +86,6 @@
     </form>
 </div>
 <div mat-dialog-actions align="end">
-    <button class="btn btn-danger mr-2" (click)="onNoClick()" cdkFocusInitial>No</button>
-    <button class="btn btn-success " (click)="save()" [ngClass]="{'disabled': !newQuestionForm.valid}">Yes</button>
+    <button class="btn btn-danger mr-2" (click)="onNoClick()" cdkFocusInitial>Cancel</button>
+    <button class="btn btn-success " (click)="save()" [ngClass]="{'disabled': !newQuestionForm.valid}">Save</button>
 </div>

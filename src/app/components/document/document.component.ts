@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
+import { DocumentsService } from 'src/app/services/documents.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-document',
@@ -10,11 +12,12 @@ import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@ang
 export class DocumentComponent implements OnInit {
 
   documentForm: FormGroup;
-  tags = ['asd', 'qwe'];
+  myDocuments: any = [];
 
-  constructor(private location: Location, private formBuilder: FormBuilder) { }
+  constructor(private location: Location, private formBuilder: FormBuilder, private docService: DocumentsService) { }
 
   ngOnInit() {
+    this.getDocuments();
     this.documentForm = this.formBuilder.group({
       docName: ['', Validators.required],
       docURL: ['', Validators.required],
@@ -31,6 +34,21 @@ export class DocumentComponent implements OnInit {
     });
   }
 
+  getDocuments(){
+    this.docService.getMyDocs().subscribe(
+      res => {
+        this.myDocuments = res['documents'];
+      },
+      err => {
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: err
+        });
+      }
+    );
+  }
+
   // convenience getter for easy access to form fields
   get f() { return this.documentForm.controls; }
 
@@ -42,9 +60,12 @@ export class DocumentComponent implements OnInit {
 
   onSubmit() {
     let keyAux = [];
-    this.documentForm.controls['tags'].value.forEach(tag => {
-      keyAux.push(tag.value);
-    });
+    if(this.documentForm.controls['tags'].value){
+
+      this.documentForm.controls['tags'].value.forEach(tag => {
+        keyAux.push(tag.value);
+      });
+    }
     let docObj = {
       docName: this.documentForm.controls['docName'].value,
       title: this.documentForm.controls['docTitle'].value,
@@ -57,8 +78,22 @@ export class DocumentComponent implements OnInit {
       url: this.documentForm.controls['docURL'].value,
       maskedUrl: this.documentForm.controls['maskedURL'].value,
       searchSnippet: this.documentForm.controls['searchSnippet'].value,
+      user: localStorage.getItem('userId')
     }
-    console.log(docObj);
+    //console.log(docObj);
+    this.docService.newDoc(docObj).subscribe(
+      res => {
+        //console.log(res);
+      },
+      err => {
+        //console.log(err);
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: err
+        });
+      }
+    )
   }
 
   show(){
