@@ -51,17 +51,18 @@
                 OK!
             </div>
         </div>
-        <!-- <div class="col mb-3">
+        <div class="col-4 mb-3">
             <label for="confirmPassword">Confirm your password</label>
-            <input type="password" class="form-control" name="confirmPassword" formControlName="confirmPassword" [ngClass]="{ 'is-invalid': registerForm.value.confirmPassword !== registerForm.value.password,
-             'is-valid': registerForm.value.confirmPassword == registerForm.value.password}">
-            <div class="invalid-feedback">
-                <div>Passwords don't match.</div>
+            <input type="password" class="form-control" name="confirmPassword" formControlName="confirmPassword" [ngClass]="{ 'is-invalid': registerForm.controls.confirmPassword.errors,
+             'is-valid': !registerForm.controls.confirmPassword.errors}">
+            <div *ngIf="registerForm.controls.confirmPassword.errors" class="invalid-feedback">
+                <div *ngIf="registerForm.controls.confirmPassword.errors.required">Password is required</div>
+                <div *ngIf="registerForm.controls.confirmPassword.errors.mismatch">Password is no the same</div>
             </div>
             <div class="valid-feedback">
                 OK!
             </div>
-        </div> -->
+        </div>
     </div>
 
     <button class="btn btn-success float-right" [ngClass]="{'disabled': !registerForm.valid}">Register</button>

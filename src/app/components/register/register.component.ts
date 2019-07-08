@@ -26,11 +26,7 @@ export class RegisterComponent implements OnInit {
         Validators.required,
         Validators.minLength(3)
       ])],
-      // confirmPassword: ['', Validators.compose([
-      //   Validators.required,
-      //   Validators.minLength(3),
-      //   //this.confirmPasswords.bind(this)
-      // ])],
+      confirmPassword: new FormControl(),
       name: ['', Validators.compose([
         Validators.required,
         Validators.minLength(3)
@@ -40,12 +36,16 @@ export class RegisterComponent implements OnInit {
         Validators.minLength(3)
       ])]
 
-    })
+    });
+    this.registerForm.controls['confirmPassword'].setValidators([
+      Validators.required,
+      this.confirmPasswords.bind(this.registerForm)
+    ]);
   }
 
   confirmPasswords(control: FormControl): {[key:string]:boolean}{
-    let form = this;
-    if(control.value !== form.registerForm.controls['password'].value){
+    let form:any = this;
+    if(control.value !== form.controls['password'].value){
       return {
         mismatch:true
       }
