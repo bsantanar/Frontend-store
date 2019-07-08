@@ -161,7 +161,7 @@
                     <div class="form-group col">
                         <button class="btn btn-success float-right mr-2" *ngIf="!editSynthesis" [ngClass]="{'disabled': !synthesisForm.valid}">Add Synthesis</button>
                         <button type="submit" class="btn btn-success float-right mr-2" *ngIf="editSynthesis" [ngClass]="{'disabled': !synthesisForm.valid}">Edit Synthesis</button>
-                        <button type="button" class="btn btn-danger float-right mr-2" *ngIf="editSynthesis" (click)="cancelSynthesis()" [ngClass]="{'disabled': !synthesisForm.valid}">Cancel</button>
+                        <button type="button" class="btn btn-danger float-right mr-2" *ngIf="editSynthesis" (click)="cancelSynthesis()">Cancel</button>
                     </div>
                 </form>
                 <hr>

@@ -19,4 +19,12 @@ export class DocumentsService {
     return this.http.post(this.documentsURL, document);
   }
 
+  public editDoc(id, document){
+    return this.http.put(this.documentsURL + '/' + id, document);
+  }
+
+  public deleteDoc(id){
+    return this.http.delete(this.documentsURL + '/' + id);
+  }
+
 }

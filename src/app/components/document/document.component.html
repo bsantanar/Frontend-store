@@ -114,14 +114,8 @@
                     <div class="col-6">
 
                         <!-- <input class="form-control" type="text" placeholder=""> -->
-                        <tag-input formControlName='tags' [placeholder]="'Enter new keyword'"></tag-input>
+                        <tag-input formControlName='tags' [placeholder]="'Press Enter for new keyword'"></tag-input>
 
-                    </div>
-                    <div class="col-6">
-
-                        <button type="button" class="btn btn-success d-flex" (click)="show()"><i class="material-icons">
-                                    add
-                                    </i>Add</button>
                     </div>
                 </div>
             </div>
@@ -134,12 +128,14 @@
         <div class="form-group">
             <div class="row">
 
-                <button class="btn btn-success d-flex mr-2 ml-2" type="submit" [ngClass]="{'disabled': !documentForm.valid}"><i class="material-icons">
+                <button class="btn btn-success d-flex mr-2 ml-2" type="submit" *ngIf="!isEdit" [ngClass]="{'disabled': !documentForm.valid}"><i class="material-icons">
                         backup
                         </i> &nbsp; Upload Document</button>
-                <button type="button" class="btn btn-secondary d-flex" [ngClass]="{'disabled': !documentForm.valid}"><i class="material-icons">
+                <button type="button" class="btn btn-secondary d-flex" *ngIf="!isEdit" [ngClass]="{'disabled': !documentForm.valid}"><i class="material-icons">
                                     visibility
                                     </i>&nbsp; Preview</button>
+                <button type="submit" class="btn btn-success float-right mr-2" *ngIf="isEdit" [ngClass]="{'disabled': !documentForm.valid}">Edit Document</button>
+                <button type="button" class="btn btn-danger float-right mr-2" *ngIf="isEdit" (click)="clearEdit()">Cancel</button>
             </div>
         </div>
     </div>
@@ -155,11 +151,11 @@
                 <h5 class="mb-1">{{doc.title}}</h5>
             </div>
             <b></b>
-            <p class="mb-1">URL <b>{{doc.url}}</b></p>
+            <p class="mb-1">URL <b>{{doc.url}}</b> | Document Name: {{doc.docName}}</p>
         </div>
         <div class="col">
-            <button type="button" class="btn btn-success mr-3">Edit</button>
-            <button type="button" class="btn btn-danger">Delete</button>
+            <button type="button" class="btn btn-success mr-3" (click)="editDoc(doc)">Edit</button>
+            <button type="button" class="btn btn-danger" (click)="deleteDoc(doc)">Delete</button>
         </div>
     </div>
 </div>

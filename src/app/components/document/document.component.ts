@@ -3,6 +3,8 @@ import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import { DocumentsService } from 'src/app/services/documents.service';
 import Swal from 'sweetalert2';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-document',
@@ -13,8 +15,11 @@ export class DocumentComponent implements OnInit {
 
   documentForm: FormGroup;
   myDocuments: any = [];
+  isEdit: Boolean = false;
+  docIdEdit: String;
 
-  constructor(private location: Location, private formBuilder: FormBuilder, private docService: DocumentsService) { }
+  constructor(private location: Location, private formBuilder: FormBuilder, private docService: DocumentsService, 
+    public dialog: MatDialog) { }
 
   ngOnInit() {
     this.getDocuments();
@@ -58,6 +63,54 @@ export class DocumentComponent implements OnInit {
     this.getKeywords.push(this.formBuilder.control(''));
   }
 
+  editDoc(doc:any){
+    let tagsObj = [];
+    this.isEdit = true;
+    this.documentForm.controls['docName'].setValue(doc.docName);
+    this.documentForm.controls['docTitle'].setValue(doc.title);
+    this.documentForm.controls['localeCode'].setValue(doc.locale);
+    this.documentForm.controls['docURL'].setValue(doc.url);
+    this.documentForm.controls['maskedURL'].setValue(doc.maskedUrl);
+    this.documentForm.controls['relevant'].setValue(doc.relevant);
+    this.documentForm.controls['searchSnippet'].setValue(doc.searchSnippet);
+    this.documentForm.controls['domain'].setValue(doc.domain);
+    this.documentForm.controls['task'].setValue(doc.task);
+    doc.keywords.forEach(k => {
+      tagsObj.push({display: k, value: k});
+    });
+    this.documentForm.controls['tags'].setValue(tagsObj);
+    this.docIdEdit = doc._id;
+  }
+
+  clearEdit(){
+    this.isEdit = false;
+    this.documentForm.reset();
+  }
+
+  deleteDoc(doc:any){
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: doc.title
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.docService.deleteDoc(doc._id).subscribe(
+          res => {
+            this.myDocuments = this.myDocuments.filter(d => d._id !== doc._id);
+            this.documentForm.reset();
+          },
+          err => {
+            Swal.fire({
+              type: 'error',
+              title: 'Oops...',
+              text: err
+            });
+          }
+        );
+      }
+    });
+  }
+
   onSubmit() {
     let keyAux = [];
     if(this.documentForm.controls['tags'].value){
@@ -77,27 +130,43 @@ export class DocumentComponent implements OnInit {
       date: new Date(),
       url: this.documentForm.controls['docURL'].value,
       maskedUrl: this.documentForm.controls['maskedURL'].value,
-      searchSnippet: this.documentForm.controls['searchSnippet'].value,
-      user: localStorage.getItem('userId')
+      searchSnippet: this.documentForm.controls['searchSnippet'].value
     }
     //console.log(docObj);
-    this.docService.newDoc(docObj).subscribe(
-      res => {
-        //console.log(res);
-      },
-      err => {
-        //console.log(err);
-        Swal.fire({
-          type: 'error',
-          title: 'Oops...',
-          text: err
-        });
-      }
-    )
-  }
-
-  show(){
-    console.log(this.documentForm.controls['localeCode'].value);
+    if(!this.isEdit){
+      docObj['user'] = localStorage.getItem('userId');
+      this.docService.newDoc(docObj).subscribe(
+        res => {
+          //console.log(res);
+          this.getDocuments();
+          this.documentForm.reset();
+        },
+        err => {
+          //console.log(err);
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: err
+          });
+        }
+      );
+    } else {
+      this.docService.editDoc(this.docIdEdit, docObj).subscribe(
+        res => {
+          this.getDocuments();
+          this.documentForm.reset();
+          this.isEdit = false;
+        },
+        err => {
+          //console.log(err);
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: err
+          });
+        }
+      );
+    }
   }
 
   backClicked() {
