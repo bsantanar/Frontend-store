@@ -32,12 +32,16 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { NewQuestionComponent } from './components/new-question/new-question.component';
 import { ErrorInterceptorService } from './services/error-interceptor.service';
+import { NewAssetComponent } from './components/document/new-asset/new-asset.component';
+import { EditAssetComponent } from './components/document/edit-asset/edit-asset.component';
 
 @NgModule({
   entryComponents: [
     TitleEditComponent,
     ConfirmationDialogComponent,
-    NewQuestionComponent
+    NewQuestionComponent,
+    NewAssetComponent,
+    EditAssetComponent
   ],
   declarations: [
     AppComponent,
@@ -53,7 +57,9 @@ import { ErrorInterceptorService } from './services/error-interceptor.service';
     StudyComponent,
     LoginComponent,
     RegisterComponent,
-    NewQuestionComponent
+    NewQuestionComponent,
+    NewAssetComponent,
+    EditAssetComponent
   ],
   imports: [
     HttpClientModule,

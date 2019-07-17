@@ -5,6 +5,9 @@ import { DocumentsService } from 'src/app/services/documents.service';
 import Swal from 'sweetalert2';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { MatDialog } from '@angular/material';
+import { NewAssetComponent } from './new-asset/new-asset.component';
+import { EditAssetComponent } from './edit-asset/edit-asset.component';
+import { AssetsService } from 'src/app/services/assets.service';
 
 @Component({
   selector: 'app-document',
@@ -17,12 +20,18 @@ export class DocumentComponent implements OnInit {
   myDocuments: any = [];
   isEdit: Boolean = false;
   docIdEdit: String;
+  myLocales: any = [];
+  myDomains: any = [];
+  myTasks: any = []; 
 
   constructor(private location: Location, private formBuilder: FormBuilder, private docService: DocumentsService, 
-    public dialog: MatDialog) { }
+    public dialog: MatDialog, public assetService: AssetsService) { }
 
   ngOnInit() {
     this.getDocuments();
+    this.getLocales();
+    this.getDomains();
+    this.getTasks();
     this.documentForm = this.formBuilder.group({
       docName: ['', Validators.required],
       docURL: ['', Validators.required],
@@ -35,8 +44,52 @@ export class DocumentComponent implements OnInit {
       searchSnippet: [''],
       relevant: [false],
       tags: new FormControl()
-
     });
+  }
+
+  getLocales(){
+    this.assetService.getMyLocales().subscribe(
+      res => {
+        this.myLocales = res['locales']
+      },
+      err => {
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: err
+        });
+      }
+    );
+  }
+
+  getDomains(){
+    this.assetService.getMyDomains().subscribe(
+      res => {
+        this.myDomains = res['domains']
+      },
+      err => {
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: err
+        });
+      }
+    );
+  }
+
+  getTasks(){
+    this.assetService.getMyTasks().subscribe(
+      res => {
+        this.myTasks = res['tasks']
+      },
+      err => {
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: err
+        });
+      }
+    );
   }
 
   getDocuments(){
@@ -61,6 +114,49 @@ export class DocumentComponent implements OnInit {
 
   addKeyword(){
     this.getKeywords.push(this.formBuilder.control(''));
+  }
+
+  addAsset(type: number){
+    const dialogRef = this.dialog.open(NewAssetComponent, {
+      width: '600px',
+      data: type
+    });
+    dialogRef.afterClosed().subscribe(newAsset => {
+      if(newAsset){
+        switch(type){
+          case 1: 
+            this.getLocales();
+            break;
+          case 2:
+            this.getDomains();
+            break;
+          case 3:
+            this.getTasks();
+            break;
+        }
+      }
+    });
+  }
+
+  editAsset(type: number){
+    const dialogRef = this.dialog.open(EditAssetComponent, {
+      width: '600px',
+      data: type
+    });
+    dialogRef.afterClosed().subscribe(asset => {
+      this.documentForm.reset();
+      switch(type){
+        case 1: 
+          this.getLocales();
+          break;
+        case 2:
+          this.getDomains();
+          break;
+        case 3:
+          this.getTasks();
+          break;
+      }
+    });
   }
 
   editDoc(doc:any){

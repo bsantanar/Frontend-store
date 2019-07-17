@@ -12,9 +12,10 @@
 <form class="needs-validation fast fadeIn" (ngSubmit)="onSubmit()" [formGroup]="documentForm">
     <div class="form-group">
         <label>Document URL</label>
-        <input type="url" formControlName="docURL" placeholder="http://www.web.com/important-url" class="form-control" [ngClass]="{ 'is-invalid': f.docURL.errors }">
+        <input type="url" formControlName="docURL" placeholder="http://www.web.com/important-url" pattern="https?://.+" class="form-control" [ngClass]="{ 'is-invalid': f.docURL.errors, 'is-valid': !f.docURL.errors }">
         <div *ngIf="f.docURL.errors" class="invalid-feedback">
             <div *ngIf="f.docURL.errors.required">URL is required</div>
+            <div *ngIf="f.docURL.errors.pattern">Not a Url. Example: http://www.example.com/test</div>
         </div>
     </div>
     <div>
@@ -23,7 +24,7 @@
                 <label class="">Document Name</label>
                 <div class="">
 
-                    <input class="form-control" type="text" placeholder="docname-01" formControlName="docName" [ngClass]="{ 'is-invalid': f.docName.errors }">
+                    <input class="form-control" type="text" placeholder="docname-01" formControlName="docName" [ngClass]="{ 'is-invalid': f.docName.errors, 'is-valid': !f.docName.errors }">
                     <div *ngIf="f.docName.errors" class="invalid-feedback">
                         <div *ngIf="f.docName.errors.required">Name is required</div>
                     </div>
@@ -31,13 +32,20 @@
             </div>
             <div class="form-group col">
                 <label class="">Locale Code</label>
-                <div>
+                <div class="row">
+                    <div class="col">
 
-                    <select formControlName="localeCode" class="form-control" [ngClass]="{ 'is-invalid': f.localeCode.errors }">
-                            <option value="es-CL">es-CL</option>
-                    </select>
-                    <div *ngIf="f.localeCode.errors" class="invalid-feedback">
-                        <div *ngIf="f.localeCode.errors.required">Locale Code is required</div>
+                        <select formControlName="localeCode" class="form-control" [ngClass]="{ 'is-invalid': f.localeCode.errors, 'is-valid': !f.localeCode.errors }">
+                                <option *ngFor="let locale of myLocales" [ngValue]="locale.code">{{locale.code}}</option>
+                        </select>
+                        <div *ngIf="f.localeCode.errors" class="invalid-feedback">
+                            <div *ngIf="f.localeCode.errors.required">Locale Code is required</div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <button type="button" class="btn btn-success mr-2" (click)="addAsset(1)">New</button>
+                        <button type="button" class="btn btn-secondary" (click)="editAsset(1)">Manage</button>
                     </div>
                 </div>
             </div>
@@ -48,26 +56,34 @@
                 <label class="">Document Title</label>
                 <div class="">
 
-                    <input class="form-control" type="text" placeholder="The origin of humanity" formControlName="docTitle" [ngClass]="{ 'is-invalid': f.docTitle.errors }">
+                    <input class="form-control" type="text" placeholder="The origin of humanity" formControlName="docTitle" [ngClass]="{ 'is-invalid': f.docTitle.errors, 'is-valid': !f.docTitle.errors }">
                     <div *ngIf="f.docTitle.errors" class="invalid-feedback">
                         <div *ngIf="f.docTitle.errors.required">Title is required</div>
+                        <div *ngIf="f.docTitle.errors.minlength">Length minimum is 6 characters</div>
                     </div>
                 </div>
             </div>
             <div class="form-group col">
                 <label class="">Domain </label>
-                <div class="">
-                    <!-- <mat-label>Select one or more</mat-label> -->
-                    <mat-select formControlName="domain" [ngClass]="{ 'is-invalid': f.domain.errors }" class="form-control" multiple>
-                        <mat-option value="cheese">Cheese</mat-option>
-                        <mat-option value="tomatoes">Tomatoes</mat-option>
-                        <mat-option value="mozarella">Mozzarella</mat-option>
-                        <mat-option value="mushrooms">Mushrooms</mat-option>
-                        <mat-option value="pepperoni">Pepperoni</mat-option>
-                        <mat-option value="onions">Onions</mat-option>
-                    </mat-select>
-                    <div *ngIf="f.domain.errors" class="invalid-feedback">
-                        <div *ngIf="f.domain.errors.required">Domain is required</div>
+                <div class="row">
+                    <div class="col">
+                        <!-- <mat-label>Select one or more</mat-label> -->
+                        <mat-select formControlName="domain" [ngClass]="{ 'is-invalid': f.domain.errors, 'is-valid': !f.domain.errors }" class="form-control" multiple>
+                            <!-- <mat-option value="cheese">Cheese</mat-option>
+                            <mat-option value="tomatoes">Tomatoes</mat-option>
+                            <mat-option value="mozarella">Mozzarella</mat-option>
+                            <mat-option value="mushrooms">Mushrooms</mat-option>
+                            <mat-option value="pepperoni">Pepperoni</mat-option>
+                            <mat-option value="onions">Onions</mat-option> -->
+                            <mat-option *ngFor="let dom of myDomains" [value]="dom.name">{{dom.name}}</mat-option>
+                        </mat-select>
+                        <div *ngIf="f.domain.errors" class="invalid-feedback">
+                            <div *ngIf="f.domain.errors.required">Domain is required</div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-success mr-2" (click)="addAsset(2)">New</button>
+                        <button type="button" class="btn btn-secondary" (click)="editAsset(2)">Manage</button>
                     </div>
                 </div>
             </div>
@@ -83,18 +99,24 @@
             </div>
             <div class="form-group col">
                 <label class="">Task </label>
-                <div class="">
-                    <!-- <mat-label>Select one or more</mat-label> -->
-                    <mat-select formControlName="task" class="form-control" [ngClass]="{ 'is-invalid': f.task.errors }" multiple>
-                        <mat-option value="cheese">Cheese</mat-option>
-                        <mat-option value="tomatoes">Tomatoes</mat-option>
-                        <mat-option value="mozarella">Mozzarella</mat-option>
-                        <mat-option value="mushrooms">Mushrooms</mat-option>
-                        <mat-option value="pepperoni">Pepperoni</mat-option>
-                        <mat-option value="onions">Onions</mat-option>
-                    </mat-select>
-                    <div *ngIf="f.task.errors" class="invalid-feedback">
-                        <div *ngIf="f.task.errors.required">Task is required</div>
+                <div class="row">
+                    <div class="col">
+                        <!-- <mat-label>Select one or more</mat-label> -->
+                        <mat-select formControlName="task" class="form-control" [ngClass]="{ 'is-invalid': f.task.errors, 'is-valid': !f.task.errors }" multiple>
+                            <!-- <mat-option value="cheese">Cheese</mat-option>
+                            <mat-option value="tomatoes">Tomatoes</mat-option>
+                            <mat-option value="mozarella">Mozzarella</mat-option>
+                            <mat-option value="mushrooms">Mushrooms</mat-option>
+                            <mat-option value="pepperoni">Pepperoni</mat-option> -->
+                            <mat-option *ngFor="let task of myTasks" [value]="task.name">{{task.name}}</mat-option>
+                        </mat-select>
+                        <div *ngIf="f.task.errors" class="invalid-feedback">
+                            <div *ngIf="f.task.errors.required">Task is required</div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-success mr-2" (click)="addAsset(3)">New</button>
+                        <button type="button" class="btn btn-secondary" (click)="editAsset(3)">Manage</button>
                     </div>
                 </div>
             </div>
