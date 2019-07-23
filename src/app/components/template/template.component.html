@@ -21,32 +21,38 @@
 <div class="tab-content fast fadeIn">
     <div class="tab-pane container active" id="simple">
         <div class="row mt-3">
-            <form [formGroup]="editorForm" (ngSubmit)="submitRichText()">
+            <form [formGroup]="editorForm" (ngSubmit)="saveRichText()">
                 <div class="form-group">
 
                     <quill-editor [styles]="{height: '250px'}" formControlName="editor"></quill-editor>
                 </div>
 
-                <button class="btn btn-success mt-2">Save</button>
+                <button class="btn btn-danger mt-2" type="button" (click)="clearRichText()">Clear</button>
+                <button class="btn btn-success mt-2" style="float: right">Save</button>
             </form>
         </div>
     </div>
     <div class="tab-pane container" id="build">
         <div class="row mt-3">
-            <div class="col-10">
-                <ngx-codemirror #codeeditor [(ngModel)]="content" [options]="{
-                            value: 'asd',
-                            lineNumbers: true,
-                            theme: 'material',
-                            mode: 'htmlmixed',
-                            autoCloseTags: true,
-                            autofocus: true
-                          }" [autoFocus]=true (change)="show()"></ngx-codemirror>
+            <div class="col">
 
+                <ngx-codemirror #codeeditor [(ngModel)]="content" [options]="{
+                                value: 'asd',
+                                lineNumbers: true,
+                                theme: 'material',
+                                mode: 'htmlmixed',
+                                autoCloseTags: true,
+                                autofocus: true,
+                                autoRefresh: true
+                              }" [autoFocus]=true (change)="show()"></ngx-codemirror>
             </div>
-            <div class="col-2">
-                <button class="btn btn-success" (click)="show()">Compile</button>
-            </div>
+
+        </div>
+        <div class="mt-3">
+            <button class="btn btn-success" (click)="exampleHtmlCode()">Load Example</button>
+            <button class="btn btn-secondary ml-3" (click)="show()">Compile</button>
+            <button class="btn btn-danger ml-3" (click)="clearHtmlCoded()">Clear</button>
+            <button class="btn btn-success" (click)="saveHtmlCoded()" style="float: right">Save</button>
         </div>
         <hr>
         <h3>Result</h3>
@@ -88,7 +94,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Image</h5>
                     <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <button class="btn btn-primary btn-block">Upload Image</button>
+                    <button class="btn btn-primary btn-block" (click)="uploadImageDialog()">Upload Image</button>
                     <button class="btn btn-info btn-block" (click)="fillAssetsList(4)">My Images</button>
                 </div>
             </div>

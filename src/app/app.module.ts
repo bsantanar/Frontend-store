@@ -5,9 +5,11 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 //services
 import { TokenInterceptorService } from './services/token-interceptor.service';
+import { ErrorInterceptorService } from './services/error-interceptor.service';
 
 //npm packages
-import { MatStepperModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatDialogModule, MatSelectModule, MatOptionModule } from '@angular/material';
+import { MatStepperModule, MatButtonModule, MatFormFieldModule, MatInputModule, 
+  MatDialogModule, MatSelectModule, MatOptionModule, MatProgressBarModule, MatListModule } from '@angular/material';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
@@ -31,9 +33,9 @@ import { StudyComponent } from './components/study/study.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { NewQuestionComponent } from './components/new-question/new-question.component';
-import { ErrorInterceptorService } from './services/error-interceptor.service';
 import { NewAssetComponent } from './components/document/new-asset/new-asset.component';
 import { EditAssetComponent } from './components/document/edit-asset/edit-asset.component';
+import { UploadComponent } from './components/template/upload/upload.component';
 
 @NgModule({
   entryComponents: [
@@ -41,7 +43,8 @@ import { EditAssetComponent } from './components/document/edit-asset/edit-asset.
     ConfirmationDialogComponent,
     NewQuestionComponent,
     NewAssetComponent,
-    EditAssetComponent
+    EditAssetComponent,
+    UploadComponent
   ],
   declarations: [
     AppComponent,
@@ -59,7 +62,8 @@ import { EditAssetComponent } from './components/document/edit-asset/edit-asset.
     RegisterComponent,
     NewQuestionComponent,
     NewAssetComponent,
-    EditAssetComponent
+    EditAssetComponent,
+    UploadComponent
   ],
   imports: [
     HttpClientModule,
@@ -69,6 +73,8 @@ import { EditAssetComponent } from './components/document/edit-asset/edit-asset.
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
+    MatProgressBarModule,
+    MatListModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,

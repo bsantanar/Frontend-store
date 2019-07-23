@@ -53,7 +53,7 @@ export class NewAssetComponent implements OnInit {
             Swal.fire({
               type: 'error',
               title: 'Oops...',
-              text: err.status
+              text: err
             });
           }
         );

@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
         Swal.fire({
           type: 'success',
           title: 'Logged in successfully'
-        })
+        });
         this.router.navigate(['/create'])
       }, 
       err => {

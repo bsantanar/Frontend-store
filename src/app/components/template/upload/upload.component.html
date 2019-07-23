@@ -1,0 +1,24 @@
+<input type="file" #file style="display: none" (change)="onFilesAdded()" multiple />
+<h1>Upload Files</h1>
+<div>
+    <button [disabled]="uploading || uploadSuccessful" class="add-files-btn btn btn-success" (click)="addFiles()">
+        Add Files
+      </button>
+</div>
+
+<!-- This is the content of the dialog, containing a list of the files to upload -->
+<mat-dialog-content fxFlex class="mt-2">
+    <ul class="list-group">
+        <li class="list-group-item" *ngFor="let file of files">
+            <h6 mat-line>{{file.name}}</h6>
+        </li>
+    </ul>
+</mat-dialog-content>
+
+<!-- This are the actions of the dialog, containing the primary and the cancel button-->
+<mat-dialog-actions align="end" class="mt-3">
+    <button *ngIf="showCancelButton" class="btn btn-danger mr-2" mat-dialog-close>Cancel</button>
+    <button class="btn btn-success" [disabled]="!canBeClosed" (click)="closeDialog()">
+        {{primaryButtonText}}
+      </button>
+</mat-dialog-actions>

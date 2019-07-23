@@ -14,8 +14,6 @@ import { RegisterComponent } from './components/register/register.component';
 
 
 
-
-
 const routes: Routes = [
   {path: 'create', component: CreateComponent, canActivate:[AuthGuard]},
   {path: 'quick', component: QuickComponent, canActivate:[AuthGuard]},
