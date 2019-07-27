@@ -6,6 +6,7 @@ import { UploadService } from 'src/app/services/upload.service';
 import { UploadComponent } from './upload/upload.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import Swal from 'sweetalert2';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-template',
@@ -21,6 +22,9 @@ export class TemplateComponent implements OnInit, AfterViewInit {
   editorForm: FormGroup;
   fileRichText: File;
   fileHtmlCoded: File;
+  assetType: number;
+  showHtml: boolean = false;
+  htmlTextButton: string = 'Show';
 
   constructor( private location: Location, public dialog: MatDialog, public uploadService: UploadService, private sanitizer: DomSanitizer) { }
 
@@ -37,6 +41,15 @@ export class TemplateComponent implements OnInit, AfterViewInit {
   backClicked() {
     this.location.back();
   }
+
+  get richText(){
+    return this.editorForm.get("editor").value;
+  }
+
+  get htmlCoded(){
+    return this.codeEditor.codeMirror.getDoc().getValue();
+  }
+
   show(){
     this.codedTemplate = this.codeEditor.codeMirror.getDoc().getValue(); 
   }
@@ -51,43 +64,205 @@ export class TemplateComponent implements OnInit, AfterViewInit {
     this.viewUploader = true;
   }
 
+  showHtmlFiles(){
+    this.showHtml = !this.showHtml;
+    this.fillAssetsList(2);
+    if(this.showHtml){
+      this.htmlTextButton = 'Hide';
+    }else{
+      this.htmlTextButton = 'Show';
+    }
+  }
+
   fillAssetsList(type: number){
     switch(type){
       //Locales
       case 1: {
         this.assetsList = [];
-        this.assetsList.push({Name: 'TestLocale'});
-        this.assetsList.push({Name: 'TestLocale'});
+        this.uploadService.getLocales().subscribe(
+          res => {
+            this.assetsList = res['locales']
+          },
+          err => {
+            console.log(err);
+          }
+        );
+        this.assetType = 1;
         break;
       }
       //Modals
       case 2: {
         this.assetsList = [];
-        this.assetsList.push({Name: 'TestModal'});
+        this.uploadService.getHtml().subscribe(
+          res => {
+            this.assetsList = res['html']
+          },
+          err => {
+            console.log(err);
+          }
+        );
+        this.assetType = 2;
         break;
       }
       //Templates
       case 3: {
         this.assetsList = [];
-        this.assetsList.push({Name: 'TestTemplate'});
+        this.uploadService.getHtml().subscribe(
+          res => {
+            this.assetsList = res['html']
+          },
+          err => {
+            console.log(err);
+          }
+        );
+        this.assetType = 2;
         break;
       }
       //Images
       case 4: {
         this.assetsList = [];
-        this.assetsList.push({Name: 'TestImage'});
+        this.uploadService.getImages().subscribe(
+          res => {
+            this.assetsList = res['images']
+          },
+          err => {
+            console.log(err);
+          }
+        );
+        this.assetType = 3;
         break;
       }
     }
   }
 
-  get richText(){
-    return this.editorForm.get("editor").value;
+  downloadAsset(name: string){
+    this.uploadService.downloadFile(name, this.assetType).subscribe(
+      res => {
+        let blob, file;
+        switch (this.assetType){
+          case 1:
+            blob = new Blob([res], {type: 'application/json'});
+            break;
+          case 2:
+            blob = new Blob([res], {type: 'text/html'});
+            break;
+          case 3:
+            blob = new Blob([res], {type: 'image/jpg'});
+            break;
+        }
+        let arrayOfBlob = new Array<Blob>();
+        arrayOfBlob.push(blob);
+        switch (this.assetType){
+          case 1:
+            file = new File(arrayOfBlob, name, {type: 'application/json'});
+            break;
+          case 2:
+            file = new File(arrayOfBlob, name, {type: 'text/html'});
+            break;
+          case 3:
+            file = new File(arrayOfBlob, name, {type: 'image/jpg'});
+            break;
+        }
+        //Download file
+        // IE doesn't allow using a blob object directly as link href
+        // instead it is necessary to use msSaveOrOpenBlob
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+          window.navigator.msSaveOrOpenBlob(blob);
+          return;
+        }
+        let a = document.createElement('a');
+        let url = window.URL.createObjectURL(blob);
+        a.download = file.name;
+        a.href = url;
+        a.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+        // For Firefox it is necessary to delay revoking the ObjectURL
+        setTimeout(function () {
+          window.URL.revokeObjectURL(url);
+          a.remove();
+        }, 100);
+      },
+      err => {
+        //console.log(err);
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: err
+        });
+      }
+    );
   }
 
-  get htmlCoded(){
-    return this.codeEditor.codeMirror.getDoc().getValue();
+  editHtml(name: string){
+    this.uploadService.downloadFile(name, this.assetType).subscribe(
+      res => {
+        let blob;
+        switch (this.assetType){
+          case 1:
+            blob = new Blob([res], {type: 'application/json'});
+            break;
+          case 2:
+            blob = new Blob([res], {type: 'text/html'});
+            break;
+          case 3:
+            blob = new Blob([res], {type: 'image/jpg'});
+            break;
+        }
+        let test = new FileReader();
+        test.readAsText(blob);
+        test.onload = () => {
+          this.codeEditor.codeMirror.getDoc().setValue(test.result);
+        }
+      },
+      err => {
+        //console.log(err);
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: err
+        });
+      }
+    );
   }
+
+  deleteAsset(name: string) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        width: '350px',
+        data: name
+      });
+    dialogRef.afterClosed().subscribe(result => {
+        if(result) {
+          this.uploadService.deleteFile(name, this.assetType).subscribe(
+            res => {
+              //console.log(res);
+              Swal.fire({
+                type: 'success',
+                title: res['message']
+              });
+              switch (this.assetType){
+                case 1:
+                  this.fillAssetsList(1);
+                  break;
+                case 2:
+                  this.fillAssetsList(2);
+                  break;
+                case 3:
+                  this.fillAssetsList(4);
+                  break;
+              }
+            },
+            err => {
+              //console.log(err);
+              Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: err
+              });
+            }
+          );
+        }
+      });
+  }
+
 
   clearRichText(){
     this.editorForm.reset();
@@ -96,11 +271,14 @@ export class TemplateComponent implements OnInit, AfterViewInit {
     this.codeEditor.codeMirror.getDoc().setValue(``);
   }
 
-  uploadImageDialog(){
+  uploadDialog(type: number){
     let dialogRef = this.dialog.open(UploadComponent, {
-      width: '50%',
-      height: '50%',
-    })
+      width: '600px',
+      data: type
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.fillAssetsList(type);
+    });
   }
 
   saveRichText(){
