@@ -21,6 +21,11 @@
 <div class="tab-content fast fadeIn">
     <div class="tab-pane container active" id="simple">
         <div class="row mt-3">
+            <div class="col-4">
+                <input placeholder="File Name" type="text" #fileNameSimple class="form-control mt-3" />
+            </div>
+        </div>
+        <div class="row mt-3">
             <form [formGroup]="editorForm" (ngSubmit)="saveRichText()">
                 <div class="form-group">
 
@@ -45,9 +50,15 @@
                             </div>
                         </div>
                         <div class="col">
-                            <button class="btn btn-info mr-3" *ngIf="assetType == 2" (click)="editHtml(asset)">Load</button>
+                            <button class="btn btn-success mr-3" *ngIf="assetType == 2" (click)="editHtml(asset)">Load</button>
+                            <!-- <button class="btn btn-info" *ngIf="assetType == 2" (click)="editHtml(asset)">Edit</button> -->
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <input placeholder="File Name" type="text" #fileNameCoded class="form-control mt-3" />
                 </div>
             </div>
         </div>
@@ -85,7 +96,7 @@
                     <!-- <img src="assets/img/fase1.PNG" alt=""> -->
                     <h5 class="card-title">Locale</h5>
                     <p class="card-text">File in JSON format that replace words during NEURONE execution.</p>
-                    <button class="btn btn-secondary btn-block">Example</button>
+                    <!-- <button class="btn btn-secondary btn-block" (click)="example(1)">Example</button> -->
                     <button class="btn btn-primary btn-block" (click)="uploadDialog(1)">Upload Locale</button>
                     <button class="btn btn-info btn-block" (click)="fillAssetsList(1)">My Locales</button>
                 </div>
@@ -94,7 +105,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Modal</h5>
                     <p class="card-text">Modals are customizable pop-up content screens (inside the web browser) that can be used in some stages of the NEURONE study.</p>
-                    <button class="btn btn-secondary btn-block">Example</button>
+                    <button class="btn btn-secondary btn-block" (click)="example(2)">Example</button>
                     <button class="btn btn-primary btn-block" (click)="uploadDialog(2)">Upload Modal</button>
                     <button class="btn btn-info btn-block" (click)="fillAssetsList(2)">My Modals</button>
                 </div>
@@ -103,7 +114,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Template</h5>
                     <p class="card-text">HTML Templates are customizable content screens that can be used in some stages of the NEURONE study.</p>
-                    <button class="btn btn-secondary btn-block">Example</button>
+                    <button class="btn btn-secondary btn-block" (click)="example(3)">Example</button>
                     <button class="btn btn-primary btn-block" (click)="uploadDialog(2)">Upload Template</button>
                     <button class="btn btn-info btn-block" (click)="fillAssetsList(3)">My Templates</button>
                 </div>

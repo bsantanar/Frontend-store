@@ -36,6 +36,7 @@ import { NewQuestionComponent } from './components/new-question/new-question.com
 import { NewAssetComponent } from './components/document/new-asset/new-asset.component';
 import { EditAssetComponent } from './components/document/edit-asset/edit-asset.component';
 import { UploadComponent } from './components/template/upload/upload.component';
+import { ExampleComponent } from './components/template/example/example.component';
 
 @NgModule({
   entryComponents: [
@@ -44,7 +45,8 @@ import { UploadComponent } from './components/template/upload/upload.component';
     NewQuestionComponent,
     NewAssetComponent,
     EditAssetComponent,
-    UploadComponent
+    UploadComponent,
+    ExampleComponent
   ],
   declarations: [
     AppComponent,
@@ -63,7 +65,8 @@ import { UploadComponent } from './components/template/upload/upload.component';
     NewQuestionComponent,
     NewAssetComponent,
     EditAssetComponent,
-    UploadComponent
+    UploadComponent,
+    ExampleComponent
   ],
   imports: [
     HttpClientModule,

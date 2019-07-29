@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { UploadService } from 'src/app/services/upload.service';
-import { forkJoin } from 'rxjs';
 import Swal from 'sweetalert2';
 
 @Component({

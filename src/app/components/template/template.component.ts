@@ -7,6 +7,7 @@ import { UploadComponent } from './upload/upload.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import Swal from 'sweetalert2';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { ExampleComponent } from './example/example.component';
 
 @Component({
   selector: 'app-template',
@@ -25,6 +26,9 @@ export class TemplateComponent implements OnInit, AfterViewInit {
   assetType: number;
   showHtml: boolean = false;
   htmlTextButton: string = 'Show';
+  
+  @ViewChild('fileNameCoded') fileNameCoded
+  @ViewChild('fileNameSimple') fileNameSimple
 
   constructor( private location: Location, public dialog: MatDialog, public uploadService: UploadService, private sanitizer: DomSanitizer) { }
 
@@ -271,6 +275,14 @@ export class TemplateComponent implements OnInit, AfterViewInit {
     this.codeEditor.codeMirror.getDoc().setValue(``);
   }
 
+  example(type: number){
+    let dialogRef = this.dialog.open(ExampleComponent, {
+      width: '800px',
+      height: '600px',
+      data: type
+    });
+  }
+
   uploadDialog(type: number){
     let dialogRef = this.dialog.open(UploadComponent, {
       width: '600px',
@@ -282,11 +294,20 @@ export class TemplateComponent implements OnInit, AfterViewInit {
   }
 
   saveRichText(){
+    let fileName = this.fileNameSimple.nativeElement.value;
+    if(fileName.length < 5){
+      Swal.fire({
+              type: 'error',
+              title: 'Oops...',
+              text: "File name must have 5 characters"
+            });
+      return;
+    }
     let htmlText = this.richText;
     let blob = new Blob([htmlText], {type: 'text/html'});
     let arrayOfBlob = new Array<Blob>();
     arrayOfBlob.push(blob);
-    this.fileRichText = new File(arrayOfBlob, "testRich.html", {type: 'text/html'});
+    this.fileRichText = new File(arrayOfBlob, fileName + ".html", {type: 'text/html'});
     //console.log(this.fileRichText);
     this.uploadService.uploadHtml(this.fileRichText).subscribe(
       res => {
@@ -325,6 +346,15 @@ export class TemplateComponent implements OnInit, AfterViewInit {
   }
 
   saveHtmlCoded(){
+    let fileName = this.fileNameCoded.nativeElement.value;
+    if(fileName.length < 5){
+      Swal.fire({
+              type: 'error',
+              title: 'Oops...',
+              text: "File name must have 5 characters"
+            });
+      return;
+    }
     let codeText = this.htmlCoded;
     codeText = `<!doctype html>
     
@@ -340,7 +370,7 @@ export class TemplateComponent implements OnInit, AfterViewInit {
     let blob = new Blob([codeText], {type: 'text/html'});
     let arrayOfBlob = new Array<Blob>();
     arrayOfBlob.push(blob);
-    this.fileHtmlCoded = new File(arrayOfBlob, "testCoded.html", {type: 'text/html'});
+    this.fileHtmlCoded = new File(arrayOfBlob, fileName + ".html", {type: 'text/html'});
     //console.log(this.fileHtmlCoded);
     this.uploadService.uploadHtml(this.fileHtmlCoded).subscribe(
       res => {
