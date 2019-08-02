@@ -9,6 +9,7 @@ export class AuthService {
 
   private registerURL = "http://localhost:3000/register";
   private loginURL = "http://localhost:3000/login";
+  private profileUrl = 'http://localhost:3000/me';
 
   constructor( private http: HttpClient, private router: Router) { }
 
@@ -22,6 +23,10 @@ export class AuthService {
 
   public loggedIn(){
     return !!localStorage.getItem('token');
+  }
+
+  public profile(){
+    return this.http.get(this.profileUrl);
   }
 
   public getToken(){

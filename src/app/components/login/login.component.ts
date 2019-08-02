@@ -41,7 +41,9 @@ export class LoginComponent implements OnInit {
           type: 'success',
           title: 'Logged in successfully'
         });
-        this.router.navigate(['/create'])
+        setTimeout(() => {
+          this.router.navigate(['/create']);
+        }, 500);
       }, 
       err => {
         //console.log(err);

@@ -16,6 +16,7 @@
         <ul class="navbar-nav">
             <a class="nav-link" routerLink="/register" *ngIf="!authService.loggedIn()">Register</a>
             <a class="nav-link" routerLink="/login" *ngIf="!authService.loggedIn()">Login</a>
+            <a class="nav-link" style="cursor: pointer" routerLink="/login" *ngIf="authService.loggedIn()">Hello {{user.name}}</a>
             <a class="nav-link" style="cursor: pointer" routerLink="/login" *ngIf="authService.loggedIn()" (click)="authService.logout()">Logout</a>
         </ul>
     </div>
