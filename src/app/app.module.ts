@@ -37,6 +37,15 @@ import { NewAssetComponent } from './components/document/new-asset/new-asset.com
 import { EditAssetComponent } from './components/document/edit-asset/edit-asset.component';
 import { UploadComponent } from './components/template/upload/upload.component';
 import { ExampleComponent } from './components/template/example/example.component';
+import { AffectiveComponent } from './components/study/affective/affective.component';
+import { CollectionComponent } from './components/study/collection/collection.component';
+import { CriticalEvalComponent } from './components/study/critical-eval/critical-eval.component';
+import { EndComponent } from './components/study/end/end.component';
+import { InstructionsComponent } from './components/study/instructions/instructions.component';
+import { SearchComponent } from './components/study/search/search.component';
+import { SynthesisComponent } from './components/study/synthesis/synthesis.component';
+import { TutorialComponent } from './components/study/tutorial/tutorial.component';
+import { TaskQuestionsComponent } from './components/study/task-questions/task-questions.component';
 
 @NgModule({
   entryComponents: [
@@ -46,7 +55,16 @@ import { ExampleComponent } from './components/template/example/example.componen
     NewAssetComponent,
     EditAssetComponent,
     UploadComponent,
-    ExampleComponent
+    ExampleComponent,
+    AffectiveComponent,
+    CollectionComponent,
+    CriticalEvalComponent,
+    EndComponent,
+    SynthesisComponent,
+    TutorialComponent,
+    TaskQuestionsComponent,
+    InstructionsComponent,
+    SearchComponent
   ],
   declarations: [
     AppComponent,
@@ -66,7 +84,16 @@ import { ExampleComponent } from './components/template/example/example.componen
     NewAssetComponent,
     EditAssetComponent,
     UploadComponent,
-    ExampleComponent
+    ExampleComponent,
+    AffectiveComponent,
+    CollectionComponent,
+    CriticalEvalComponent,
+    EndComponent,
+    InstructionsComponent,
+    SearchComponent,
+    SynthesisComponent,
+    TutorialComponent,
+    TaskQuestionsComponent
   ],
   imports: [
     HttpClientModule,

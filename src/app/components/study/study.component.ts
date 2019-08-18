@@ -5,6 +5,15 @@ import {MatDialog, MatDialogRef} from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { TitleEditComponent } from '../test/title-edit.component';
+import { AffectiveComponent } from './affective/affective.component';
+import { CollectionComponent } from './collection/collection.component';
+import { CriticalEvalComponent } from './critical-eval/critical-eval.component';
+import { EndComponent } from './end/end.component';
+import { InstructionsComponent } from './instructions/instructions.component';
+import { SearchComponent } from './search/search.component';
+import { SynthesisComponent } from './synthesis/synthesis.component';
+import { TaskQuestionsComponent } from './task-questions/task-questions.component';
+import { TutorialComponent } from './tutorial/tutorial.component';
 
 @Component({
   selector: 'app-study',
@@ -81,14 +90,47 @@ export class StudyComponent implements OnInit {
     moveItemInArray(this.stages, event.previousIndex, event.currentIndex);
   }
 
-  addStage(type:number){
-    let typeName = this.typesStages.find(a => a.id===type).type;
+  newStage(typeName:string){
     let aux = {
       title: `${typeName} stage`,
       id: this.idAux
     };
     this.idAux++;
     this.stages.push(aux);
+    let stageComp;
+    switch (typeName){
+      case 'Affective(SAM)':
+        stageComp = AffectiveComponent;
+        break;
+      case 'Collection':
+        stageComp = CollectionComponent;
+        break;
+      case 'Critical Evaluation':
+        stageComp = CriticalEvalComponent;
+        break;
+      case 'End':
+        stageComp = EndComponent;
+        break;
+      case 'Instructions':
+        stageComp = InstructionsComponent;
+        break;
+      case 'Search':
+        stageComp = SearchComponent;
+        break;
+      case 'Synthesis':
+        stageComp = SynthesisComponent;
+        break;
+      case 'Task Questions':
+        stageComp = TaskQuestionsComponent;
+        break;
+      case 'Tutorial':
+        stageComp = TutorialComponent;
+        break;
+    }
+    let dialogRef = this.dialog.open(stageComp, {
+      width: '600px',
+      data: typeName
+    });
   }
 
   editTitle(value:string){

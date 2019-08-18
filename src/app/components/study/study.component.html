@@ -23,13 +23,13 @@
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <div class="row mb-2" *ngFor="let type of typesStages">
                         <div class="col">
-                            <button class="btn btn-success btn-block d-flex justify-content-center" (click)="addStage(type.id)"><i class="material-icons">
+                            <button class="btn btn-success btn-block d-flex justify-content-center" (click)="newStage(type.type)"><i class="material-icons">
                                               add
                                               </i>{{type.type}}</button>
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="repository" role="tabpanel" aria-labelledby="profile-tab">
+                <div class="tab-pane fade limit-tab" id="repository" role="tabpanel" aria-labelledby="profile-tab">
                     <input class="form-control mr-sm-2" type="text" placeholder="Search stage.." aria-label="Search" (keyup)="searchStage(search.value)" #search>
                     <hr>
                     <div class="ml-1 list-group-item list-group-item-action row" *ngFor="let created of createdStages">

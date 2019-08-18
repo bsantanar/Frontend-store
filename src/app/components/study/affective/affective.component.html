@@ -1,0 +1,17 @@
+<h2>New {{data}}</h2>
+<hr>
+
+<div mat-dialog-content>
+    <form [formGroup]="affectiveForm">
+        <div class="form-row">
+            <div class="form-group col-8">
+                <label for="id">Title of the question</label>
+                <input type="text" class="form-control" name="id" placeholder="How old are you?" formControlName="id" [ngClass]="{ 'is-invalid': affectiveForm.controls.id.errors, 'is-valid': !affectiveForm.controls.id.errors}">
+            </div>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions align="end">
+    <button class="btn btn-danger mr-2" (click)="onNoClick()" cdkFocusInitial>Cancel</button>
+    <button class="btn btn-success " (click)="save()" [ngClass]="{'disabled': !affectiveForm.valid}">Save</button>
+</div>

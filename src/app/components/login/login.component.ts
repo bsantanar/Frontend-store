@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
         });
         setTimeout(() => {
           this.router.navigate(['/create']);
-        }, 500);
+        }, 1000);
       }, 
       err => {
         //console.log(err);
