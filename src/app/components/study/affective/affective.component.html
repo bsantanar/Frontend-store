@@ -1,13 +1,36 @@
-<h2>New {{data}}</h2>
+<h2>New {{data}} Stage</h2>
 <hr>
 
 <div mat-dialog-content>
     <form [formGroup]="affectiveForm">
         <div class="form-row">
             <div class="form-group col-8">
-                <label for="id">Title of the question</label>
-                <input type="text" class="form-control" name="id" placeholder="How old are you?" formControlName="id" [ngClass]="{ 'is-invalid': affectiveForm.controls.id.errors, 'is-valid': !affectiveForm.controls.id.errors}">
+                <label for="id">Id name of the stage</label>
+                <input type="text" class="form-control" name="id" placeholder="affective-stage-01" formControlName="id" [ngClass]="{ 'is-invalid': affectiveForm.controls.id.errors, 'is-valid': !affectiveForm.controls.id.errors}">
             </div>
+            <div class="form-group col-4">
+                <label for="time">Time limit (minutes)</label>
+                <input type="number" class="form-control" name="time" formControlName="time" [ngClass]="{'is-invalid': affectiveForm.controls.time.errors}">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-4">
+                <label for="avatar">Avatar Name</label>
+                <input type="text" class="form-control" name="avatar" placeholder="Sarah" formControlName="avatar" [ngClass]="{ 'is-invalid': affectiveForm.controls.avatar.errors, 'is-valid': !affectiveForm.controls.avatar.errors}">
+            </div>
+            <div class="form-group col-4">
+                <label for="answer">Form Answer Label</label>
+                <input type="text" class="form-control" name="answer" placeholder="PreTaskSAM" formControlName="answerType" [ngClass]="{ 'is-invalid': affectiveForm.controls.answerType.errors, 'is-valid': !affectiveForm.controls.answerType.errors}">
+            </div>
+            <div class="form-group col-4">
+                <label for="stage">URL Parameter</label>
+                <input type="text" class="form-control" name="stage" placeholder="pretaskSAM" formControlName="stage" [ngClass]="{ 'is-invalid': affectiveForm.controls.stage.errors, 'is-valid': !affectiveForm.controls.stage.errors}">
+            </div>
+        </div>
+        <div class="form-group">
+            <select formControlName="page" class="form-control" [ngClass]="{ 'is-invalid': affectiveForm.controls.page.errors, 'is-valid': !affectiveForm.controls.page.errors }">
+                <option *ngFor="let template of templates" [ngValue]="template">{{template}}</option>
+            </select>
         </div>
     </form>
 </div>

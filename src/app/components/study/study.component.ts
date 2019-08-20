@@ -91,12 +91,6 @@ export class StudyComponent implements OnInit {
   }
 
   newStage(typeName:string){
-    let aux = {
-      title: `${typeName} stage`,
-      id: this.idAux
-    };
-    this.idAux++;
-    this.stages.push(aux);
     let stageComp;
     switch (typeName){
       case 'Affective(SAM)':
@@ -130,6 +124,16 @@ export class StudyComponent implements OnInit {
     let dialogRef = this.dialog.open(stageComp, {
       width: '600px',
       data: typeName
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        let aux = {
+          title: `${typeName} stage`,
+          id: this.idAux
+        };
+        this.idAux++;
+        this.stages.push(aux);
+      }
     });
   }
 

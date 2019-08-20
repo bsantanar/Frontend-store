@@ -29,6 +29,8 @@ export class TemplateComponent implements OnInit, AfterViewInit {
   
   @ViewChild('fileNameCoded') fileNameCoded
   @ViewChild('fileNameSimple') fileNameSimple
+  @ViewChild('htmlTypeSimple') htmlTypeSimple
+  @ViewChild('htmlTypeCoded') htmlTypeCoded
 
   constructor( private location: Location, public dialog: MatDialog, public uploadService: UploadService, private sanitizer: DomSanitizer) { }
 
@@ -88,7 +90,7 @@ export class TemplateComponent implements OnInit, AfterViewInit {
             this.assetsList = res['locales']
           },
           err => {
-            console.log(err);
+            //console.log(err);
           }
         );
         this.assetType = 1;
@@ -97,12 +99,12 @@ export class TemplateComponent implements OnInit, AfterViewInit {
       //Modals
       case 2: {
         this.assetsList = [];
-        this.uploadService.getHtml().subscribe(
+        this.uploadService.getHtml("1").subscribe(
           res => {
             this.assetsList = res['html']
           },
           err => {
-            console.log(err);
+            //console.log(err);
           }
         );
         this.assetType = 2;
@@ -111,15 +113,15 @@ export class TemplateComponent implements OnInit, AfterViewInit {
       //Templates
       case 3: {
         this.assetsList = [];
-        this.uploadService.getHtml().subscribe(
+        this.uploadService.getHtml("2").subscribe(
           res => {
             this.assetsList = res['html']
           },
           err => {
-            console.log(err);
+            //console.log(err);
           }
         );
-        this.assetType = 2;
+        this.assetType = 3;
         break;
       }
       //Images
@@ -130,10 +132,10 @@ export class TemplateComponent implements OnInit, AfterViewInit {
             this.assetsList = res['images']
           },
           err => {
-            console.log(err);
+            //console.log(err);
           }
         );
-        this.assetType = 3;
+        this.assetType = 4;
         break;
       }
     }
@@ -151,6 +153,9 @@ export class TemplateComponent implements OnInit, AfterViewInit {
             blob = new Blob([res], {type: 'text/html'});
             break;
           case 3:
+            blob = new Blob([res], {type: 'text/html'});
+            break;
+          case 4:
             blob = new Blob([res], {type: 'image/jpg'});
             break;
         }
@@ -164,6 +169,9 @@ export class TemplateComponent implements OnInit, AfterViewInit {
             file = new File(arrayOfBlob, name, {type: 'text/html'});
             break;
           case 3:
+            file = new File(arrayOfBlob, name, {type: 'text/html'});
+            break;
+          case 4:
             file = new File(arrayOfBlob, name, {type: 'image/jpg'});
             break;
         }
@@ -208,6 +216,9 @@ export class TemplateComponent implements OnInit, AfterViewInit {
             blob = new Blob([res], {type: 'text/html'});
             break;
           case 3:
+            blob = new Blob([res], {type: 'text/html'});
+            break;
+          case 4:
             blob = new Blob([res], {type: 'image/jpg'});
             break;
         }
@@ -250,6 +261,9 @@ export class TemplateComponent implements OnInit, AfterViewInit {
                   this.fillAssetsList(2);
                   break;
                 case 3:
+                  this.fillAssetsList(3);
+                  break;
+                case 4:
                   this.fillAssetsList(4);
                   break;
               }
@@ -294,6 +308,7 @@ export class TemplateComponent implements OnInit, AfterViewInit {
   }
 
   saveRichText(){
+    let htmlType = this.htmlTypeSimple.nativeElement.value;
     let fileName = this.fileNameSimple.nativeElement.value;
     if(fileName.length < 5){
       Swal.fire({
@@ -309,7 +324,7 @@ export class TemplateComponent implements OnInit, AfterViewInit {
     arrayOfBlob.push(blob);
     this.fileRichText = new File(arrayOfBlob, fileName + ".html", {type: 'text/html'});
     //console.log(this.fileRichText);
-    this.uploadService.uploadHtml(this.fileRichText).subscribe(
+    this.uploadService.uploadHtml(this.fileRichText, htmlType).subscribe(
       res => {
         //console.log(res);
         Swal.fire({
@@ -347,6 +362,7 @@ export class TemplateComponent implements OnInit, AfterViewInit {
 
   saveHtmlCoded(){
     let fileName = this.fileNameCoded.nativeElement.value;
+    let htmlType = this.htmlTypeCoded.nativeElement.value;
     if(fileName.length < 5){
       Swal.fire({
               type: 'error',
@@ -372,7 +388,7 @@ export class TemplateComponent implements OnInit, AfterViewInit {
     arrayOfBlob.push(blob);
     this.fileHtmlCoded = new File(arrayOfBlob, fileName + ".html", {type: 'text/html'});
     //console.log(this.fileHtmlCoded);
-    this.uploadService.uploadHtml(this.fileHtmlCoded).subscribe(
+    this.uploadService.uploadHtml(this.fileHtmlCoded, htmlType).subscribe(
       res => {
         //console.log(res);
         Swal.fire({

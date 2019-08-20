@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpRequest, HttpEventType, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable({
@@ -35,10 +35,13 @@ export class UploadService {
     return this.http.post(this.imageUrl, formData);
   }
 
-  public uploadHtml(file: File){
+  public uploadHtml(file: File, type: string){
+    //Set type of html file
+    let headers = new HttpHeaders({'type': type});
+    //Append file
     let formData: FormData = new FormData();
     formData.append('file', file, file.name);
-    return this.http.post(this.htmlUrl, formData);
+    return this.http.post(this.htmlUrl, formData, {headers});
   }
 
   public uploadJson(file: File){
@@ -51,8 +54,10 @@ export class UploadService {
     return this.http.get(this.myImagesUrl);
   }
 
-  public getHtml(){
-    return this.http.get(this.myHtmlUrl);
+  public getHtml(type: string){
+    //Set type of html file
+    let headers = new HttpHeaders({'type': type});
+    return this.http.get(this.myHtmlUrl, {headers});
   }
 
   public getLocales(){
@@ -60,23 +65,33 @@ export class UploadService {
   }
 
   public downloadFile(name, type){
+    //Set type of html file
+    let typeHtml = (type - 1).toString();
+    let headers = new HttpHeaders({'type': typeHtml});
     switch (type){
       case 1:
         return this.http.post(this.localeDownloadUrl + name, '', {responseType: "arraybuffer"});
       case 2:
-        return this.http.post(this.htmlDownloadUrl + name, '', {responseType: "arraybuffer"});
+        return this.http.post(this.htmlDownloadUrl + name, '', {responseType: "arraybuffer", headers});
       case 3:
-        return this.http.post(this.imageDownloadUrl + name, '', {responseType: "arraybuffer"});
+        return this.http.post(this.htmlDownloadUrl + name, '', {responseType: "arraybuffer", headers});
+      case 4:
+        return this.http.post(this.imageDownloadUrl + name, '', {responseType: "arraybuffer"})
     }
   }
 
   public deleteFile(name, type){
+    //Set type of html file
+    let typeHtml = (type - 1).toString();
+    let headers = new HttpHeaders({'type': typeHtml});
     switch (type){
       case 1:
         return this.http.delete(this.deleteLocaleUrl + name);
       case 2:
-        return this.http.delete(this.deleteHtmlUrl + name);
+        return this.http.delete(this.deleteHtmlUrl + name, {headers});
       case 3:
+        return this.http.delete(this.deleteHtmlUrl + name, {headers});
+      case 4:
         return this.http.delete(this.deleteImageUrl + name);
     }
   }

@@ -33,6 +33,11 @@ export class UploadComponent implements OnInit {
 
   checkFile(file: File){
     switch (this.data){
+      case 3:
+        if(file.type.split('/')[1] === 'html'){
+          return true;
+        }
+        break;
       case 2:
         if(file.type.split('/')[1] === 'html'){
           return true;
@@ -88,8 +93,11 @@ export class UploadComponent implements OnInit {
       // When all progress-observables are completed...
       this.files.forEach(file => {
         switch(this.data){
+          case 3:
+            this.uploadHtml(file, "2");
+            break;
           case 2:
-            this.uploadHtml(file);
+            this.uploadHtml(file, "1");
             break;
           case 4:
             this.uploadImage(file);
@@ -143,8 +151,8 @@ export class UploadComponent implements OnInit {
     );
   }
 
-  uploadHtml(file: File){
-    this.uploadService.uploadHtml(file).subscribe(
+  uploadHtml(file: File, type: string){
+    this.uploadService.uploadHtml(file, type).subscribe(
       res => {
         // The OK-button should have the text "Finish" now
         this.primaryButtonText = 'Finish';
