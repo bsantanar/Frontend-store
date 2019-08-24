@@ -144,14 +144,6 @@ export class TestComponent implements OnInit {
     this.location.back();
   }
 
-  open(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      console.log(result);
-    }, (reason) => {
-    
-    });
-  }
-
   editTitle(value:string){
     const dialogRef = this.dialog.open(TitleEditComponent, {
       width: '250px',
@@ -187,11 +179,13 @@ export class TestComponent implements OnInit {
         //   options: newQuestion.options
         // };
         //console.log(newQuestion);
-        newQuestion['idAux'] = this.idAux;
-        this.idAux++;
-        this.questions.push(newQuestion);
-        this.getMyQuestions();
-        this.getQuestions.push(new FormControl(newQuestion._id));
+        setTimeout(() => {
+          newQuestion['idAux'] = this.idAux;
+          this.idAux++;
+          this.questions.push(newQuestion);
+          this.getMyQuestions();
+          this.getQuestions.push(new FormControl(newQuestion._id));
+        }, 500)
       }
     });
   }
@@ -234,6 +228,7 @@ export class TestComponent implements OnInit {
     }
     this.questions = [];
     questionnaire.questions.forEach(q => {
+      //console.log(q);
       //this.getQuestions.push(new FormControl(q));
       this.questionsService.getQuestion(q).subscribe(
         res => {

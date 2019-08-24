@@ -1,2 +1,21 @@
 <h2>New {{data}} Stage</h2>
 <hr>
+
+<div mat-dialog-content>
+    <form [formGroup]="endForm">
+        <div class="form-row">
+            <div class="form-group col-8">
+                <label for="id">Id name of the stage</label>
+                <input type="text" class="form-control" name="id" placeholder="end" formControlName="id" [ngClass]="{ 'is-invalid': endForm.controls.id.errors, 'is-valid': !endForm.controls.id.errors}">
+            </div>
+            <div class="form-group col-4">
+                <label for="time">Time limit (minutes)</label>
+                <input type="number" class="form-control" name="time" formControlName="time" [ngClass]="{'is-invalid': endForm.controls.time.errors, 'is-valid': !endForm.controls.time.errors}">
+            </div>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions align="end">
+    <button class="btn btn-danger mr-2" (click)="onNoClick()" cdkFocusInitial>Cancel</button>
+    <button class="btn btn-success " (click)="save()" [ngClass]="{'disabled': !endForm.valid}">Save</button>
+</div>

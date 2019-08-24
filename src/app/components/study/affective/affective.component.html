@@ -10,7 +10,7 @@
             </div>
             <div class="form-group col-4">
                 <label for="time">Time limit (minutes)</label>
-                <input type="number" class="form-control" name="time" formControlName="time" [ngClass]="{'is-invalid': affectiveForm.controls.time.errors}">
+                <input type="number" class="form-control" name="time" formControlName="time" [ngClass]="{'is-invalid': affectiveForm.controls.time.errors, 'is-valid': !affectiveForm.controls.time.errors}">
             </div>
         </div>
         <div class="form-row">
@@ -28,6 +28,7 @@
             </div>
         </div>
         <div class="form-group">
+            <label for="">Select The Template</label>
             <select formControlName="page" class="form-control" [ngClass]="{ 'is-invalid': affectiveForm.controls.page.errors, 'is-valid': !affectiveForm.controls.page.errors }">
                 <option *ngFor="let template of templates" [ngValue]="template">{{template}}</option>
             </select>

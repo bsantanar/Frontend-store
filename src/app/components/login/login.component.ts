@@ -37,13 +37,16 @@ export class LoginComponent implements OnInit {
         //console.log(res);
         localStorage.setItem('token', res['token']);
         localStorage.setItem('userId', res['user']._id);
-        Swal.fire({
-          type: 'success',
-          title: 'Logged in successfully'
-        });
+        // Swal.fire({
+        //   type: 'success',
+        //   title: 'Logged in successfully'
+        // });
         setTimeout(() => {
           this.router.navigate(['/create']);
-        }, 1000);
+        }, 100);
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       }, 
       err => {
         //console.log(err);

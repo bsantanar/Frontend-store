@@ -1,2 +1,33 @@
 <h2>New {{data}} Stage</h2>
 <hr>
+
+<div mat-dialog-content>
+    <form [formGroup]="tutorialForm">
+        <div class="form-row">
+            <div class="form-group col-8">
+                <label for="id">Id name of the stage</label>
+                <input type="text" class="form-control" name="id" placeholder="instructions-begin" formControlName="id" [ngClass]="{ 'is-invalid': tutorialForm.controls.id.errors, 'is-valid': !tutorialForm.controls.id.errors}">
+            </div>
+            <div class="form-group col-4">
+                <label for="time">Time limit (minutes)</label>
+                <input type="number" class="form-control" name="time" formControlName="time" [ngClass]="{'is-invalid': tutorialForm.controls.time.errors, 'is-valid': !tutorialForm.controls.time.errors}">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col">
+                <label for="stage">URL Parameter</label>
+                <input type="text" class="form-control" name="stage" placeholder="instructions-begin" formControlName="stage" [ngClass]="{ 'is-invalid': tutorialForm.controls.stage.errors, 'is-valid': !tutorialForm.controls.stage.errors}">
+            </div>
+            <div class="form-group col">
+                <label for="">Tutorial Image Templates</label>
+                <mat-select formControlName="slides" [ngClass]="{ 'is-invalid': tutorialForm.controls.slides.errors, 'is-valid': !tutorialForm.controls.slides.errors }" class="form-control" multiple>
+                    <mat-option *ngFor="let image of images" [value]="image">{{image}}</mat-option>
+                </mat-select>
+            </div>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions align="end">
+    <button class="btn btn-danger mr-2" (click)="onNoClick()" cdkFocusInitial>Cancel</button>
+    <button class="btn btn-success " (click)="save()" [ngClass]="{'disabled': !tutorialForm.valid}">Save</button>
+</div>

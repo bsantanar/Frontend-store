@@ -185,7 +185,9 @@ export class NewQuestionComponent implements OnInit {
         )
       }
       //console.log(this.newQuestionForm.value);
-      this.dialogRef.close(question)
+      setTimeout(() => {
+        this.dialogRef.close(question)
+      }, 300);
     }
   }
 

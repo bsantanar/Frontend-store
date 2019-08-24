@@ -1,2 +1,33 @@
 <h2>New {{data}} Stage</h2>
 <hr>
+
+<div mat-dialog-content>
+    <form [formGroup]="instructionsForm">
+        <div class="form-row">
+            <div class="form-group col-8">
+                <label for="id">Id name of the stage</label>
+                <input type="text" class="form-control" name="id" placeholder="instructions-begin" formControlName="id" [ngClass]="{ 'is-invalid': instructionsForm.controls.id.errors, 'is-valid': !instructionsForm.controls.id.errors}">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-8">
+                <label for="stage">URL Parameter</label>
+                <input type="text" class="form-control" name="stage" placeholder="instructions-begin" formControlName="stage" [ngClass]="{ 'is-invalid': instructionsForm.controls.stage.errors, 'is-valid': !instructionsForm.controls.stage.errors}">
+            </div>
+            <div class="form-group col-4">
+                <label for="time">Time limit (minutes)</label>
+                <input type="number" class="form-control" name="time" formControlName="time" [ngClass]="{'is-invalid': instructionsForm.controls.time.errors, 'is-valid': !instructionsForm.controls.time.errors}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="">Select The Template</label>
+            <select formControlName="page" class="form-control" [ngClass]="{ 'is-invalid': instructionsForm.controls.page.errors, 'is-valid': !instructionsForm.controls.page.errors }">
+                <option *ngFor="let template of templates" [ngValue]="template">{{template}}</option>
+            </select>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions align="end">
+    <button class="btn btn-danger mr-2" (click)="onNoClick()" cdkFocusInitial>Cancel</button>
+    <button class="btn btn-success " (click)="save()" [ngClass]="{'disabled': !instructionsForm.valid}">Save</button>
+</div>
