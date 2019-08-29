@@ -2,6 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { UploadService } from 'src/app/services/upload.service';
+import { StagesService } from 'src/app/services/stages.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-search',
@@ -15,7 +17,7 @@ export class SearchComponent implements OnInit {
   images: any = [];
 
   constructor( private fb: FormBuilder, public dialogRef: MatDialogRef<SearchComponent>,
-    @Inject(MAT_DIALOG_DATA) public data, private uploadService: UploadService) { }
+    @Inject(MAT_DIALOG_DATA) public data, private uploadService: UploadService, private stageService: StagesService) { }
 
   ngOnInit() {
     this.searchForm = this.fb.group({
@@ -36,12 +38,62 @@ export class SearchComponent implements OnInit {
         this.images = res['images']
       }
     );
+    if(this.data.isEdit){
+      this.loadStage(this.data.stage);
+    }
+  }
+
+  loadStage(stage){
+    this.searchForm.controls['id'].setValue(stage.id);
+    this.searchForm.controls['time'].setValue(stage.time);
+    this.searchForm.controls['alert'].setValue(stage.reminderAlert);
+    this.searchForm.controls['tips'].setValue(stage.tips);
+    this.searchForm.controls['slides'].setValue(stage.slides);
+    this.searchForm.controls['stage'].setValue(stage.stage);
   }
 
   save(){
     let searchObj = this.searchForm.value;
-    console.log(searchObj);
-    this.dialogRef.close(searchObj);
+    searchObj['state'] = this.data.typeName;
+    searchObj['type'] = "stage";
+    searchObj['user'] = localStorage.getItem('userId');
+    if(this.data.isEdit){
+      this.editStage(this.data.stage, searchObj);
+    } else{
+      this.saveNewStage(searchObj);
+    }
+  }
+
+  saveNewStage(obj){
+    this.stageService.newStage(obj).subscribe(
+      res => {
+        this.dialogRef.close(res['stage']);
+      },
+      err => {
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: 'Error en el servidor'
+        });
+        this.dialogRef.close();
+      }
+    );
+  }
+
+  editStage(old, newObj){
+    this.stageService.editStage(old._id, newObj).subscribe(
+      res => {
+        this.dialogRef.close(res['stage']);
+      },
+      err => {
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: 'Error en el servidor'
+        });
+        this.dialogRef.close();
+      }
+    );
   }
 
   onNoClick(): void {

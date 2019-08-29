@@ -36,14 +36,15 @@
                         <div class="col">
 
                             <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">{{created}}</h5>
+                                <h5 class="mb-1">{{created.id}}</h5>
                             </div>
-                            <p class="mb-1">Type: instructions</p>
-                            <small>Time: -1</small>
+                            <p class="mb-1">Type: {{created.state}}</p>
+                            <small>Time: {{created.time}}</small>
                         </div>
                         <div class="col">
-                            <button class="btn btn-success mr-3">Add</button>
-                            <button class="btn btn-danger" (click)="deleteStage(created)">Delete</button>
+                            <button class="btn btn-sm btn-success mr-1" (click)="addStageDB(created)">Add</button>
+                            <button class="btn btn-sm btn-info mr-1" (click)="newStage(created.state, created)">Edit</button>
+                            <button class="btn btn-sm btn-danger mt-1" (click)="deleteStageDB(created)">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -68,13 +69,12 @@
                         <div class="col">
 
                             <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">{{stage.title}}</h5>
+                                <h5 class="mb-1">{{stage.id}}</h5>
                             </div>
-                            <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                            <small>Donec id elit non mi porta.</small>
+                            <p class="mb-1">Type: {{stage.state}}</p>
+                            <small>Time: {{stage.time}} minutes</small>
                         </div>
                         <div class="col">
-                            <button class="btn btn-info mr-3">Edit</button>
                             <button class="btn btn-danger" (click)="deleteStage(stage)">Delete</button>
                         </div>
                     </div>

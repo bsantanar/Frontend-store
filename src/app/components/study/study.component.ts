@@ -5,6 +5,8 @@ import {MatDialog, MatDialogRef} from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { TitleEditComponent } from '../test/title-edit.component';
+
+//Stages
 import { AffectiveComponent } from './affective/affective.component';
 import { CollectionComponent } from './collection/collection.component';
 import { CriticalEvalComponent } from './critical-eval/critical-eval.component';
@@ -14,6 +16,8 @@ import { SearchComponent } from './search/search.component';
 import { SynthesisComponent } from './synthesis/synthesis.component';
 import { TaskQuestionsComponent } from './task-questions/task-questions.component';
 import { TutorialComponent } from './tutorial/tutorial.component';
+import { StagesService } from 'src/app/services/stages.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-study',
@@ -60,8 +64,8 @@ export class StudyComponent implements OnInit {
       id: 9
     }];
 
-  stagesDB:string[] = ['test1', 'test2', 'test3'];
-  createdStages = this.stagesDB;
+  stagesDB:any[] = [];
+  createdStages;
 
   idAux:number = 0;
 
@@ -72,10 +76,21 @@ export class StudyComponent implements OnInit {
     questions: ''
   }
 
-  constructor(private location: Location, public dialog: MatDialog) {
-  }
+  constructor(private location: Location, public dialog: MatDialog, private stageService: StagesService) {}
 
   ngOnInit() {
+    this.getMyStages();
+  }
+
+  getMyStages(){
+    this.stageService.getMyStages().subscribe(
+      res => {
+        this.createdStages = res['stages'];
+        this.stagesDB = this.createdStages;
+      },
+      err => {
+      }
+    );
   }
 
   backClicked() {
@@ -90,8 +105,15 @@ export class StudyComponent implements OnInit {
     moveItemInArray(this.stages, event.previousIndex, event.currentIndex);
   }
 
-  newStage(typeName:string){
-    let stageComp;
+  addStageDB(stage){
+    let aux = stage;
+    aux['idAux'] = this.idAux;
+    this.idAux++;
+    this.stages.push(aux);
+  }
+
+  newStage(typeName:string, stage = undefined){
+    let stageComp, dialogRef;
     switch (typeName){
       case 'Affective(SAM)':
         stageComp = AffectiveComponent;
@@ -121,18 +143,32 @@ export class StudyComponent implements OnInit {
         stageComp = TutorialComponent;
         break;
     }
-    let dialogRef = this.dialog.open(stageComp, {
-      width: '600px',
-      data: typeName
-    });
+    if(stage != undefined){
+      dialogRef = this.dialog.open(stageComp, {
+        width: '600px',
+        data: {
+          typeName,
+          isEdit: true,
+          stage
+        }
+      });
+    } else {
+      dialogRef = this.dialog.open(stageComp, {
+        width: '600px',
+        data: {
+          typeName,
+          isEdit: false
+        }
+      });
+    }
     dialogRef.afterClosed().subscribe(result => {
       if(result){
-        let aux = {
-          title: `${typeName} stage`,
-          id: this.idAux
-        };
+        //console.log(result);
+        let aux = result;
+        aux['idAux'] = this.idAux;
         this.idAux++;
         this.stages.push(aux);
+        this.getMyStages();
       }
     });
   }
@@ -151,20 +187,36 @@ export class StudyComponent implements OnInit {
   }
 
   searchStage(name: string){
-    this.createdStages = this.stagesDB.filter(word => word.includes(name));
-    console.log(this.createdStages);
+    this.createdStages = this.stagesDB.filter(obj => obj.id.includes(name));
+  }
+
+  deleteStageDB(stage){
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: stage.id
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.stageService.deleteStage(stage._id).subscribe(
+          res => {
+            this.stages = this.stages.filter(s => {s._id != stage._id});
+            this.getMyStages();
+          }
+        );
+      }
+    });
   }
 
   deleteStage(stage: any) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         width: '350px',
-        data: stage.title
+        data: stage.id
       });
     dialogRef.afterClosed().subscribe(result => {
         if(result) {
           let index = this.stages.map( a => {
-              return a.id;
-            } ).indexOf(stage.id);
+              return a.idAux;
+            } ).indexOf(stage.idAux);
           this.stages.splice(index, 1);
         }
       });

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpRequest, HttpEventType, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -8,24 +9,24 @@ import { Observable, Subject } from 'rxjs';
 export class UploadService {
 
   //Upload services
-  private imageUrl = 'http://localhost:3000/upload-image';
-  private htmlUrl = 'http://localhost:3000/upload-html';
-  private jsonUrl = 'http://localhost:3000/upload-locale';
+  private imageUrl = environment.apiUrl + 'upload-image';
+  private htmlUrl = environment.apiUrl + 'upload-html';
+  private jsonUrl = environment.apiUrl + 'upload-locale';
 
   //Get uploaded files
-  private myImagesUrl = 'http://localhost:3000/my-images';
-  private myHtmlUrl = 'http://localhost:3000/my-html';
-  private myJsonUrl = 'http://localhost:3000/my-json';
+  private myImagesUrl = environment.apiUrl + 'my-images';
+  private myHtmlUrl = environment.apiUrl + 'my-html';
+  private myJsonUrl = environment.apiUrl + 'my-json';
 
   //Download files
-  private imageDownloadUrl = 'http://localhost:3000/download-image/';
-  private htmlDownloadUrl = 'http://localhost:3000/download-html/';
-  private localeDownloadUrl = 'http://localhost:3000/download-locale/';
+  private imageDownloadUrl = environment.apiUrl + 'download-image/';
+  private htmlDownloadUrl = environment.apiUrl + 'download-html/';
+  private localeDownloadUrl = environment.apiUrl + 'download-locale/';
 
   //Delete files
-  private deleteImageUrl = 'http://localhost:3000/delete-image/';
-  private deleteHtmlUrl = 'http://localhost:3000/delete-html/';
-  private deleteLocaleUrl = 'http://localhost:3000/delete-locale/';
+  private deleteImageUrl = environment.apiUrl + 'delete-image/';
+  private deleteHtmlUrl = environment.apiUrl + 'delete-html/';
+  private deleteLocaleUrl = environment.apiUrl + 'delete-locale/';
 
   constructor( private http: HttpClient ) {}
 

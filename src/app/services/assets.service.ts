@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AssetsService {
 
-  private myLocalesURL = 'http://localhost:3000/my-locales';
-  private localesURL = 'http://localhost:3000/locales';
-  private myDomainsURL = 'http://localhost:3000/my-domains';
-  private domainsURL = 'http://localhost:3000/domains';
-  private myTasksURL = 'http://localhost:3000/my-tasks';
-  private tasksURL = 'http://localhost:3000/tasks';
+  private myLocalesURL = environment.apiUrl + 'my-locales';
+  private localesURL = environment.apiUrl + 'locales';
+  private myDomainsURL = environment.apiUrl + 'my-domains';
+  private domainsURL = environment.apiUrl + 'domains';
+  private myTasksURL = environment.apiUrl + 'my-tasks';
+  private tasksURL = environment.apiUrl + 'tasks';
 
   constructor(private http: HttpClient) { }
 

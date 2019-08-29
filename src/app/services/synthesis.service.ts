@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SynthesisService {
 
-  private synthesisURL = "http://localhost:3000/synthesis";
-  private mySynthesisURL = "http://localhost:3000/my-synthesis";
+  private synthesisURL = environment.apiUrl + "synthesis";
+  private mySynthesisURL = environment.apiUrl + "my-synthesis";
 
   constructor( private http: HttpClient ) { }
 

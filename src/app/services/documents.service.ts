@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DocumentsService {
 
-  private myDocumentsURL = 'http://localhost:3000/my-documents';
-  private documentsURL = 'http://localhost:3000/documents';
+  private myDocumentsURL = environment.apiUrl + 'my-documents';
+  private documentsURL = environment.apiUrl + 'documents';
 
   constructor(private http: HttpClient) { }
 

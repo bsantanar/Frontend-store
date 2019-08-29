@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuestionsService {
 
-  private questionsURL = "http://localhost:3000/questions";
-  private questionURL = "http://localhost:3000/question/";
-  private myQuestionsURL = "http://localhost:3000/my-questions";
+  private questionsURL = environment.apiUrl + "questions";
+  private questionURL = environment.apiUrl + "question/";
+  private myQuestionsURL = environment.apiUrl + "my-questions";
 
   constructor( private http: HttpClient) { }
 

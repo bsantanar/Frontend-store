@@ -2,6 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { UploadService } from 'src/app/services/upload.service';
+import { StagesService } from 'src/app/services/stages.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-instructions',
@@ -14,7 +16,7 @@ export class InstructionsComponent implements OnInit {
   templates:any = [];
 
   constructor( private fb: FormBuilder, public dialogRef: MatDialogRef<InstructionsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data, private uploadService: UploadService) { }
+    @Inject(MAT_DIALOG_DATA) public data, private uploadService: UploadService, private stageService: StagesService) { }
 
   ngOnInit() {
     this.instructionsForm = this.fb.group({
@@ -28,12 +30,60 @@ export class InstructionsComponent implements OnInit {
         this.templates = res['html']
       }
     );
+    if(this.data.isEdit){
+      this.loadStage(this.data.stage);
+    }
+  }
+
+  loadStage(stage){
+    this.instructionsForm.controls['id'].setValue(stage.id);
+    this.instructionsForm.controls['time'].setValue(stage.time);
+    this.instructionsForm.controls['page'].setValue(stage.page);
+    this.instructionsForm.controls['stage'].setValue(stage.stage);
   }
 
   save(){
     let instructionsObj = this.instructionsForm.value;
-    console.log(instructionsObj);
-    this.dialogRef.close(instructionsObj);
+    instructionsObj['state'] = this.data.typeName;
+    instructionsObj['type'] = "stage";
+    instructionsObj['user'] = localStorage.getItem('userId');
+    if(this.data.isEdit){
+      this.editStage(this.data.stage, instructionsObj);
+    } else{
+      this.saveNewStage(instructionsObj);
+    }
+  }
+
+  saveNewStage(obj){
+    this.stageService.newStage(obj).subscribe(
+      res => {
+        this.dialogRef.close(res['stage']);
+      },
+      err => {
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: 'Error en el servidor'
+        });
+        this.dialogRef.close();
+      }
+    );
+  }
+
+  editStage(old, newObj){
+    this.stageService.editStage(old._id, newObj).subscribe(
+      res => {
+        this.dialogRef.close(res['stage']);
+      },
+      err => {
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: 'Error en el servidor'
+        });
+        this.dialogRef.close();
+      }
+    );
   }
 
   onNoClick(): void {

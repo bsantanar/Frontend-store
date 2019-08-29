@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { UploadService } from 'src/app/services/upload.service';
 import { SynthesisService } from 'src/app/services/synthesis.service';
+import { StagesService } from 'src/app/services/stages.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-synthesis',
@@ -17,7 +19,8 @@ export class SynthesisComponent implements OnInit {
   forms: any = [];
 
   constructor( private fb: FormBuilder, public dialogRef: MatDialogRef<SynthesisComponent>,
-    @Inject(MAT_DIALOG_DATA) public data, private uploadService: UploadService, private synthService: SynthesisService) { }
+    @Inject(MAT_DIALOG_DATA) public data, private uploadService: UploadService, private synthService: SynthesisService, 
+    private stageService: StagesService) { }
 
   ngOnInit() {
     this.synthesisForm = this.fb.group({
@@ -44,12 +47,63 @@ export class SynthesisComponent implements OnInit {
         this.forms = res['synthesis']
       }
     );
+    if(this.data.isEdit){
+      this.loadStage(this.data.stage);
+    }
+  }
+
+  loadStage(stage){
+    this.synthesisForm.controls['id'].setValue(stage.id);
+    this.synthesisForm.controls['time'].setValue(stage.time);
+    this.synthesisForm.controls['alert'].setValue(stage.reminderAlert);
+    this.synthesisForm.controls['tips'].setValue(stage.tips);
+    this.synthesisForm.controls['form'].setValue(stage.form);
+    this.synthesisForm.controls['slides'].setValue(stage.slides);
+    this.synthesisForm.controls['stage'].setValue(stage.stage);
   }
 
   save(){
     let synthObj = this.synthesisForm.value;
-    console.log(synthObj);
-    this.dialogRef.close(synthObj);
+    synthObj['state'] = this.data.typeName;
+    synthObj['type'] = "stage";
+    synthObj['user'] = localStorage.getItem('userId');
+    if(this.data.isEdit){
+      this.editStage(this.data.stage, synthObj);
+    } else{
+      this.saveNewStage(synthObj);
+    }
+  }
+
+  saveNewStage(obj){
+    this.stageService.newStage(obj).subscribe(
+      res => {
+        this.dialogRef.close(res['stage']);
+      },
+      err => {
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: 'Error en el servidor'
+        });
+        this.dialogRef.close();
+      }
+    );
+  }
+
+  editStage(old, newObj){
+    this.stageService.editStage(old._id, newObj).subscribe(
+      res => {
+        this.dialogRef.close(res['stage']);
+      },
+      err => {
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: 'Error en el servidor'
+        });
+        this.dialogRef.close();
+      }
+    );
   }
 
   onNoClick(): void {

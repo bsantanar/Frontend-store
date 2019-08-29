@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { UploadService } from 'src/app/services/upload.service';
 import { QuestionnairesService } from 'src/app/services/questionnaires.service';
+import { StagesService } from 'src/app/services/stages.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-critical-eval',
@@ -17,7 +19,8 @@ export class CriticalEvalComponent implements OnInit {
   questionnaires: any = [];
 
   constructor( private fb: FormBuilder, public dialogRef: MatDialogRef<CriticalEvalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data, private uploadService: UploadService, private qsService: QuestionnairesService) { }
+    @Inject(MAT_DIALOG_DATA) public data, private uploadService: UploadService, private qsService: QuestionnairesService,
+    private stageService: StagesService) { }
 
   ngOnInit() {
     this.criticalForm = this.fb.group({
@@ -44,12 +47,63 @@ export class CriticalEvalComponent implements OnInit {
         this.questionnaires = res['questionnaires']
       }
     );
+    if(this.data.isEdit){
+      this.loadStage(this.data.stage);
+    }
+  }
+
+  loadStage(stage){
+    this.criticalForm.controls['id'].setValue(stage.id);
+    this.criticalForm.controls['time'].setValue(stage.time);
+    this.criticalForm.controls['alert'].setValue(stage.reminderAlert);
+    this.criticalForm.controls['tips'].setValue(stage.tips);
+    this.criticalForm.controls['form'].setValue(stage.form);
+    this.criticalForm.controls['slides'].setValue(stage.slides);
+    this.criticalForm.controls['stage'].setValue(stage.stage);
   }
 
   save(){
     let criticalObj = this.criticalForm.value;
-    console.log(criticalObj);
-    this.dialogRef.close(criticalObj);
+    criticalObj['state'] = this.data.typeName;
+    criticalObj['type'] = "stage";
+    criticalObj['user'] = localStorage.getItem('userId');
+    if(this.data.isEdit){
+      this.editStage(this.data.stage, criticalObj);
+    } else{
+      this.saveNewStage(criticalObj);
+    }
+  }
+
+  saveNewStage(obj){
+    this.stageService.newStage(obj).subscribe(
+      res => {
+        this.dialogRef.close(res['stage']);
+      },
+      err => {
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: 'Error en el servidor'
+        });
+        this.dialogRef.close();
+      }
+    );
+  }
+
+  editStage(old, newObj){
+    this.stageService.editStage(old._id, newObj).subscribe(
+      res => {
+        this.dialogRef.close(res['stage']);
+      },
+      err => {
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: 'Error en el servidor'
+        });
+        this.dialogRef.close();
+      }
+    );
   }
 
   onNoClick(): void {
