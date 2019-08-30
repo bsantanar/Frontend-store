@@ -47,7 +47,9 @@
     </div>
     <div class="tab-pane container" id="build">
         <div class="mt-3">
-            <button class="btn btn-success" (click)="showHtmlFiles()">{{htmlTextButton}} Your Files</button>
+            <button class="btn btn-success mr-2" (click)="showHtmlFiles(1)" *ngIf="!showHtml">{{htmlTextButton}} Your Modals</button>
+            <button class="btn btn-success" (click)="showHtmlFiles(2)" *ngIf="!showHtml">{{htmlTextButton}} Your Templates</button>
+            <button class="btn btn-success" (click)="showHtmlFiles(1)" *ngIf="showHtml">Hide Files</button>
             <div class="mt-3 fadeIn" *ngIf="showHtml">
                 <div class="list-group">
                     <div class="list-group-item list-group-item-action" *ngFor="let asset of assetsList">
@@ -58,7 +60,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <button class="btn btn-success mr-3" *ngIf="assetType == 2" (click)="editHtml(asset)">Load</button>
+                            <button class="btn btn-success mr-3" *ngIf="assetType == 2 || assetType == 3" (click)="editHtml(asset)">Load</button>
                             <!-- <button class="btn btn-info" *ngIf="assetType == 2" (click)="editHtml(asset)">Edit</button> -->
                         </div>
                     </div>

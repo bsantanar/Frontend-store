@@ -70,9 +70,13 @@ export class TemplateComponent implements OnInit, AfterViewInit {
     this.viewUploader = true;
   }
 
-  showHtmlFiles(){
+  showHtmlFiles(type: number){
     this.showHtml = !this.showHtml;
-    this.fillAssetsList(2);
+    if(type == 1){
+      this.fillAssetsList(2);
+    } else {
+      this.fillAssetsList(3);
+    }
     if(this.showHtml){
       this.htmlTextButton = 'Hide';
     }else{
@@ -204,8 +208,15 @@ export class TemplateComponent implements OnInit, AfterViewInit {
     );
   }
 
-  editHtml(name: string){
-    this.uploadService.downloadFile(name, this.assetType).subscribe(
+  editHtml(asset: string){
+    let filename = asset.split('.').reduce((a, c) => {
+      if(c != 'html'){
+        return c + a;
+      } 
+      return a;
+    }, "");
+    this.fileNameCoded.nativeElement.value = filename;
+    this.uploadService.downloadFile(asset, this.assetType).subscribe(
       res => {
         let blob;
         switch (this.assetType){
