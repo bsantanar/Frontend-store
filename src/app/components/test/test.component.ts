@@ -10,6 +10,7 @@ import { NewQuestionComponent } from '../new-question/new-question.component';
 import { QuestionsService } from 'src/app/services/questions.service';
 import { SynthesisService } from 'src/app/services/synthesis.service';
 import { QuestionnairesService } from 'src/app/services/questionnaires.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-test',
@@ -70,6 +71,10 @@ export class TestComponent implements OnInit {
   synthesisDB:any[] = [];
   questionnairesDB: any[] = [];
   createdQuestions:any[] = [];
+  showNewQuestion: boolean = false;
+  showRepository: boolean = false;
+  showStore: boolean = false;
+  showHide: boolean = false;
 
   question: object = {
       id: null as number,
@@ -134,6 +139,37 @@ export class TestComponent implements OnInit {
         console.log(err);
       }
     );
+  }
+
+  activateNewQuestion(){
+    if(this.showNewQuestion){
+      this.showNewQuestion = this.showRepository = this.showStore = this.showHide = false;
+    } else{
+      this.showNewQuestion = this.showHide = true;
+      this.showRepository = this.showStore = false;
+    }
+  }
+
+  activateRepository(){
+    if(this.showRepository){
+      this.showNewQuestion = this.showRepository = this.showStore = this.showHide = false;
+    } else{
+      this.showRepository = this.showHide = true;
+      this.showNewQuestion = this.showStore = false;
+    }
+  }
+
+  activateStore(){
+    if(this.showStore){
+      this.showNewQuestion = this.showRepository = this.showStore = this.showHide = false;
+    } else{
+      this.showStore = this.showHide = true;
+      this.showRepository = this.showNewQuestion = false;
+    }
+  }
+
+  hideQuestions(){
+    this.showNewQuestion = this.showRepository = this.showStore = this.showHide = false;
   }
 
   saveTitle(value:string){
@@ -254,6 +290,16 @@ export class TestComponent implements OnInit {
     this.editSynthesis = true;
   }
 
+  clearForm(){
+    this.questionnaireForm.reset();
+    this.questions = [];
+    this.editQuestionnaire = false;
+    this.questionnaireForm.controls['questionnaireId'].setValue('New Questionnaire');
+    while(this.getQuestions.length > 0){
+      this.getQuestions.removeAt(0);
+    }
+  }
+
   cancelSynthesis(){
     this.synthesisForm.reset();
     this.editSynthesis = false;
@@ -360,25 +406,30 @@ export class TestComponent implements OnInit {
         res => {
           //console.log(res);
           this.questionnairesDB.push(res['questionnaire']);
-          this.questionnaireForm.reset();
-          this.questionnaireForm.controls['questionnaireId'].setValue("New Questionnaire");
-          this.questions = [];
+          this.clearForm();
         },
         err => {
-          console.log(err);
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: err
+          });
+          //console.log(err);
         }
       );
     } else {
       this.questionnaireService.editQuestionnaire(id, newQuestionnaire).subscribe(
         res => {
-          this.questionnaireForm.reset();
-          this.editQuestionnaire = false;
           this.getQuestionnairesDB();
-          this.questionnaireForm.controls['questionnaireId'].setValue("New Questionnaire");
-          this.questions = [];
+          this.clearForm();
         },
         err => {
-          console.log(err);
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: err
+          });
+          //console.log(err);
         }
       );
     }

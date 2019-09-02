@@ -76,7 +76,9 @@ export class StudyComponent implements OnInit {
 
 
   studyForm: FormGroup;
-
+  advancedMode: boolean = false;
+  isEdit: boolean = false;
+  idEdit: string;
   showNewStage: boolean;
   showRepository: boolean;
   showStore: boolean;
@@ -122,6 +124,44 @@ export class StudyComponent implements OnInit {
       stages: this.fb.array([])
     });
     this.studyForm.controls['stages'].setValidators([Validators.required]);
+  }
+
+  
+
+  loadStudy(study: any){
+    this.isEdit = true;
+    this.stages = [];
+    this.idEdit = study._id;
+    this.studyForm.patchValue({
+      id: study.id,
+      locale: study.locale,
+      avatar: study.avatar,
+      domain: study.domain,
+      task: study.task,
+      maxGlobalTime: study.maxGlobalTime,
+      minBookmarks: study.minBookmarks,
+      maxBookmarks: study.maxBookmarks,
+      minSnippetWordLength: study.minSnippetWordLength,
+      maxSnippetWordLength: study.maxSnippetWordLength,
+      minSnippetsPerPage: study.minSnippetsPerPage,
+      maxSnippetsPerPage: study.maxSnippetsPerPage,
+      snippetWordTruncateThreshold: study.snippetWordTruncateThreshold,
+      minSynthesisCharLength: study.minSynthesisCharLength,
+      minSynthesisWordLength: study.minSynthesisWordLength,
+      syhtesisAutosaveInterval: study.syhtesisAutosaveInterval,
+      maxStars: study.maxStars,
+      taskPage: study.taskPage,
+      replaceWithRelevantDocuments: study.replaceWithRelevantDocuments
+    });
+    study.stages.forEach(s => {
+      this.getStagesForm.push(new FormControl(s));
+      this.stageService.getStage(s).subscribe(
+        res => {
+          this.stages.push(res['stage']);
+        }
+      );
+    });
+    //console.log(this.studyForm.value);
   }
 
   getMyStudies(){
@@ -204,6 +244,16 @@ export class StudyComponent implements OnInit {
 
   hideStages(){
     this.showNewStage = this.showRepository = this.showStore = this.showHide = false;
+  }
+
+  clearForm(){
+    this.studyForm.reset();
+    this.isEdit = false;
+    this.stages = [];
+    this.studyForm.controls['id'].setValue('New Study Title');
+    while (this.getStagesForm.length > 0){
+      this.getStagesForm.removeAt(0);
+    }
   }
 
   backClicked() {
@@ -357,6 +407,7 @@ export class StudyComponent implements OnInit {
           res => {
             this.stages = this.stages.filter(s => {s._id != study._id});
             this.getMyStudies();
+            this.clearForm();
           },
           err => {
             //console.log(err);
@@ -369,13 +420,11 @@ export class StudyComponent implements OnInit {
   submitStudy(){
     let newStudy = this.studyForm.value;
     newStudy['user'] = localStorage.getItem('userId');
-    console.log(newStudy);
+    //console.log(newStudy);
     this.studyService.newStudy(newStudy).subscribe(
       res => {
         this.getMyStudies();
-        this.studyForm.reset();
-        this.studyForm.controls['id'].setValue('New Study Title');
-        this.stages = [];
+        this.clearForm();
       },
       err => {
         Swal.fire({
@@ -386,5 +435,24 @@ export class StudyComponent implements OnInit {
         //console.log(err);
       }
     );
+  }
+
+  editStudy(){
+    let putStudy = this.studyForm.value;
+    putStudy['user'] = localStorage.getItem('userId');
+    this.studyService.editStudy(this.idEdit, putStudy).subscribe(
+      res => {
+        this.getMyStudies();
+        this.clearForm();
+      },
+      err => {
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: err
+        });
+      }
+    );
+    
   }
 }

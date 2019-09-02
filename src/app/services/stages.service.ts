@@ -17,6 +17,10 @@ export class StagesService {
     return this.http.get(this.myStagesUrl);
   }
 
+  public getStage(id){
+    return this.http.get(this.stageUrl + id);
+  }
+
   public newStage(stage){
     return this.http.post(this.stagesUrl, stage);
   }

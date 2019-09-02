@@ -78,72 +78,36 @@
 
 <div class="mt-3">
     <div class="row fast fadeIn">
-        <!-- <div class="col-3">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">New Stage</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="repository-tab" data-toggle="tab" href="#repository" role="tab" aria-controls="repository" aria-selected="false">Repository</a>
-                </li>
-            </ul>
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                    <div class="row mb-2" *ngFor="let type of typesStages">
-                        <div class="col">
-                            <button class="btn btn-success btn-block d-flex justify-content-center" (click)="newStage(type.type)"><i class="material-icons">
-                                              add
-                                              </i>{{type.type}}</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade limit-tab" id="repository" role="tabpanel" aria-labelledby="profile-tab">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Search stage.." aria-label="Search" (keyup)="searchStage(search.value)" #search>
-                    <hr>
-                    <div class="ml-1 list-group-item list-group-item-action row" *ngFor="let created of createdStages">
-                        <div class="col">
-
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">{{created.id}}</h5>
-                            </div>
-                            <p class="mb-1">Type: {{created.state}}</p>
-                            <small>Time: {{created.time}}</small>
-                        </div>
-                        <div class="col">
-                            <button class="btn btn-sm btn-success mr-1" (click)="addStageDB(created)">Add</button>
-                            <button class="btn btn-sm btn-info mr-1" (click)="newStage(created.state, created)">Edit</button>
-                            <button class="btn btn-sm btn-danger mt-1" (click)="deleteStageDB(created)">Delete</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
         <div class="col">
             <div class="jumbotron">
-                <form [formGroup]="studyForm" (ngSubmit)="submitStudy()">
 
-                    <div class="row">
-                        <div class="col">
+                <div class="row">
+                    <div class="col">
 
-                        </div>
-                        <div class="col-lg">
-                            <h1>{{studyForm.get('id').value}}</h1>
-                        </div>
-                        <div class="col">
-
-                            <button class="btn btn-info d-flex justify-content-center" type="button" style="float: left" (click)="editTitle(studyForm.get('id').value)">Edit</button>
-                        </div>
                     </div>
-                    <hr>
+                    <div class="col-lg">
+                        <h1>{{studyForm.get('id').value}}</h1>
+                    </div>
+                    <div class="col">
+
+                        <button class="btn btn-info d-flex justify-content-center" type="button" style="float: left" (click)="editTitle(studyForm.get('id').value)">Edit</button>
+                    </div>
+                </div>
+                <hr>
+                <div class="form-group col form-check">
+                    <input type="checkbox" class="form-check-input" id="advanced" [(ngModel)]="advancedMode" [checked]="advancedMode">
+                    <label for="advanced" class="form-check-label">Advanced Mode</label>
+                </div>
+                <form [formGroup]="studyForm" (ngSubmit)="submitStudy()">
                     <div class="form-row">
                         <div class="form-group col">
                             <label for="avatar">Avatar Name</label>
                             <input type="text" class="form-control" name="avatar" placeholder="Sarah" formControlName="avatar" [ngClass]="{ 'is-invalid': studyForm.controls.avatar.errors, 'is-valid': !studyForm.controls.avatar.errors}">
                         </div>
                         <div class="form-group col">
-                            <label for="">Flow Locale</label>
+                            <label for="">Flow Language (Locale File)</label>
                             <select formControlName="locale" class="form-control" [ngClass]="{ 'is-invalid': studyForm.controls.locale.errors, 'is-valid': !studyForm.controls.locale.errors }">
-                                <option *ngFor="let local of myLocales" [ngValue]="local.code">{{local.code}}</option>
+                                <option *ngFor="let local of myLocales" [ngValue]="local.code">{{local.name}} ({{local.code}})</option>
                             </select>
                         </div>
                         <div class="form-group col">
@@ -165,7 +129,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row" *ngIf="advancedMode">
                         <div class="form-group col">
                             <label for="">Minimum Required Bookmarks</label>
                             <input type="number" class="form-control" formControlName="minBookmarks" [ngClass]="{ 'is-invalid': studyForm.controls.minBookmarks.errors, 'is-valid': !studyForm.controls.minBookmarks.errors }">
@@ -191,7 +155,7 @@
                             <input type="number" class="form-control" formControlName="maxSnippetWordLength" [ngClass]="{ 'is-invalid': studyForm.controls.maxSnippetWordLength.errors, 'is-valid': !studyForm.controls.maxSnippetWordLength.errors }">
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row" *ngIf="advancedMode">
                         <div class="form-group col-sm">
                             <label for="">Global Time Limit (minutes)</label>
                             <input type="number" class="form-control" formControlName="maxGlobalTime" [ngClass]="{ 'is-invalid': studyForm.controls.maxGlobalTime.errors, 'is-valid': !studyForm.controls.maxGlobalTime.errors }">
@@ -217,7 +181,7 @@
                             <input type="number" class="form-control" formControlName="maxStars" [ngClass]="{ 'is-invalid': studyForm.controls.maxStars.errors, 'is-valid': !studyForm.controls.maxStars.errors }">
                         </div>
                     </div>
-                    <div class="form-group col form-check">
+                    <div class="form-group col form-check" *ngIf="advancedMode">
                         <input type="checkbox" class="form-check-input" id="replace" formControlName="replaceWithRelevantDocuments">
                         <label for="replace" class="form-check-label">Replace Student Bookmarks with Relevant Documents</label>
                     </div>
@@ -244,7 +208,9 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-success float-right mt-3" type="submit" [ngClass]="{'disabled': !studyForm.valid}">Create</button>
+                    <button class="btn btn-success float-right mt-3" *ngIf="!isEdit" type="submit" [ngClass]="{'disabled': !studyForm.valid}">Create</button>
+                    <button class="btn btn-success float-right mt-3 ml-1" *ngIf="isEdit" type="button" (click)="editStudy()" [ngClass]="{'disabled': !studyForm.valid}">Edit</button>
+                    <button class="btn btn-danger float-right mt-3" *ngIf="isEdit" type="button" (click)="clearForm()">Cancel</button>
                 </form>
             </div>
         </div>
@@ -264,7 +230,7 @@
             <p class="mb-1">Task: <b>{{study.task}}</b>. Domain: <b>{{study.domain}}</b>. Locale: <b>{{study.locale}}</b>. With <b>{{study.stages.length}} stages</b>.</p>
         </div>
         <div class="col">
-            <button class="btn btn-success mr-3">Edit</button>
+            <button class="btn btn-success mr-3" (click)="loadStudy(study)">Edit</button>
             <button class="btn btn-danger" (click)="deleteStudy(study)">Delete</button>
         </div>
     </div>
