@@ -151,17 +151,15 @@ export class NewQuestionComponent implements OnInit {
           res => {
             //console.log(res);
             question['_id'] = res['question']._id;
+            this.dialogRef.close(question);
           },
           err => {
-            if(err instanceof HttpErrorResponse){
-              if(err.status){
-                Swal.fire({
-                  type: 'error',
-                  title: 'Oops...',
-                  text: `Error! ${err.status}`
-                });
-              }
-            }
+            Swal.fire({
+              type: 'error',
+              title: 'Oops...',
+              text: err
+            });
+            this.dialogRef.close()
             //console.log(err);
           }
         );
@@ -169,25 +167,20 @@ export class NewQuestionComponent implements OnInit {
         this.questionService.editQuestion(this.data._id, question).subscribe(
           res => {
             //console.log(res);
+            this.dialogRef.close(question)
           },
           err => {
-            if(err instanceof HttpErrorResponse){
-              if(err.status){
-                Swal.fire({
-                  type: 'error',
-                  title: 'Oops...',
-                  text: `Error! ${err.status}`
-                });
-              }
-            }
+            Swal.fire({
+              type: 'error',
+              title: 'Oops...',
+              text: err
+            });
+            this.dialogRef.close()
             //console.log(err);
           }
         )
       }
       //console.log(this.newQuestionForm.value);
-      setTimeout(() => {
-        this.dialogRef.close(question)
-      }, 300);
     }
   }
 

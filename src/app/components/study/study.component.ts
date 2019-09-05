@@ -270,6 +270,7 @@ export class StudyComponent implements OnInit {
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.stages, event.previousIndex, event.currentIndex);
+    //console.log(this.stages);
   }
 
   addStageDB(stage){
@@ -418,6 +419,12 @@ export class StudyComponent implements OnInit {
   }
 
   submitStudy(){
+    while (this.getStagesForm.length > 0){
+      this.getStagesForm.removeAt(0);
+    }
+    this.stages.forEach(s => {
+      this.getStagesForm.push(new FormControl (s._id))
+    });
     let newStudy = this.studyForm.value;
     newStudy['user'] = localStorage.getItem('userId');
     //console.log(newStudy);
@@ -438,6 +445,12 @@ export class StudyComponent implements OnInit {
   }
 
   editStudy(){
+    while (this.getStagesForm.length > 0){
+      this.getStagesForm.removeAt(0);
+    }
+    this.stages.forEach(s => {
+      this.getStagesForm.push(new FormControl (s._id))
+    });
     let putStudy = this.studyForm.value;
     putStudy['user'] = localStorage.getItem('userId');
     this.studyService.editStudy(this.idEdit, putStudy).subscribe(

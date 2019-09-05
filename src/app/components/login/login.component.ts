@@ -37,6 +37,7 @@ export class LoginComponent implements OnInit {
         //console.log(res);
         localStorage.setItem('token', res['token']);
         localStorage.setItem('userId', res['user']._id);
+        //localStorage.setItem('userName', res['name']);
         // Swal.fire({
         //   type: 'success',
         //   title: 'Logged in successfully'

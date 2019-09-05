@@ -46,6 +46,9 @@ import { SearchComponent } from './components/study/search/search.component';
 import { SynthesisComponent } from './components/study/synthesis/synthesis.component';
 import { TutorialComponent } from './components/study/tutorial/tutorial.component';
 import { TaskQuestionsComponent } from './components/study/task-questions/task-questions.component';
+import { SynthesisTestComponent } from './components/test/synthesis-test/synthesis-test.component';
+import { TestDetailComponent } from './components/test/test-detail/test-detail.component';
+import { AddTestStoreComponent } from './components/test/add-test-store/add-test-store.component';
 
 @NgModule({
   entryComponents: [
@@ -64,7 +67,9 @@ import { TaskQuestionsComponent } from './components/study/task-questions/task-q
     TutorialComponent,
     TaskQuestionsComponent,
     InstructionsComponent,
-    SearchComponent
+    SearchComponent,
+    TestDetailComponent,
+    AddTestStoreComponent
   ],
   declarations: [
     AppComponent,
@@ -93,7 +98,10 @@ import { TaskQuestionsComponent } from './components/study/task-questions/task-q
     SearchComponent,
     SynthesisComponent,
     TutorialComponent,
-    TaskQuestionsComponent
+    TaskQuestionsComponent,
+    SynthesisTestComponent,
+    TestDetailComponent,
+    AddTestStoreComponent
   ],
   imports: [
     HttpClientModule,

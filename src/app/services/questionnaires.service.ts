@@ -10,6 +10,7 @@ export class QuestionnairesService {
   private questionnairesURL = environment.apiUrl + "questionnaires";
   private questionnaireURL = environment.apiUrl + "questionnaire/";
   private myQuestionnairesURL = environment.apiUrl + "my-questionnaires";
+  private publicQuestionnaires = environment.apiUrl + "public-questionnaires";
 
   constructor( private http: HttpClient) { }
 
@@ -19,6 +20,10 @@ export class QuestionnairesService {
 
   public getMyQuestionnaires(){
     return this.http.get(this.myQuestionnairesURL);
+  }
+
+  public getPublicQuestionnaires(){
+    return this.http.get(this.publicQuestionnaires);
   }
 
   public newQuestionnaire(questionnaire){

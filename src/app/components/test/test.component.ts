@@ -8,9 +8,10 @@ import { CdkDragDrop, moveItemInArray  } from '@angular/cdk/drag-drop';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { NewQuestionComponent } from '../new-question/new-question.component';
 import { QuestionsService } from 'src/app/services/questions.service';
-import { SynthesisService } from 'src/app/services/synthesis.service';
 import { QuestionnairesService } from 'src/app/services/questionnaires.service';
 import Swal from 'sweetalert2';
+import { TestDetailComponent } from './test-detail/test-detail.component';
+import { AddTestStoreComponent } from './add-test-store/add-test-store.component';
 
 @Component({
   selector: 'app-test',
@@ -60,51 +61,37 @@ export class TestComponent implements OnInit {
   editQuestionnaire: Boolean = false;
   editQuestId: String = null;
 
-  editSynthesis: Boolean = false;
-  editSynthId: String = null;
-
   idAux:number = 0;
 
   questions:any[] = [];
 
   questionsDB:any[] = [];
-  synthesisDB:any[] = [];
   questionnairesDB: any[] = [];
   createdQuestions:any[] = [];
+  storeQuestionnaires:any[] = [];
+  filterStore:any[] = [];
   showNewQuestion: boolean = false;
   showRepository: boolean = false;
   showStore: boolean = false;
   showHide: boolean = false;
 
-  question: object = {
-      id: null as number,
-      title: null as string,
-      type: null as number,
-      required: null as boolean,
-      content: null as object
-  }
-
-  synthesisForm: FormGroup;
   questionnaireForm: FormGroup;
 
   constructor(private location: Location, private modalService: NgbModal, private formBuilder: FormBuilder, 
-    public dialog: MatDialog, private questionsService: QuestionsService, private synthesisService: SynthesisService, 
-    private questionnaireService: QuestionnairesService) { }
+    public dialog: MatDialog, private questionsService: QuestionsService, private questionnaireService: QuestionnairesService) { }
 
   ngOnInit() {
-    this.synthesisForm = this.formBuilder.group({
-      id: ['', Validators.required],
-      title: ['', Validators.required]
-    });
     this.questionnaireForm = this.formBuilder.group({
       questionnaireId: ['New Questionnaire', Validators.required],
       instructions: ['', Validators.required],
-      questions: this.formBuilder.array([])
+      questions: this.formBuilder.array([]),
+      public: [false],
+      tags: new FormControl()
     });
     this.questionnaireForm.controls['questions'].setValidators([Validators.required]);
     this.getMyQuestions();
-    this.getSynthesisDB();
     this.getQuestionnairesDB();
+    this.getStoreQuestionnaires();
   }
 
   getMyQuestions(){
@@ -114,18 +101,7 @@ export class TestComponent implements OnInit {
         this.createdQuestions = this.questionsDB;
       },
       err => {
-        console.log(err);
-      }
-    );
-  }
-
-  getSynthesisDB(){
-    this.synthesisService.getMySynthesis().subscribe(
-      res => {
-        this.synthesisDB = res['synthesis'];
-      },
-      err => {
-        console.log(err);
+        //console.log(err);
       }
     );
   }
@@ -136,7 +112,22 @@ export class TestComponent implements OnInit {
         this.questionnairesDB = res['questionnaires'];
       },
       err => {
-        console.log(err);
+        //console.log(err);
+      }
+    );
+  }
+
+  getStoreQuestionnaires(){
+    this.questionnaireService.getPublicQuestionnaires().subscribe(
+      res => {
+        //console.log(res);
+        this.storeQuestionnaires = res['public'].filter(
+          q => q.createdBy != localStorage.getItem('userId')
+        );
+        this.filterStore = this.storeQuestionnaires;
+      },
+      err => {
+        //console.log(err);
       }
     );
   }
@@ -180,6 +171,54 @@ export class TestComponent implements OnInit {
     this.location.back();
   }
 
+  makePublic(){
+    this.questionnaireForm.controls['public'].setValue(true);
+    this.questionnaireForm.controls['tags'].setValidators([Validators.required]);
+    this.questionnaireForm.controls['tags'].updateValueAndValidity();
+  }
+
+  cancelPublic(){
+    this.questionnaireForm.controls['public'].setValue(false);
+    this.questionnaireForm.controls['tags'].clearValidators();
+    this.questionnaireForm.controls['tags'].updateValueAndValidity();
+    //console.log(this.questionnaireForm);
+  }
+
+  searchQuestion(name: string){
+    this.createdQuestions = this.questionsDB.filter(
+      q => q.title.toLowerCase().includes(name.toLowerCase())
+      );
+  }
+
+  searchTagStore(name: string, clear?: boolean){
+    if(clear) this.filterStore = this.storeQuestionnaires;
+    else{
+      this.filterStore = this.storeQuestionnaires.filter(
+        q => q.tags.includes(name)
+      );
+    }
+  }
+
+  viewTestStore(questionnaire: any){
+    const dialogRef = this.dialog.open(TestDetailComponent, {
+      width: '800px',
+      data: questionnaire
+    });
+    dialogRef.afterClosed().subscribe();
+  }
+
+  addTestStore(questionnaire: any){
+    const dialogRef = this.dialog.open(AddTestStoreComponent, {
+      width: '800px',
+      data: questionnaire
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.getQuestionnairesDB();
+      }
+    });
+  }
+
   editTitle(value:string){
     const dialogRef = this.dialog.open(TitleEditComponent, {
       width: '250px',
@@ -204,17 +243,6 @@ export class TestComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(newQuestion => {
       if(newQuestion){
-        // let aux = {
-        //   title: newQuestion.title,
-        //   questionId: newQuestion.questionId,
-        //   hint: newQuestion.hint,
-        //   required: newQuestion.required,
-        //   idAux: this.idAux,
-        //   type: type.type,
-        //   _id: newQuestion.id,
-        //   options: newQuestion.options
-        // };
-        //console.log(newQuestion);
         setTimeout(() => {
           newQuestion['idAux'] = this.idAux;
           this.idAux++;
@@ -239,7 +267,12 @@ export class TestComponent implements OnInit {
       options: question.options
     };
     this.idAux++;
-    this.questions.push(aux);
+    if(this.questions.includes(question._id)){
+      let idx = this.questions.indexOf(question._id);
+      this.questions[idx] = aux;
+    } else{
+      this.questions.push(aux);
+    }
     this.getQuestions.push(new FormControl(question._id));
   }
 
@@ -257,37 +290,39 @@ export class TestComponent implements OnInit {
   }
 
   loadQuestionnaire(questionnaire: any, editable: boolean){
+    this.clearForm();
     this.questionnaireForm.controls['questionnaireId'].setValue(questionnaire.questionnaireId);
     this.questionnaireForm.controls['instructions'].setValue(questionnaire.instructions);
+    this.questionnaireForm.controls['public'].setValue(questionnaire.public);
+    if(questionnaire.tags.length > 0){
+      let tagsAux = [];
+      for (const tag of questionnaire.tags){
+        tagsAux.push({display: tag, value: tag});
+      }
+      this.questionnaireForm.controls['tags'].setValue(tagsAux);
+    }
+    //se obtiene cada objeto question relacionado a questionnaire
     while(this.getQuestions.length !== 0){
       this.getQuestions.removeAt(0);
     }
     this.questions = [];
-    questionnaire.questions.forEach(q => {
-      //console.log(q);
-      //this.getQuestions.push(new FormControl(q));
+    for (const q of questionnaire.questions) {
+      this.questions.push(q);
       this.questionsService.getQuestion(q).subscribe(
         res => {
           this.addQuestionDB(res['question']);
         },
         err => {
-          console.log(err);
+          //console.log(err);
         }
       );
-    });
+    }
     if(editable){
       this.editQuestionnaire = true;
       this.editQuestId = questionnaire._id;
     } else {
       this.editQuestionnaire = false;
     }
-  }
-
-  loadSynthesis(synthesis: any){
-    this.synthesisForm.controls['id'].setValue(synthesis.synthesisId);
-    this.synthesisForm.controls['title'].setValue(synthesis.title);
-    this.editSynthId = synthesis._id;
-    this.editSynthesis = true;
   }
 
   clearForm(){
@@ -298,11 +333,6 @@ export class TestComponent implements OnInit {
     while(this.getQuestions.length > 0){
       this.getQuestions.removeAt(0);
     }
-  }
-
-  cancelSynthesis(){
-    this.synthesisForm.reset();
-    this.editSynthesis = false;
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -367,39 +397,27 @@ export class TestComponent implements OnInit {
       });
   }
 
-  deleteSynthesis(synthesis: any){
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-        width: '350px',
-        data: synthesis.synthesisId
-      });
-    dialogRef.afterClosed().subscribe(result => {
-        if(result) {
-          this.synthesisService.deleteSynthesis(synthesis._id).subscribe(
-            res => {
-              this.synthesisDB = this.synthesisDB.filter(q => q._id !== synthesis._id);
-            },
-            err => {
-              console.log(err);
-            }
-          );
-        }
-      });
-  }
-
-
-  searchQuestion(name: string){
-    this.createdQuestions = this.questionsDB.filter(
-      word => word.title.toLowerCase().includes(name.toLowerCase())
-      );
-  }
 
 
   submitQuestionnaire(id?: string){
-    let newQuestionnaire = {};
-    newQuestionnaire["questionnaireId"] = this.questionnaireForm.get('questionnaireId').value;
-    newQuestionnaire["instructions"] = this.questionnaireForm.get('instructions').value;
-    newQuestionnaire["questions"] = this.questionnaireForm.get('questions').value;
+    //questions en orden dejado por el usuario
+    while(this.getQuestions.length > 0){
+      this.getQuestions.removeAt(0);
+    }
+    this.questions.forEach(q => {
+      this.getQuestions.push(new FormControl(q._id))
+    });
+    //Se elimina el tags del nuevo objeto
+    let newQuestionnaire = this.questionnaireForm.value;
+    delete newQuestionnaire.tags;
     newQuestionnaire["user"] = localStorage.getItem('userId');
+    //Si es publico, se le asigna los tags
+    if(newQuestionnaire.public){
+      newQuestionnaire.tags = [];
+      this.questionnaireForm.controls['tags'].value.forEach(tag => {
+        newQuestionnaire.tags.push(tag.value);
+      });
+    }
     //console.log(newQuestionnaire);
     if(!this.editQuestionnaire){
       this.questionnaireService.newQuestionnaire(newQuestionnaire).subscribe(
@@ -433,36 +451,6 @@ export class TestComponent implements OnInit {
         }
       );
     }
-  }
-
-  submitSynthesis(id?: string) {
-    let newSynth = {};
-    newSynth["title"] = this.synthesisForm.get('title').value;
-    newSynth["synthesisId"] = this.synthesisForm.get('id').value;
-    newSynth["user"] = localStorage.getItem('userId');
-    if(!this.editSynthesis){
-      this.synthesisService.newSynthesis(newSynth).subscribe(
-        res => {
-          this.synthesisDB.push(res['synthesis']);
-          this.synthesisForm.reset();
-        },
-        err => {
-          console.log(err);
-        }
-      );
-    } else {
-      this.synthesisService.editSynthesis(id, newSynth).subscribe(
-        res => {
-          this.synthesisForm.reset();
-          this.editSynthesis = false;
-          this.getSynthesisDB();
-        },
-        err => {
-          console.log(err);
-        }
-      );
-    }
-    
   }
 
 }
