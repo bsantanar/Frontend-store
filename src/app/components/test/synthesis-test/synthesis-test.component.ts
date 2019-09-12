@@ -70,7 +70,7 @@ export class SynthesisTestComponent implements OnInit {
       });
   }
 
-  submitSynthesis(id?: string) {
+  submitSynthesis(id?: String) {
     let newSynth = {};
     newSynth["title"] = this.synthesisForm.get('title').value;
     newSynth["synthesisId"] = this.synthesisForm.get('id').value;

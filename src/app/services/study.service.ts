@@ -10,6 +10,7 @@ export class StudyService {
   private myStudiesUrl = environment.apiUrl + 'my-studies';
   private studiesUrl = environment.apiUrl + 'studies';
   private studyUrl = environment.apiUrl + 'study/'
+  private publicStudiesUrl = environment.apiUrl + 'public-studies';
 
   constructor(private http: HttpClient) { }
 
@@ -27,5 +28,9 @@ export class StudyService {
 
   public deleteStudy(id){
     return this.http.delete(this.studyUrl + id);
+  }
+
+  public getPublicStudies(){
+    return this.http.get(this.publicStudiesUrl);
   }
 }

@@ -11,6 +11,7 @@ export class AuthService {
   private registerURL = environment.apiUrl + "register";
   private loginURL = environment.apiUrl + "login";
   private profileUrl = environment.apiUrl + 'me';
+  private userUrl = environment.apiUrl + "user/";
 
   constructor( private http: HttpClient, private router: Router) { }
 
@@ -39,6 +40,10 @@ export class AuthService {
     localStorage.removeItem('userId');
     localStorage.removeItem('userName');
     this.router.navigate(['/login']);
+  }
+
+  public getUser(id){
+    return this.http.get(this.userUrl + id);
   }
 
 }

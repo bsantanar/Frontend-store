@@ -21,6 +21,8 @@ import Swal from 'sweetalert2';
 import { AssetsService } from 'src/app/services/assets.service';
 import { UploadService } from 'src/app/services/upload.service';
 import { StudyService } from 'src/app/services/study.service';
+import { StudyDetailComponent } from './study-detail/study-detail.component';
+import { AddStudyStoreComponent } from './add-study-store/add-study-store.component';
 
 @Component({
   selector: 'app-study',
@@ -74,7 +76,7 @@ export class StudyComponent implements OnInit {
 
   stages:any[] = [];
 
-
+  currentUserId = localStorage.getItem('userId');
   studyForm: FormGroup;
   advancedMode: boolean = false;
   isEdit: boolean = false;
@@ -83,6 +85,8 @@ export class StudyComponent implements OnInit {
   showRepository: boolean;
   showStore: boolean;
   showHide: boolean;
+  storeStudies = [];
+  filterStore = [];
   myLocales = [];
   myDomains = [];
   myTasks = [];
@@ -100,6 +104,7 @@ export class StudyComponent implements OnInit {
     this.getMyLocales();
     this.getMyModals();
     this.getMyStudies();
+    this.getPublicStudies();
     this.showNewStage = this.showRepository = this.showStore = this.showHide = false;
     this.studyForm = this.fb.group({
       id: ['New Study Title', Validators.required],
@@ -121,12 +126,12 @@ export class StudyComponent implements OnInit {
       taskPage: ['', Validators.required],
       replaceWithRelevantDocuments: [false],
       avatar: ['', Validators.required],
-      stages: this.fb.array([])
+      stages: this.fb.array([]),
+      public: [false],
+      tags: new FormControl()
     });
     this.studyForm.controls['stages'].setValidators([Validators.required]);
   }
-
-  
 
   loadStudy(study: any){
     this.isEdit = true;
@@ -151,17 +156,38 @@ export class StudyComponent implements OnInit {
       syhtesisAutosaveInterval: study.syhtesisAutosaveInterval,
       maxStars: study.maxStars,
       taskPage: study.taskPage,
-      replaceWithRelevantDocuments: study.replaceWithRelevantDocuments
+      replaceWithRelevantDocuments: study.replaceWithRelevantDocuments,
+      public: study.public
     });
-    study.stages.forEach(s => {
+    if(study.tags.length > 0){
+      let tagsAux = [];
+      for (const tag of study.tags){
+        tagsAux.push({display: tag, value: tag});
+      }
+      this.studyForm.controls['tags'].setValue(tagsAux);
+    }
+    for( const s of study.stages){
       this.getStagesForm.push(new FormControl(s));
+      this.stages.push(s);
+      let idx = this.stages.indexOf(s);
       this.stageService.getStage(s).subscribe(
         res => {
-          this.stages.push(res['stage']);
+          this.stages[idx] = res['stage'];
         }
       );
-    });
+    }
     //console.log(this.studyForm.value);
+  }
+
+  getPublicStudies(){
+    this.studyService.getPublicStudies().subscribe(
+      res => {
+        this.storeStudies = res['public'].filter(
+          s => s.user != this.currentUserId
+        );
+        this.filterStore = this.storeStudies;
+      }
+    );
   }
 
   getMyStudies(){
@@ -258,6 +284,19 @@ export class StudyComponent implements OnInit {
 
   backClicked() {
     this.location.back();
+  }
+
+  makePublic(){
+    this.studyForm.controls['public'].setValue(true);
+    this.studyForm.controls['tags'].setValidators([Validators.required]);
+    this.studyForm.controls['tags'].updateValueAndValidity();
+  }
+
+  cancelPublic(){
+    this.studyForm.controls['public'].setValue(false);
+    this.studyForm.controls['tags'].clearValidators();
+    this.studyForm.controls['tags'].updateValueAndValidity();
+    //console.log(this.studyForm.value);
   }
 
   saveTitle(value:string){
@@ -364,6 +403,41 @@ export class StudyComponent implements OnInit {
     this.createdStages = this.stagesDB.filter(obj => obj.id.includes(name));
   }
 
+  searchTagStore(name: string){
+    if(name == ''){
+      this.filterStore = this.storeStudies;
+      return;
+    }
+    this.filterStore = this.storeStudies.filter(
+      q => q.tags.includes(name)
+    );
+  }
+
+  viewStudyStore(study: any){
+    const dialogRef = this.dialog.open(StudyDetailComponent, {
+      width: '900px',
+      data: study
+    });
+    dialogRef.afterClosed().subscribe();
+  }
+
+  addStudyStore(study: any){
+    let data = study;
+    data['locales'] = this.myLocales;
+    data['domains'] = this.myDomains;
+    data['tasks'] = this.myTasks;
+    data['modals'] = this.myModals;
+    const dialogRef = this.dialog.open(AddStudyStoreComponent, {
+      width: '800px',
+      data
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.getMyStudies();
+      }
+    });
+  }
+
   deleteStageDB(stage){
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
@@ -419,6 +493,7 @@ export class StudyComponent implements OnInit {
   }
 
   submitStudy(){
+    //stages en orden dejado por el usuario
     while (this.getStagesForm.length > 0){
       this.getStagesForm.removeAt(0);
     }
@@ -426,7 +501,16 @@ export class StudyComponent implements OnInit {
       this.getStagesForm.push(new FormControl (s._id))
     });
     let newStudy = this.studyForm.value;
-    newStudy['user'] = localStorage.getItem('userId');
+    //Se elimina el tags del nuevo objeto
+    delete newStudy.tags;
+    newStudy['user'] = this.currentUserId;
+    //Si es publico, se le asigna los tags
+    if(newStudy.public){
+      newStudy.tags = [];
+      this.studyForm.controls['tags'].value.forEach(tag => {
+        newStudy.tags.push(tag.value);
+      });
+    }
     //console.log(newStudy);
     this.studyService.newStudy(newStudy).subscribe(
       res => {
@@ -452,7 +536,16 @@ export class StudyComponent implements OnInit {
       this.getStagesForm.push(new FormControl (s._id))
     });
     let putStudy = this.studyForm.value;
-    putStudy['user'] = localStorage.getItem('userId');
+    //Se elimina el tags del nuevo objeto
+    delete putStudy.tags;
+    putStudy['user'] = this.currentUserId;
+    //Si es publico, se le asigna los tags
+    if(putStudy.public){
+      putStudy.tags = [];
+      this.studyForm.controls['tags'].value.forEach(tag => {
+        putStudy.tags.push(tag.value);
+      });
+    }
     this.studyService.editStudy(this.idEdit, putStudy).subscribe(
       res => {
         this.getMyStudies();

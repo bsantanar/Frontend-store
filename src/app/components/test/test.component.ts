@@ -190,13 +190,14 @@ export class TestComponent implements OnInit {
       );
   }
 
-  searchTagStore(name: string, clear?: boolean){
-    if(clear) this.filterStore = this.storeQuestionnaires;
-    else{
-      this.filterStore = this.storeQuestionnaires.filter(
-        q => q.tags.includes(name)
-      );
+  searchTagStore(name: string){
+    if(name == ''){
+      this.filterStore = this.storeQuestionnaires;
+      return;
     }
+    this.filterStore = this.storeQuestionnaires.filter(
+      q => q.tags.includes(name)
+    );
   }
 
   viewTestStore(questionnaire: any){
@@ -399,7 +400,7 @@ export class TestComponent implements OnInit {
 
 
 
-  submitQuestionnaire(id?: string){
+  submitQuestionnaire(id?: String){
     //questions en orden dejado por el usuario
     while(this.getQuestions.length > 0){
       this.getQuestions.removeAt(0);
