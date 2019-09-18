@@ -9,7 +9,7 @@ import { ErrorInterceptorService } from './services/error-interceptor.service';
 
 //npm packages
 import { MatStepperModule, MatButtonModule, MatFormFieldModule, MatInputModule, 
-  MatDialogModule, MatSelectModule, MatOptionModule, MatProgressBarModule, MatListModule } from '@angular/material';
+  MatDialogModule, MatSelectModule, MatOptionModule, MatProgressBarModule, MatListModule, MatCheckboxModule } from '@angular/material';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
@@ -129,7 +129,8 @@ import { AddStudyStoreComponent } from './components/study/add-study-store/add-s
     MatOptionModule,
     CodemirrorModule,
     QuillModule,
-    TagInputModule
+    TagInputModule,
+    MatCheckboxModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

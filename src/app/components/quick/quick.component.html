@@ -8,37 +8,112 @@
 </div>
 <hr>
 
-<mat-vertical-stepper labelPosition="bottom" linear class="border bg-light animated fadeIn">
-    <mat-step [stepControl]="profileFormGroup">
-        <form [formGroup]="profileFormGroup">
-            <ng-template matStepLabel>Profile</ng-template>
+<mat-horizontal-stepper labelPosition="bottom" linear class="border bg-light animated fadeIn">
+    <mat-step [stepControl]="assetsForm">
+        <form [formGroup]="assetsForm">
+            <ng-template matStepLabel>Resources</ng-template>
+            <div class="row">
+                <div class="col">
+                    <button type="button" mat-stroked-button color="primary" (click)="addAsset(1)">New Language</button>
+                    <button class="ml-3" type="button" mat-stroked-button (click)="editAsset(1)">Manage Languages</button>
+                </div>
+                <div class="col">
+                    <button type="button" mat-stroked-button color="primary" (click)="addAsset(2)">New Domain</button>
+                    <button class="ml-3" type="button" mat-stroked-button (click)="editAsset(2)">Manage Domains</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Language of the Study</mat-label>
+                        <mat-select formControlName="locale" required>
+                            <mat-option *ngFor="let local of myLocales" [value]="local.code">
+                                {{local.name}} ({{local.code}})
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Domain of the Study</mat-label>
+                        <mat-select formControlName="domain" required>
+                            <mat-option *ngFor="let domain of myDomains" [value]="domain.name">
+                                {{domain.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <button type="button" mat-stroked-button color="primary" (click)="addAsset(3)">New Task</button>
+                    <button class="ml-3" type="button" mat-stroked-button (click)="editAsset(3)">Manage Tasks</button>
+                </div>
+                <div class="col">
+                    <button type="button" mat-stroked-button color="primary" (click)="uploadDialog(2)">Upload New Page</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Task of the Study</mat-label>
+                        <mat-select formControlName="task" required>
+                            <mat-option *ngFor="let tsk of myTasks" [value]="tsk.name">
+                                {{tsk.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
 
-            <mat-form-field>
-                <input matInput placeholder="Nombre" formControlName="name" required>
-            </mat-form-field>
-            <br>
-            <mat-form-field>
-                <input matInput placeholder="Apellido" formControlName="name">
-            </mat-form-field>
-            <br>
-            <mat-form-field>
-                <input matInput placeholder="Rut" formControlName="name" required>
-            </mat-form-field>
-            <br>
-            <div>
-                <button class="btn btn-success" matStepperNext type="button">Siguiente</button>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Default page</mat-label>
+                        <mat-select formControlName="taskPage" required>
+                            <mat-option *ngFor="let modal of myModals" [value]="modal">
+                                {{modal}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="mt-5">
+                <button mat-stroked-button color="warn" matStepperPrevious>Previous</button>
+                <button style="float: right;" mat-stroked-button color="primary" matStepperNext>Next</button>
             </div>
         </form>
     </mat-step>
-    <mat-step [stepControl]="addressFormGroup">
-        <form [formGroup]="addressFormGroup">
-            <ng-template matStepLabel>Address</ng-template>
-            <mat-form-field>
-                <input matInput placeholder="Calle" formControlName="address" required>
-            </mat-form-field>
+    <mat-step [stepControl]="generalForm">
+        <form [formGroup]="generalForm">
+            <ng-template matStepLabel>General</ng-template>
+            <div class="row">
+                <div class="col">
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Title of your Study</mat-label>
+                        <input matInput placeholder="Testing-012" formControlName="id" required>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Avatar Name</mat-label>
+                        <input matInput placeholder="Sarah" formControlName="avatar" required>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <mat-checkbox formControlName="public">
+                        Public Content?
+                    </mat-checkbox>
+                </div>
+            </div>
+            <div class="row" *ngIf="generalForm.get('public').value">
+                <div class="form-group col">
+                    <tag-input formControlName='tags' [secondaryPlaceholder]="'Type a tag and press Enter'"></tag-input>
+                </div>
+            </div>
             <div>
-                <button class="btn btn-danger" matStepperPrevious>Atrás</button>
-                <button class="btn btn-success" matStepperNext>Siguiente</button>
+                <button style="float: right;" mat-stroked-button color="primary" matStepperNext type="button">Next</button>
             </div>
         </form>
     </mat-step>
@@ -46,8 +121,28 @@
         <ng-template matStepLabel>Done</ng-template>
         <p>Finalizado</p>
         <div>
-            <button class="btn btn-danger" matStepperPrevious>Atrás</button>
-            <button class="btn btn-success" matStepperNext>Ver mis contenidos</button>
+            <button mat-button matStepperPrevious>Atrás</button>
+            <button mat-button matStepperNext>Ver mis contenidos</button>
         </div>
     </mat-step>
-</mat-vertical-stepper>
+    <mat-step>
+        <ng-template matStepLabel>Done</ng-template>
+        <p>Finalizado</p>
+        <div>
+            <button mat-button matStepperPrevious>Atrás</button>
+            <button mat-button matStepperNext>Ver mis contenidos</button>
+        </div>
+    </mat-step>
+</mat-horizontal-stepper>
+<br>
+<div class="row">
+
+    <div class="col">
+
+        <pre>General form: {{generalForm.value | json}}</pre>
+    </div>
+    <div class="col">
+
+        <pre>Assets form: {{assetsForm.value | json}}</pre>
+    </div>
+</div>

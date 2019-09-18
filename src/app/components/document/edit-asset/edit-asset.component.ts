@@ -115,7 +115,7 @@ export class EditAssetComponent implements OnInit {
             case 1:
               this.assetService.deleteLocale(asset._id).subscribe(
                 res => {
-
+                  this.dialogRef.close(true);
                 },
                 err => {
                   Swal.fire({
@@ -129,7 +129,7 @@ export class EditAssetComponent implements OnInit {
             case 2:
               this.assetService.deleteDomain(asset._id).subscribe(
                 res => {
-
+                  this.dialogRef.close(true);
                 },
                 err => {
                   Swal.fire({
@@ -143,7 +143,7 @@ export class EditAssetComponent implements OnInit {
             case 3:
               this.assetService.deleteTask(asset._id).subscribe(
                 res => {
-
+                  this.dialogRef.close(true);
                 },
                 err => {
                   Swal.fire({
@@ -155,7 +155,6 @@ export class EditAssetComponent implements OnInit {
               );
               break;
           }
-          this.dialogRef.close();
         }
       });
   }
@@ -174,6 +173,7 @@ export class EditAssetComponent implements OnInit {
         this.assetService.editLocale(this.idAsset, asset).subscribe(
           res => {
             //console.log(res);
+            this.dialogRef.close(asset);
           },
           err => {
             Swal.fire({
@@ -188,6 +188,7 @@ export class EditAssetComponent implements OnInit {
         this.assetService.editDomain(this.idAsset, asset).subscribe(
           res => {
             //console.log(res);
+            this.dialogRef.close(asset);
           },
           err => {
             Swal.fire({
@@ -202,6 +203,7 @@ export class EditAssetComponent implements OnInit {
         this.assetService.editTask(this.idAsset, asset).subscribe(
           res => {
             //console.log(res);
+            this.dialogRef.close(asset);
           },
           err => {
             Swal.fire({
@@ -213,7 +215,6 @@ export class EditAssetComponent implements OnInit {
         );
         break;
     }
-    this.dialogRef.close(asset);
   }
 
   onNoClick(): void {

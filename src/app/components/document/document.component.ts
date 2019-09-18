@@ -144,17 +144,19 @@ export class DocumentComponent implements OnInit {
       data: type
     });
     dialogRef.afterClosed().subscribe(asset => {
-      this.documentForm.reset();
-      switch(type){
-        case 1: 
-          this.getLocales();
-          break;
-        case 2:
-          this.getDomains();
-          break;
-        case 3:
-          this.getTasks();
-          break;
+      if(asset){
+        this.documentForm.reset();
+        switch(type){
+          case 1: 
+            this.getLocales();
+            break;
+          case 2:
+            this.getDomains();
+            break;
+          case 3:
+            this.getTasks();
+            break;
+        }
       }
     });
   }

@@ -5,3 +5,8 @@
 .btn-success {
     background-color: #3F51B5;
 }
+
+.full-width {
+    max-width: 300px;
+    width: 100%;
+}
