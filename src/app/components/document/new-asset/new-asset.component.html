@@ -25,7 +25,8 @@
                 <input *ngIf="data == 3" type="text" class="form-control" name="alias" placeholder="email" formControlName="alias" [ngClass]="{ 'is-invalid': assetForm.controls.alias.errors, 'is-valid': !assetForm.controls.alias.errors}">
             </div>
             <div class="form-group col-3">
-                <label for="code">User Code</label>
+                <label for="code" *ngIf="data != 1">User Code</label>
+                <label for="code" *ngIf="data == 1">Locale Code</label>
                 <input *ngIf="data == 1" type="text" class="form-control" name="code" placeholder="en-US" formControlName="code" [ngClass]="{ 'is-invalid': assetForm.controls.code.errors, 'is-valid': !assetForm.controls.code.errors}">
                 <input *ngIf="data == 2" type="text" class="form-control" name="code" placeholder="SS" formControlName="code" [ngClass]="{ 'is-invalid': assetForm.controls.code.errors, 'is-valid': !assetForm.controls.code.errors}">
                 <input *ngIf="data == 3" type="text" class="form-control" name="code" placeholder="E" formControlName="code" [ngClass]="{ 'is-invalid': assetForm.controls.code.errors, 'is-valid': !assetForm.controls.code.errors}">

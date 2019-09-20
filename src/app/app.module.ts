@@ -51,6 +51,7 @@ import { TestDetailComponent } from './components/test/test-detail/test-detail.c
 import { AddTestStoreComponent } from './components/test/add-test-store/add-test-store.component';
 import { StudyDetailComponent } from './components/study/study-detail/study-detail.component';
 import { AddStudyStoreComponent } from './components/study/add-study-store/add-study-store.component';
+import { CreatedStagesComponent } from './components/quick/created-stages/created-stages.component';
 
 @NgModule({
   entryComponents: [
@@ -73,7 +74,8 @@ import { AddStudyStoreComponent } from './components/study/add-study-store/add-s
     TestDetailComponent,
     AddTestStoreComponent,
     StudyDetailComponent,
-    AddStudyStoreComponent
+    AddStudyStoreComponent,
+    CreatedStagesComponent
   ],
   declarations: [
     AppComponent,
@@ -107,7 +109,8 @@ import { AddStudyStoreComponent } from './components/study/add-study-store/add-s
     TestDetailComponent,
     AddTestStoreComponent,
     StudyDetailComponent,
-    AddStudyStoreComponent
+    AddStudyStoreComponent,
+    CreatedStagesComponent
   ],
   imports: [
     HttpClientModule,

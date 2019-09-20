@@ -165,25 +165,35 @@
         </div>
         <hr>
         <h3>Your Questionnaires</h3>
-        <div class="limit-tab">
 
-            <div class="list-group mt-3">
-                <div class="list-group-item row" *ngFor="let q of questionnairesDB">
-                    <div class="col">
+        <div class="text-center" *ngIf="questionnairesDB.length == 0; else myQsList">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <ng-template #myQsList>
 
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">{{q.questionnaireId}}</h5>
+            <div class="limit-tab">
+
+                <div class="list-group mt-3">
+                    <div class="list-group-item row" *ngFor="let q of questionnairesDB">
+                        <div class="col">
+
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{q.questionnaireId}}</h5>
+                            </div>
+                            <p class="mb-1">{{q.instructions}}</p>
                         </div>
-                        <p class="mb-1">{{q.instructions}}</p>
-                    </div>
-                    <div class="col">
-                        <button class="btn btn-success mr-1" (click)="loadQuestionnaire(q, false)">Load</button>
-                        <button class="btn btn-info mr-1" (click)="loadQuestionnaire(q, true)">Edit</button>
-                        <button class="btn btn-danger" (click)="deleteQuestionnaire(q)">Delete</button>
+                        <div class="col">
+                            <button class="btn btn-success mr-1" (click)="loadQuestionnaire(q, false)">Load</button>
+                            <button class="btn btn-info mr-1" (click)="loadQuestionnaire(q, true)">Edit</button>
+                            <button class="btn btn-danger" (click)="deleteQuestionnaire(q)">Delete</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </ng-template>
+
     </div>
     <div class="tab-pane container fade" id="synthesis">
         <app-synthesis-test></app-synthesis-test>

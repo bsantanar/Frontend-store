@@ -1,0 +1,37 @@
+<h2>Created Stages</h2>
+<hr>
+
+<div mat-dialog-content>
+    <div class="text-center" *ngIf="myStages.length == 0; else stagesList">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <ng-template #stagesList>
+        <input class="form-control mr-2 mt-1" type="text" placeholder="Search stage.." aria-label="Search" (keyup)="searchStage(search.value)" #search>
+        <hr>
+        <div class="limit-tab">
+            <div class="row">
+                <div class="col-11">
+                    <div class="ml-2 list-group-item list-group-item-action row" *ngFor="let created of stageFilter">
+                        <div class="col">
+
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{created.id}}</h5>
+                            </div>
+                            <button class="btn btn-success" style="float: right" (click)="addStage(created)">Add Stage</button>
+                            <p class="mb-1">Type: {{created.state}}</p>
+                            <small *ngIf="created.time === -1">Time: Unlimited</small>
+                            <small *ngIf="created.time != -1">Time: {{created.time}} minutes</small>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </ng-template>
+
+</div>
+<div mat-dialog-actions align="end">
+    <button class="btn btn-danger mr-2" (click)="onNoClick()" cdkFocusInitial>Close</button>
+</div>
