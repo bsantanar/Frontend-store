@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { UploadService } from 'src/app/services/upload.service';
 import { StagesService } from 'src/app/services/stages.service';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-instructions',
@@ -16,7 +17,8 @@ export class InstructionsComponent implements OnInit {
   templates:any = [];
 
   constructor( private fb: FormBuilder, public dialogRef: MatDialogRef<InstructionsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data, private uploadService: UploadService, private stageService: StagesService) { }
+    @Inject(MAT_DIALOG_DATA) public data, private uploadService: UploadService, private stageService: StagesService,
+    private router: Router) { }
 
   ngOnInit() {
     this.instructionsForm = this.fb.group({
@@ -87,6 +89,11 @@ export class InstructionsComponent implements OnInit {
   }
 
   onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  newTemplate(){
+    this.router.navigate(['/template']);
     this.dialogRef.close();
   }
 

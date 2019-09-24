@@ -42,8 +42,14 @@
                 </mat-select>
             </div>
         </div>
+        <div class="row">
+            <div class="col">
+                <button type="button" class="btn btn-info btn-sm" (click)="newAsset()">Upload new Modal or Image</button>
+            </div>
+        </div>
     </form>
 </div>
+<hr>
 <div mat-dialog-actions align="end">
     <button class="btn btn-danger mr-2" (click)="onNoClick()" cdkFocusInitial>Cancel</button>
     <button class="btn btn-success " (click)="save()" [ngClass]="{'disabled': !searchForm.valid}">Save</button>

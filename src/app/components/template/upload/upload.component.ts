@@ -18,6 +18,7 @@ export class UploadComponent implements OnInit {
   uploadSuccessful = false
 
   @ViewChild('file') file
+  @ViewChild('publicFile') publicFile
   //public files: Set<File> = new Set()
   public files = [];
 
@@ -111,7 +112,7 @@ export class UploadComponent implements OnInit {
   }
 
   uploadImage(file: File){
-    this.uploadService.uploadImage(file).subscribe(
+    this.uploadService.uploadImage(file, this.publicFile.nativeElement.checked).subscribe(
       res => {
         // The OK-button should have the text "Finish" now
         this.primaryButtonText = 'Finish';
@@ -152,7 +153,7 @@ export class UploadComponent implements OnInit {
   }
 
   uploadHtml(file: File, type: string){
-    this.uploadService.uploadHtml(file, type).subscribe(
+    this.uploadService.uploadHtml(file, type, this.publicFile.nativeElement.checked).subscribe(
       res => {
         // The OK-button should have the text "Finish" now
         this.primaryButtonText = 'Finish';
@@ -193,7 +194,7 @@ export class UploadComponent implements OnInit {
   }
 
   uploadJson(file: File){
-    this.uploadService.uploadJson(file).subscribe(
+    this.uploadService.uploadJson(file, this.publicFile.nativeElement.checked).subscribe(
       res => {
         // The OK-button should have the text "Finish" now
         this.primaryButtonText = 'Finish';

@@ -5,6 +5,7 @@ import { UploadService } from 'src/app/services/upload.service';
 import { QuestionnairesService } from 'src/app/services/questionnaires.service';
 import { StagesService } from 'src/app/services/stages.service';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-task-questions',
@@ -19,7 +20,7 @@ export class TaskQuestionsComponent implements OnInit {
 
   constructor( private fb: FormBuilder, public dialogRef: MatDialogRef<TaskQuestionsComponent>,
     @Inject(MAT_DIALOG_DATA) public data, private uploadService: UploadService, private qsService: QuestionnairesService, 
-    private stageService: StagesService) { }
+    private stageService: StagesService, private router: Router) { }
 
   ngOnInit() {
     this.taskQuestionForm = this.fb.group({
@@ -97,6 +98,16 @@ export class TaskQuestionsComponent implements OnInit {
   }
 
   onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  newQuestionnaire(){
+    this.router.navigate(['/test']);
+    this.dialogRef.close();
+  }
+
+  newImage(){
+    this.router.navigate(['/template']);
     this.dialogRef.close();
   }
 

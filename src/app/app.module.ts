@@ -9,7 +9,8 @@ import { ErrorInterceptorService } from './services/error-interceptor.service';
 
 //npm packages
 import { MatStepperModule, MatButtonModule, MatFormFieldModule, MatInputModule, 
-  MatDialogModule, MatSelectModule, MatOptionModule, MatProgressBarModule, MatListModule, MatCheckboxModule } from '@angular/material';
+  MatDialogModule, MatSelectModule, MatOptionModule, MatProgressBarModule, MatListModule, MatCheckboxModule,
+  MatButtonToggleModule} from '@angular/material';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
@@ -52,6 +53,7 @@ import { AddTestStoreComponent } from './components/test/add-test-store/add-test
 import { StudyDetailComponent } from './components/study/study-detail/study-detail.component';
 import { AddStudyStoreComponent } from './components/study/add-study-store/add-study-store.component';
 import { CreatedStagesComponent } from './components/quick/created-stages/created-stages.component';
+import { StoreAssetsComponent } from './components/template/store-assets/store-assets.component';
 
 @NgModule({
   entryComponents: [
@@ -110,7 +112,8 @@ import { CreatedStagesComponent } from './components/quick/created-stages/create
     AddTestStoreComponent,
     StudyDetailComponent,
     AddStudyStoreComponent,
-    CreatedStagesComponent
+    CreatedStagesComponent,
+    StoreAssetsComponent
   ],
   imports: [
     HttpClientModule,
@@ -133,7 +136,8 @@ import { CreatedStagesComponent } from './components/quick/created-stages/create
     CodemirrorModule,
     QuillModule,
     TagInputModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatButtonToggleModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

@@ -35,6 +35,9 @@
                     <mat-option *ngFor="let image of images" [value]="image">{{image}}</mat-option>
                 </mat-select>
             </div>
+            <div class="col-4 ml-2 mt-4">
+                <button type="button" class="btn btn-info btn-sm" (click)="newModal()">Upload Images</button>
+            </div>
         </div>
         <div class="form-row">
             <div class="form-group col">
@@ -50,8 +53,17 @@
                             </select>
             </div>
         </div>
+        <div class="row">
+            <div class="col">
+                <button type="button" class="btn btn-info btn-sm" (click)="newQuestionnaire()">New Synthesis Form</button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-info btn-sm" (click)="newModal()">New Modal</button>
+            </div>
+        </div>
     </form>
 </div>
+<hr>
 <div mat-dialog-actions align="end">
     <button class="btn btn-danger mr-2" (click)="onNoClick()" cdkFocusInitial>Cancel</button>
     <button class="btn btn-success " (click)="save()" [ngClass]="{'disabled': !synthesisForm.valid}">Save</button>

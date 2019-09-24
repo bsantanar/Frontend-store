@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UploadService } from 'src/app/services/upload.service';
 import { StagesService } from 'src/app/services/stages.service';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-affective',
@@ -16,7 +17,8 @@ export class AffectiveComponent implements OnInit {
   templates: any = [];
 
   constructor( private fb: FormBuilder, public dialogRef: MatDialogRef<AffectiveComponent>,
-    @Inject(MAT_DIALOG_DATA) public data, public uploadService: UploadService, private stageService: StagesService) { }
+    @Inject(MAT_DIALOG_DATA) public data, public uploadService: UploadService, private stageService: StagesService,
+    private router: Router) { }
 
   ngOnInit() {
     this.affectiveForm = this.fb.group({
@@ -91,6 +93,11 @@ export class AffectiveComponent implements OnInit {
   }
 
   onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  newTemplate(){
+    this.router.navigate(['/template']);
     this.dialogRef.close();
   }
 }

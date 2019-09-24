@@ -28,27 +28,72 @@ export class UploadService {
   private deleteHtmlUrl = environment.apiUrl + 'delete-html/';
   private deleteLocaleUrl = environment.apiUrl + 'delete-locale/';
 
+  //Public files
+  private publicModals = environment.apiUrl + 'public-modals';
+  private publicTemplates = environment.apiUrl + 'public-templates';
+  private publicImages = environment.apiUrl + 'public-images';
+  private publicLocales = environment.apiUrl + 'public-locales';
+
   constructor( private http: HttpClient ) {}
 
-  public uploadImage(file: File){
+  public uploadImage(file: File, publicContent = false){
+    //Set public
+    let headersObj = {
+      'public': '0'
+    };
+    if(publicContent){
+      headersObj.public = '1';
+    }
+    let headers = new HttpHeaders(headersObj);
     let formData: FormData = new FormData();
     formData.append('file', file, file.name);
-    return this.http.post(this.imageUrl, formData);
+    return this.http.post(this.imageUrl, formData, {headers});
   }
 
-  public uploadHtml(file: File, type: string){
-    //Set type of html file
-    let headers = new HttpHeaders({'type': type});
+  public uploadHtml(file: File, type: string, publicContent = false){
+    //Set type of html file and public
+    let headersObj = {
+      'type': type,
+      'public': '0'
+    };
+    if(publicContent){
+      headersObj.public = '1';
+    }
+    let headers = new HttpHeaders(headersObj);
     //Append file
     let formData: FormData = new FormData();
     formData.append('file', file, file.name);
     return this.http.post(this.htmlUrl, formData, {headers});
   }
 
-  public uploadJson(file: File){
+  public uploadJson(file: File, publicContent = false){
+    //Set public
+    let headersObj = {
+      'public': '0'
+    };
+    if(publicContent){
+      headersObj.public = '1';
+    }
+    let headers = new HttpHeaders(headersObj);
     let formData: FormData = new FormData();
     formData.append('file', file, file.name);
-    return this.http.post(this.jsonUrl, formData);
+    return this.http.post(this.jsonUrl, formData, {headers});
+  }
+
+  public getPublicModals(){
+    return this.http.get(this.publicModals);
+  }
+
+  public getPublicImages(){
+    return this.http.get(this.publicImages);
+  }
+
+  public getPublicTemplates(){
+    return this.http.get(this.publicTemplates);
+  }
+
+  public getPublicLocales(){
+    return this.http.get(this.publicLocales);
   }
 
   public getImages(){

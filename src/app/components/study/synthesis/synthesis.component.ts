@@ -5,6 +5,7 @@ import { UploadService } from 'src/app/services/upload.service';
 import { SynthesisService } from 'src/app/services/synthesis.service';
 import { StagesService } from 'src/app/services/stages.service';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-synthesis',
@@ -20,7 +21,7 @@ export class SynthesisComponent implements OnInit {
 
   constructor( private fb: FormBuilder, public dialogRef: MatDialogRef<SynthesisComponent>,
     @Inject(MAT_DIALOG_DATA) public data, private uploadService: UploadService, private synthService: SynthesisService, 
-    private stageService: StagesService) { }
+    private stageService: StagesService, private router: Router) { }
 
   ngOnInit() {
     this.synthesisForm = this.fb.group({
@@ -107,6 +108,16 @@ export class SynthesisComponent implements OnInit {
   }
 
   onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  newQuestionnaire(){
+    this.router.navigate(['/test']);
+    this.dialogRef.close();
+  }
+
+  newModal(){
+    this.router.navigate(['/template']);
     this.dialogRef.close();
   }
 
