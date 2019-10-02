@@ -33,6 +33,7 @@ export class UploadService {
   private publicTemplates = environment.apiUrl + 'public-templates';
   private publicImages = environment.apiUrl + 'public-images';
   private publicLocales = environment.apiUrl + 'public-locales';
+  private addAssetStore = environment.apiUrl + 'add-store-asset/';
 
   constructor( private http: HttpClient ) {}
 
@@ -110,19 +111,40 @@ export class UploadService {
     return this.http.get(this.myJsonUrl);
   }
 
-  public downloadFile(name, type){
+  public downloadFile(name, type, publicContent = false){
     //Set type of html file
     let typeHtml = (type - 1).toString();
-    let headers = new HttpHeaders({'type': typeHtml});
+    let headersObj = {
+      'type': typeHtml,
+      'public': '0'
+    };
+    if(publicContent){
+      headersObj.public = '1';
+    }
+    let headers = new HttpHeaders(headersObj);
     switch (type){
       case 1:
-        return this.http.post(this.localeDownloadUrl + name, '', {responseType: "arraybuffer"});
+        return this.http.post(this.localeDownloadUrl + name, '', {responseType: "arraybuffer", headers});
       case 2:
         return this.http.post(this.htmlDownloadUrl + name, '', {responseType: "arraybuffer", headers});
       case 3:
         return this.http.post(this.htmlDownloadUrl + name, '', {responseType: "arraybuffer", headers});
       case 4:
-        return this.http.post(this.imageDownloadUrl + name, '', {responseType: "arraybuffer"})
+        return this.http.post(this.imageDownloadUrl + name, '', {responseType: "arraybuffer", headers})
+    }
+  }
+
+  public copyAssetStore(name, type){
+    let headers = new HttpHeaders({'type': type.toString()});
+    switch (type){
+      case 1:
+        return this.http.post(this.addAssetStore + name, '', {headers});
+      case 2:
+        return this.http.post(this.addAssetStore + name, '', {headers});
+      case 3:
+        return this.http.post(this.addAssetStore + name, '', {headers});
+      case 4:
+        return this.http.post(this.addAssetStore + name, '', {headers})
     }
   }
 

@@ -34,6 +34,9 @@ export class InstructionsComponent implements OnInit {
     );
     if(this.data.isEdit){
       this.loadStage(this.data.stage);
+      if(this.data.stage.user != localStorage.getItem('userId')){
+        this.data.isEdit = false;
+      }
     }
   }
 

@@ -242,7 +242,7 @@
                                 <small *ngIf="stage.time != -1">Time: {{stage.time}} minutes</small>
                             </div>
                             <div class="col">
-                                <button class="btn btn-info mr-2" type="button" *ngIf="stage.user != currentUserId">Edit</button>
+                                <button class="btn btn-info mr-2" type="button" (click)="newStage(stage.state, stage)">Edit</button>
                                 <button class="btn btn-danger" type="button" (click)="deleteStage(stage)">Delete</button>
                             </div>
                         </div>

@@ -63,6 +63,9 @@ export class SearchComponent implements OnInit {
       this.editStage(this.data.stage, searchObj);
     } else{
       this.saveNewStage(searchObj);
+      if(this.data.stage.user != localStorage.getItem('userId')){
+        this.data.isEdit = false;
+      }
     }
   }
 

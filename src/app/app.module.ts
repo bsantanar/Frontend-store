@@ -54,6 +54,8 @@ import { StudyDetailComponent } from './components/study/study-detail/study-deta
 import { AddStudyStoreComponent } from './components/study/add-study-store/add-study-store.component';
 import { CreatedStagesComponent } from './components/quick/created-stages/created-stages.component';
 import { StoreAssetsComponent } from './components/template/store-assets/store-assets.component';
+import { PreviewAssetComponent } from './components/template/preview-asset/preview-asset.component';
+import { PreviewComponent } from './components/document/preview/preview.component';
 
 @NgModule({
   entryComponents: [
@@ -77,7 +79,9 @@ import { StoreAssetsComponent } from './components/template/store-assets/store-a
     AddTestStoreComponent,
     StudyDetailComponent,
     AddStudyStoreComponent,
-    CreatedStagesComponent
+    CreatedStagesComponent,
+    PreviewAssetComponent,
+    PreviewComponent
   ],
   declarations: [
     AppComponent,
@@ -113,7 +117,9 @@ import { StoreAssetsComponent } from './components/template/store-assets/store-a
     StudyDetailComponent,
     AddStudyStoreComponent,
     CreatedStagesComponent,
-    StoreAssetsComponent
+    StoreAssetsComponent,
+    PreviewAssetComponent,
+    PreviewComponent
   ],
   imports: [
     HttpClientModule,

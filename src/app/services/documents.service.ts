@@ -9,6 +9,7 @@ export class DocumentsService {
 
   private myDocumentsURL = environment.apiUrl + 'my-documents';
   private documentsURL = environment.apiUrl + 'documents';
+  private previewDocUrl = environment.apiUrl + 'preview-document';
 
   constructor(private http: HttpClient) { }
 
@@ -18,6 +19,10 @@ export class DocumentsService {
 
   public newDoc(document){
     return this.http.post(this.documentsURL, document);
+  }
+
+  public previewDoc(document){
+    return this.http.post(this.previewDocUrl, document);
   }
 
   public editDoc(id, document){

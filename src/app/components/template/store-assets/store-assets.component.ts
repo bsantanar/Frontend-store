@@ -1,5 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UploadService } from 'src/app/services/upload.service';
+import { MatDialog } from '@angular/material';
+import { PreviewAssetComponent } from '../preview-asset/preview-asset.component';
+import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-store-assets',
@@ -19,9 +23,13 @@ export class StoreAssetsComponent implements OnInit {
 
   @ViewChild('group') group;
 
-  constructor(private uploadService: UploadService) { }
+  constructor(private uploadService: UploadService, private dialog: MatDialog) { }
 
   ngOnInit() {
+    this.loadAssetsStore();
+  }
+
+  loadAssetsStore(){
     this.uploadService.getPublicModals().subscribe(
       res => {
         this.modals = res['modals'];
@@ -104,6 +112,28 @@ export class StoreAssetsComponent implements OnInit {
     }
     this.filterLocales = this.locales.filter(
       q => q.toLowerCase().includes(name)
+    );
+  }
+
+  previewAsset(fileName: string, type: number){
+    const dialogRef = this.dialog.open(PreviewAssetComponent, {
+        width: '900px',
+        data: {
+          fileName,
+          type
+        }
+      });
+      dialogRef.afterClosed().subscribe();
+  }
+
+  addAssetStore(file: string, type: number){
+    this.uploadService.copyAssetStore(file, type).subscribe(
+      res => {
+        Swal.fire({
+          type: 'success',
+          title: 'Copied to your assets'
+        });
+      }
     );
   }
 

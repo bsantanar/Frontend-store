@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material';
 import { NewAssetComponent } from './new-asset/new-asset.component';
 import { EditAssetComponent } from './edit-asset/edit-asset.component';
 import { AssetsService } from 'src/app/services/assets.service';
+import { PreviewComponent } from './preview/preview.component';
 
 @Component({
   selector: 'app-document',
@@ -207,6 +208,35 @@ export class DocumentComponent implements OnInit {
         );
       }
     });
+  }
+
+  previewDoc() {
+    let keyAux = [];
+    if(this.documentForm.controls['tags'].value){
+
+      this.documentForm.controls['tags'].value.forEach(tag => {
+        keyAux.push(tag.value);
+      });
+    }
+    let docObj = {
+      docName: this.documentForm.controls['docName'].value,
+      title: this.documentForm.controls['docTitle'].value,
+      locale: this.documentForm.controls['localeCode'].value,
+      relevant: this.documentForm.controls['relevant'].value,
+      task: this.documentForm.controls['task'].value,
+      domain: this.documentForm.controls['domain'].value,
+      keywords: keyAux,
+      date: new Date(),
+      url: this.documentForm.controls['docURL'].value,
+      maskedUrl: this.documentForm.controls['maskedURL'].value,
+      searchSnippet: this.documentForm.controls['searchSnippet'].value,
+      route: null
+    }
+    const dialogRef = this.dialog.open(PreviewComponent, {
+      width: '800px',
+      data: docObj
+    });
+    dialogRef.afterClosed().subscribe();
   }
 
   onSubmit() {

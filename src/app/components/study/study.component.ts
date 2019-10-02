@@ -92,6 +92,7 @@ export class StudyComponent implements OnInit {
   myTasks = [];
   myModals = [];
   myStudies = [];
+  loadedStudy: any;
 
   constructor(private location: Location, public dialog: MatDialog, private stageService: StagesService, 
     private fb: FormBuilder, private assetsService: AssetsService, private uploadService: UploadService,
@@ -134,6 +135,8 @@ export class StudyComponent implements OnInit {
   }
 
   loadStudy(study: any){
+    //console.log(study);
+    this.loadedStudy = study;
     this.isEdit = true;
     this.stages = [];
     this.idEdit = study._id;
@@ -169,14 +172,15 @@ export class StudyComponent implements OnInit {
     for( const s of study.stages){
       this.getStagesForm.push(new FormControl(s));
       this.stages.push(s);
-      let idx = this.stages.indexOf(s);
       this.stageService.getStage(s).subscribe(
         res => {
+          let idx = this.stages.indexOf(s);
           this.stages[idx] = res['stage'];
+          this.stages[idx].idAux = this.idAux++;
         }
       );
     }
-    //console.log(this.studyForm.value);
+    //console.log(this.stages);
   }
 
   getPublicStudies(){
@@ -373,6 +377,18 @@ export class StudyComponent implements OnInit {
       if(result){
         if(stage != undefined){
           this.getMyStages();
+          if(stage.user != this.currentUserId){
+            let index = this.stages.map( a => {
+                return a.idAux;
+              } ).indexOf(stage.idAux);
+            this.stages.splice(index, 1);
+            this.getStagesForm.removeAt(this.getStagesForm.value.findIndex(q => q == stage._id));
+            result.idAux = this.idAux++;
+            this.stages.push(result);
+            this.getStagesForm.push(new FormControl(result._id));
+          } else {
+            this.loadStudy(this.loadedStudy);
+          }
         } else {
           //console.log(result);
           let aux = result;
@@ -447,7 +463,12 @@ export class StudyComponent implements OnInit {
       if(result) {
         this.stageService.deleteStage(stage._id).subscribe(
           res => {
-            this.stages = this.stages.filter(s => {s._id != stage._id});
+            while(this.stages.includes(stage)){
+              let index = this.stages.map( a => {
+                return a._id;
+              } ).indexOf(stage._id);
+              this.stages.splice(index, 1);
+            }
             this.getMyStages();
           }
         );
@@ -546,6 +567,7 @@ export class StudyComponent implements OnInit {
         putStudy.tags.push(tag.value);
       });
     }
+    //console.log(putStudy);
     this.studyService.editStudy(this.idEdit, putStudy).subscribe(
       res => {
         this.getMyStudies();
