@@ -12,8 +12,3 @@ iframe {
     height: 100%;
     border: 0;
 }
-
-.limit-tab {
-    overflow: auto;
-    max-height: 600px;
-}

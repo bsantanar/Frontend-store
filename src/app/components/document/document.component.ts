@@ -233,7 +233,8 @@ export class DocumentComponent implements OnInit {
       route: null
     }
     const dialogRef = this.dialog.open(PreviewComponent, {
-      width: '800px',
+      width: '1100px',
+      height: '800px',
       data: docObj
     });
     dialogRef.afterClosed().subscribe();

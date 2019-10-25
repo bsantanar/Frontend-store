@@ -2,6 +2,8 @@ import { Component, OnInit, Inject, SecurityContext } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DocumentsService } from 'src/app/services/documents.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { environment } from 'src/environments/environment';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-preview',
@@ -18,13 +20,17 @@ export class PreviewComponent implements OnInit {
     //console.log(this.data);
     this.docService.previewDoc(this.data).subscribe(
       res => {
-        console.log(res);
-        this.data.route = this.sanitizer.bypassSecurityTrustResourceUrl(res['document'].route);
-        //this.sanitizer.sanitize(SecurityContext.URL, this.data.route);
-        console.log(this.data);
+        //console.log(res);
+        this.data.route = this.sanitizer.bypassSecurityTrustResourceUrl(environment.apiUrl + 'static/' + res['document'].route);
+        //console.log(this.data);
       },
       err => {
-        console.log(err);
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: err
+        });
+        //console.log(err);
       }
     );
   }
