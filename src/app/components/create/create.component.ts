@@ -21,4 +21,8 @@ export class CreateComponent implements OnInit {
     this.router.navigate(['custom']);
   }
 
+  goPublish(){
+    this.router.navigate(['publish']);
+  }
+
 }

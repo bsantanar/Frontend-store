@@ -56,6 +56,7 @@ import { CreatedStagesComponent } from './components/quick/created-stages/create
 import { StoreAssetsComponent } from './components/template/store-assets/store-assets.component';
 import { PreviewAssetComponent } from './components/template/preview-asset/preview-asset.component';
 import { PreviewComponent } from './components/document/preview/preview.component';
+import { PublishComponent } from './components/publish/publish.component';
 
 @NgModule({
   entryComponents: [
@@ -119,7 +120,8 @@ import { PreviewComponent } from './components/document/preview/preview.componen
     CreatedStagesComponent,
     StoreAssetsComponent,
     PreviewAssetComponent,
-    PreviewComponent
+    PreviewComponent,
+    PublishComponent
   ],
   imports: [
     HttpClientModule,

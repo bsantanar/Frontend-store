@@ -11,6 +11,7 @@ import { StudyComponent } from './components/study/study.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
 import { RegisterComponent } from './components/register/register.component';
+import { PublishComponent } from './components/publish/publish.component';
 
 
 
@@ -24,6 +25,7 @@ const routes: Routes = [
   {path: 'study', component: StudyComponent, canActivate:[AuthGuard]},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
+  {path: 'publish', component: PublishComponent},
   {path: '**', pathMatch: 'full', redirectTo: 'create'}
 ]
 
