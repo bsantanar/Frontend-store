@@ -280,7 +280,7 @@ export class QuickComponent implements OnInit {
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.stages, event.previousIndex, event.currentIndex);
-    console.log(this.stages);
+    //console.log(this.stages);
   }
 
   deleteStage(stage: any) {

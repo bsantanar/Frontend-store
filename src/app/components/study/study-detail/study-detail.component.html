@@ -2,7 +2,7 @@
 <p><b>Created by: </b>{{user.name}} <b>From: </b>{{user.institution}}</p>
 <p *ngIf="data.maxGlobalTime != -1"><b>Max. Global Time: </b>{{data.maxGlobalTime}} minutes</p>
 <p *ngIf="data.maxGlobalTime == -1"><b>Max. Global Time: </b>Unlimited</p>
-<p><b>Domain: </b> {{data.domain}}. <b>Taks: </b> {{data.task}}</p>
+<p><b>Domain: </b> {{data.domain.name}}. <b>Taks: </b> {{data.task.name}}</p>
 <hr>
 <div class="row">
 

@@ -1,4 +1,13 @@
 <h1>Example {{title}}</h1>
+<div *ngIf="data == 1">
+  
+  <p>Below these instructions is a Locale example template for NEURONE (in JSON format). All string values must be translated to the target language for NEURONE use (string keys must not be translated). Save the locale templates as <i>locale-XX.json</i>, where <i>XX</i> is a language code (like <i>en</i> or <i>es-CL</i>). Words between double brackets (like <i>{{bookmarks}}</i>) must not be translated, because they are variables that are replaced during NEURONE execution.</p>
+  <hr>
+  <pre>
+    {{localeExample | json}}
+  </pre>
+
+</div>
 <div *ngIf="data == 2">
     <div class="container-fluid">
         <p>Below there is an example of a HTML Template for NEURONE. Modals are customizable pop-up content screens (inside the web browser) that can be used in some stages of the NEURONE study. These templates must be written in plain HTML and they can

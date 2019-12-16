@@ -26,6 +26,8 @@ export class TemplateComponent implements OnInit, AfterViewInit {
   assetType: number;
   showHtml: boolean = false;
   htmlTextButton: string = 'Show';
+  publicSimple: boolean = false;
+  publicCoded: boolean = false;
   
   @ViewChild('fileNameCoded') fileNameCoded
   @ViewChild('fileNameSimple') fileNameSimple
@@ -335,7 +337,7 @@ export class TemplateComponent implements OnInit, AfterViewInit {
     arrayOfBlob.push(blob);
     this.fileRichText = new File(arrayOfBlob, fileName + ".html", {type: 'text/html'});
     //console.log(this.fileRichText);
-    this.uploadService.uploadHtml(this.fileRichText, htmlType).subscribe(
+    this.uploadService.uploadHtml(this.fileRichText, htmlType, this.publicSimple).subscribe(
       res => {
         //console.log(res);
         Swal.fire({
@@ -352,23 +354,6 @@ export class TemplateComponent implements OnInit, AfterViewInit {
         });
       }
     );
-    // // IE doesn't allow using a blob object directly as link href
-    // // instead it is necessary to use msSaveOrOpenBlob
-    // if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-    //   window.navigator.msSaveOrOpenBlob(blob);
-    //   return;
-    // }
-    //Download Html file
-    // let a = document.createElement('a');
-    // let url = window.URL.createObjectURL(blob);
-    // a.download = 'file.html';
-    // a.href = url;
-    // a.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-    // // For Firefox it is necessary to delay revoking the ObjectURL
-    // setTimeout(function () {
-    //   window.URL.revokeObjectURL(url);
-    //   a.remove();
-    // }, 100);
   }
 
   saveHtmlCoded(){
@@ -399,7 +384,7 @@ export class TemplateComponent implements OnInit, AfterViewInit {
     arrayOfBlob.push(blob);
     this.fileHtmlCoded = new File(arrayOfBlob, fileName + ".html", {type: 'text/html'});
     //console.log(this.fileHtmlCoded);
-    this.uploadService.uploadHtml(this.fileHtmlCoded, htmlType).subscribe(
+    this.uploadService.uploadHtml(this.fileHtmlCoded, htmlType, this.publicCoded).subscribe(
       res => {
         //console.log(res);
         Swal.fire({

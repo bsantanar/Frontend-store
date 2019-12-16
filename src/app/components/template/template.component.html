@@ -38,6 +38,10 @@
                     <option value="2">Template</option>
                 </select>
             </div>
+            <div class="col mt-4">
+                <input type="checkbox" id="publicFile" [(ngModel)]="publicSimple">
+                <label for="publicFile">Public File?</label>
+            </div>
         </div>
         <div class="row mt-3">
             <form [formGroup]="editorForm" (ngSubmit)="saveRichText()">
@@ -84,6 +88,10 @@
                         <option value="2">Template</option>
                     </select>
                 </div>
+                <div class="col mt-4">
+                    <input type="checkbox" id="publicCoded" [(ngModel)]="publicCoded">
+                    <label for="publicCoded">Public File?</label>
+                </div>
             </div>
         </div>
         <div class="row mt-3">
@@ -121,6 +129,7 @@
                     <h5 class="card-title">Locale</h5>
                     <p class="card-text">File in JSON format that replace words during NEURONE execution.</p>
                     <!-- <button class="btn btn-secondary btn-block" (click)="example(1)">Example</button> -->
+                    <button class="btn btn-secondary btn-block" (click)="example(1)">Example</button>
                     <button class="btn btn-primary btn-block" (click)="uploadDialog(1)">Upload Locale</button>
                     <button class="btn btn-info btn-block" (click)="fillAssetsList(1)">My Locales</button>
                 </div>

@@ -308,10 +308,12 @@ export class TestComponent implements OnInit {
     }
     this.questions = [];
     for (const q of questionnaire.questions) {
-      this.questions.push(q);
       this.questionsService.getQuestion(q).subscribe(
         res => {
-          this.addQuestionDB(res['question']);
+          if(res['question']){
+            this.questions.push(q);
+            this.addQuestionDB(res['question']);
+          }
         },
         err => {
           //console.log(err);

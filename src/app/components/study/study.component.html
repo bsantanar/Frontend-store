@@ -144,19 +144,19 @@
                         <div class="form-group col">
                             <label for="">Flow Language (Locale File)</label>
                             <select formControlName="locale" class="form-control" [ngClass]="{ 'is-invalid': studyForm.controls.locale.errors, 'is-valid': !studyForm.controls.locale.errors }">
-                                <option *ngFor="let local of myLocales" [ngValue]="local.code">{{local.name}} ({{local.code}})</option>
+                                <option *ngFor="let local of myLocales" [ngValue]="local">{{local.name}} ({{local.code}})</option>
                             </select>
                         </div>
                         <div class="form-group col">
                             <label for="">Flow Domain</label>
                             <select formControlName="domain" class="form-control" [ngClass]="{ 'is-invalid': studyForm.controls.domain.errors, 'is-valid': !studyForm.controls.domain.errors }">
-                                <option *ngFor="let domain of myDomains" [ngValue]="domain.name">{{domain.name}}</option>
+                                <option *ngFor="let domain of myDomains" [ngValue]="domain">{{domain.name}}</option>
                             </select>
                         </div>
                         <div class="form-group col">
                             <label for="">Flow Task</label>
                             <select formControlName="task" class="form-control" [ngClass]="{ 'is-invalid': studyForm.controls.task.errors, 'is-valid': !studyForm.controls.task.errors }">
-                                <option *ngFor="let tsk of myTasks" [ngValue]="tsk.name">{{tsk.name}}</option>
+                                <option *ngFor="let tsk of myTasks" [ngValue]="tsk">{{tsk.name}}</option>
                             </select>
                         </div>
                         <div class="form-group col">
@@ -272,7 +272,7 @@
                     <h5 class="mb-1">{{study.id}}</h5>
                 </div>
                 <b></b>
-                <p class="mb-1">Task: <b>{{study.task}}</b>. Domain: <b>{{study.domain}}</b>. Locale: <b>{{study.locale}}</b>. With <b>{{study.stages.length}} stages</b>.</p>
+                <p class="mb-1">Task: <b>{{study.task.name}}</b>. Domain: <b>{{study.domain.name}}</b>. Locale: <b>{{study.locale.name}}</b>. With <b>{{study.stages.length}} stages</b>.</p>
             </div>
             <div class="col">
                 <button class="btn btn-success mr-3" (click)="loadStudy(study)">Edit</button>
