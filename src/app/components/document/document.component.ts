@@ -298,8 +298,5 @@ export class DocumentComponent implements OnInit {
     }
   }
 
-  backClicked() {
-    this.location.back();
-  }
 
 }

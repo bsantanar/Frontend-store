@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@ang
 import { QuestionsService } from 'src/app/services/questions.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-new-question',
@@ -17,13 +18,59 @@ export class NewQuestionComponent implements OnInit {
   isScale: Boolean = false;
   isRating: Boolean = false;
   isEdit: Boolean = false;
+  typesQuestions: any[] = [];
+  selectedType = '';
 
   
   constructor( private fb: FormBuilder, public dialogRef: MatDialogRef<NewQuestionComponent>,
-    @Inject(MAT_DIALOG_DATA) public data, private questionService: QuestionsService) {
+    @Inject(MAT_DIALOG_DATA) public data, private questionService: QuestionsService, private utils: UtilsService) {
     }
 
   ngOnInit() {
+    this.typesQuestions = this.utils.getTypesQuestion();
+    if(this.data._id){
+      this.newQuestionForm = this.fb.group({
+        title: ['', Validators.compose([
+          Validators.required
+        ])],
+        questionId: ['', Validators.compose([
+          Validators.required
+        ])],
+        hint: [''],
+        required: [false],
+        options: this.fb.array([])
+      });
+      if(["multiple choice", "checkbox", "list"].includes(this.data.type.toLowerCase())){
+        this.isOptions = true;
+        this.newQuestionForm.controls['options'].setValidators([Validators.required]);
+      } else if(this.data.type.toLowerCase() == "scale"){
+        this.isScale = true;
+        this.newQuestionForm.addControl('min', new FormControl(0, Validators.required));
+        this.newQuestionForm.addControl('max', new FormControl(1, Validators.compose([
+          Validators.required,
+          Validators.min(1)
+        ])));
+        this.newQuestionForm.addControl('step', new FormControl(1, Validators.compose([
+          Validators.required,
+          Validators.min(1)
+        ])));
+        this.newQuestionForm.addControl('minLabel', new FormControl("", Validators.required));
+        this.newQuestionForm.addControl('maxLabel', new FormControl("", Validators.required));
+  
+      } else if(this.data.type.toLowerCase() == "rating"){
+        this.isRating = true;
+        this.newQuestionForm.addControl('maxStars', new FormControl(0, Validators.compose([
+          Validators.required,
+          Validators.min(3)
+        ])));
+      }
+      this.editQuestion();
+    }
+  }
+
+  loadFormType(){
+    this.isOptions = this.isRating = this.isScale = false;
+    this.data = this.selectedType;
     this.newQuestionForm = this.fb.group({
       title: ['', Validators.compose([
         Validators.required
@@ -58,9 +105,6 @@ export class NewQuestionComponent implements OnInit {
         Validators.required,
         Validators.min(3)
       ])));
-    }
-    if(this.data._id){
-      this.editQuestion();
     }
   }
 

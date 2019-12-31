@@ -25,9 +25,9 @@
             </div>
 
             <div class="form-group col">
-                <button class="btn btn-success float-right mr-2" *ngIf="!editSynthesis" [ngClass]="{'disabled': !synthesisForm.valid}">Add Synthesis</button>
-                <button type="submit" class="btn btn-success float-right mr-2" *ngIf="editSynthesis" [ngClass]="{'disabled': !synthesisForm.valid}">Edit Synthesis</button>
-                <button type="button" class="btn btn-danger float-right mr-2" *ngIf="editSynthesis" (click)="cancelSynthesis()">Cancel</button>
+                <button class="mr-2 float-right" mat-raised-button color="primary" *ngIf="!editSynthesis" [ngClass]="{'disabled': !synthesisForm.valid}">CREATE</button>
+                <button type="submit" mat-raised-button color="primary" class="float-right mr-2" *ngIf="editSynthesis" [ngClass]="{'disabled': !synthesisForm.valid}">SAVE</button>
+                <button type="button" mat-button color="warn" class="float-right mr-2" *ngIf="editSynthesis" (click)="cancelSynthesis()">CANCEL</button>
             </div>
         </form>
         <hr>
@@ -44,8 +44,8 @@
                         <p class="mb-1">{{synthesis.synthesisId}}</p>
                     </div>
                     <div class="col">
-                        <button class="btn btn-info mr-3" (click)="loadSynthesis(synthesis)">Edit</button>
-                        <button class="btn btn-danger" (click)="deleteSynthesis(synthesis)">Delete</button>
+                        <button mat-stroked-button color="primary" class="mr-3" (click)="loadSynthesis(synthesis)">Edit</button>
+                        <button mat-stroked-button color="warn" (click)="deleteSynthesis(synthesis)">Delete</button>
                     </div>
                 </div>
             </div>

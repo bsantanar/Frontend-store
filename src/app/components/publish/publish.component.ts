@@ -225,8 +225,4 @@ export class PublishComponent implements OnInit {
     });
   }
 
-  backClicked() {
-    this.location.back();
-  }
-
 }

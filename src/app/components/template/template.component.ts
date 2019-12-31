@@ -46,10 +46,6 @@ export class TemplateComponent implements OnInit, AfterViewInit {
     //Add 'implements AfterViewInit' to the class.
   }
 
-  backClicked() {
-    this.location.back();
-  }
-
   get richText(){
     return this.editorForm.get("editor").value;
   }
@@ -211,6 +207,7 @@ export class TemplateComponent implements OnInit, AfterViewInit {
   }
 
   editHtml(asset: string){
+    this.showHtml = false;
     let filename = asset.split('.').reduce((a, c) => {
       if(c != 'html'){
         return c + a;

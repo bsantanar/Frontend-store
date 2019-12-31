@@ -9,7 +9,7 @@
     <p>Select a Task</p>
 </div>
 <div class="row">
-    <div class="col-8">
+    <div class="col-7">
 
         <select *ngIf="data == 1" class="form-control" [(ngModel)]="selectedAsset" name="selectedAsset" id="selectedAsset">
           <option *ngFor="let asset of assets" [ngValue]="asset">{{asset.code}}</option>
@@ -19,10 +19,10 @@
         </select>
     </div>
     <div class="col">
-        <button *ngIf="selectedAsset" class="btn btn-success" type="button" (click)="loadAsset(selectedAsset)">Load</button>
+        <button *ngIf="selectedAsset" mat-stroked-button color="primary" type="button" (click)="loadAsset(selectedAsset)">Load</button>
     </div>
     <div class="col">
-        <button *ngIf="selectedAsset" class="btn btn-danger" type="button" (click)="deleteAsset(selectedAsset)">Delete</button>
+        <button *ngIf="selectedAsset" mat-stroked-button color="warn" type="button" (click)="deleteAsset(selectedAsset)">Delete</button>
     </div>
 </div>
 <hr>
@@ -63,6 +63,6 @@
     <hr>
 </div>
 <div mat-dialog-actions align="end">
-    <button class="btn btn-danger mr-2" (click)="onNoClick()" cdkFocusInitial>Cancel</button>
-    <button class="btn btn-success " (click)="save()" [ngClass]="{'disabled': !assetForm.valid}">Save</button>
+    <button mat-button color="warn" (click)="onNoClick()">CANCEL</button>
+    <button mat-raised-button color="primary" (click)="save()" [ngClass]="{'disabled': !assetForm.valid}">SAVE</button>
 </div>

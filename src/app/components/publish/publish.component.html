@@ -2,13 +2,8 @@
   <div class="col-8">
       <h1>Keep your studies avaible for NEURONE</h1>
   </div>
-  <div class="col">
-      <button class="btn btn-danger" (click)="backClicked()" style="float: right">Back</button>
-  </div>
 </div>
 <hr>
-
-
 
 <h3>Your Study Flows</h3>
 <div class="text-center" *ngIf="myStudies.length == 0; else myStudiesList">
@@ -31,8 +26,8 @@
                             <p class="mb-1">Language file: <b>{{study.locale.name}}</b>. With <b>{{study.stages.length}} stages</b>.</p>
                         </div>
                         <div class="col">
-                            <button class="btn btn-info mr-3" (click)="viewStudyDetails(study)">Details</button>
-                            <button class="btn btn-success mr-3" (click)="loadStudy(study)">Load</button>
+                            <button mat-stroked-button class="mr-3" (click)="viewStudyDetails(study)">Details</button>
+                            <button mat-stroked-button color="primary" class="mr-3" (click)="loadStudy(study)">Load</button>
                         </div>
                     </div>
                 </div>
@@ -51,11 +46,11 @@
                         <p class="mt-2 mb-2">{{stateStudy}}</p>
                     </div>
                     <div class="row mb-2">
-                        <button class="btn btn-primary" (click)="generatePublish()" [disabled]="clicked">Generate</button>
+                        <button mat-raised-button color="primary" (click)="generatePublish()" [disabled]="clicked">GENERATE</button>
                         <!-- <button class="btn btn-danger">Cancel</button> -->
                     </div>
                     <div class="row">
-                        <button class="btn btn-success mt-2 mb-2" *ngIf="loadedItems === totalItems" (click)="publishStudy()">Publish</button>
+                        <button mat-raised-button color="primary" class="mt-2 mb-2" *ngIf="loadedItems === totalItems" (click)="publishStudy()">PUBLISH</button>
                     </div>
                 </ng-template>
             </div>
@@ -85,7 +80,7 @@
                             <p class="mb-1">Language file: <b>{{publish.study.locale.name}}</b>. With <b>{{publish.stages.length}} stages</b>.</p>
                         </div>
                         <div class="col">
-                            <button class="btn btn-danger mr-3" (click)="deletePublish(publish)">Delete</button>
+                            <button mat-stroked-button color="warn" class="mr-3" (click)="deletePublish(publish)">Delete</button>
                         </div>
                     </div>
                 </div>

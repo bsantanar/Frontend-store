@@ -39,6 +39,6 @@
 </div>
 <hr>
 <div mat-dialog-actions align="end">
-    <button class="btn btn-danger mr-2" (click)="onNoClick()" cdkFocusInitial>Cancel</button>
-    <button class="btn btn-success " (click)="save()" [ngClass]="{'disabled': !instructionsForm.valid}">Save</button>
+    <button mat-button color="warn" class="mr-2" (click)="onNoClick()">CANCEL</button>
+    <button mat-raised-button color="primary" (click)="save()" [ngClass]="{'disabled': !instructionsForm.valid}">SAVE</button>
 </div>

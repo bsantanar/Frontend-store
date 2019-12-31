@@ -2,9 +2,6 @@
     <div class="col">
         <h1>Assets Manager</h1>
     </div>
-    <div class="col">
-        <button class="btn btn-danger" (click)="backClicked()" style="float: right">Back</button>
-    </div>
 </div>
 <hr>
 <ul class="nav nav-tabs fast fadeIn">
@@ -50,16 +47,16 @@
                     <quill-editor [styles]="{height: '250px'}" formControlName="editor"></quill-editor>
                 </div>
 
-                <button class="btn btn-danger mt-2" type="button" (click)="clearRichText()">Clear</button>
-                <button class="btn btn-success mt-2" style="float: right">Save</button>
+                <button mat-raised-button color="primary" style="float: right">SAVE</button>
+                <button mat-button color="warn" type="button" style="float: right" (click)="clearRichText()">CLEAR</button>
             </form>
         </div>
     </div>
     <div class="tab-pane container" id="build">
         <div class="mt-3">
-            <button class="btn btn-info mr-2" (click)="showHtmlFiles(1)" *ngIf="!showHtml">{{htmlTextButton}} Your Modals</button>
-            <button class="btn btn-info" (click)="showHtmlFiles(2)" *ngIf="!showHtml">{{htmlTextButton}} Your Templates</button>
-            <button class="btn btn-info" (click)="showHtmlFiles(1)" *ngIf="showHtml">Hide Files</button>
+            <button mat-stroked-button color="primary" class="mr-2" (click)="showHtmlFiles(1)" *ngIf="!showHtml">{{htmlTextButton}} Your Modals</button>
+            <button mat-stroked-button color="primary" (click)="showHtmlFiles(2)" *ngIf="!showHtml">{{htmlTextButton}} Your Templates</button>
+            <button mat-stroked-button color="primary" (click)="showHtmlFiles(1)" *ngIf="showHtml">Hide Files</button>
             <div class="mt-3 fadeIn" *ngIf="showHtml">
                 <div class="list-group">
                     <div class="list-group-item list-group-item-action" *ngFor="let asset of assetsList">
@@ -70,7 +67,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <button class="btn btn-success mr-3" *ngIf="assetType == 2 || assetType == 3" (click)="editHtml(asset)">Load</button>
+                            <button mat-raised-button color="primary" *ngIf="assetType == 2 || assetType == 3" (click)="editHtml(asset)">Load</button>
                             <!-- <button class="btn btn-info" *ngIf="assetType == 2" (click)="editHtml(asset)">Edit</button> -->
                         </div>
                     </div>
@@ -110,10 +107,10 @@
 
         </div>
         <div class="mt-3">
-            <button class="btn btn-info" (click)="exampleHtmlCode()">Load Example</button>
-            <button class="btn btn-secondary ml-3" (click)="show()">Compile</button>
-            <button class="btn btn-danger ml-3" (click)="clearHtmlCoded()">Clear</button>
-            <button class="btn btn-success" (click)="saveHtmlCoded()" style="float: right">Save</button>
+            <button mat-button (click)="exampleHtmlCode()">LOAD EXAMPLE</button>
+            <button mat-button (click)="show()">COMPILE</button>
+            <button mat-button color="warn" (click)="clearHtmlCoded()">CLEAR</button>
+            <button mat-raised-button color="primary" (click)="saveHtmlCoded()" style="float: right">SAVE</button>
         </div>
         <hr>
         <h3>Result</h3>
@@ -126,7 +123,7 @@
             <div class="card text-center" style="width: 18rem;">
                 <div class="card-body">
                     <!-- <img src="assets/img/fase1.PNG" alt=""> -->
-                    <h5 class="card-title">Locale</h5>
+                    <h5 class="card-title">Language File</h5>
                     <p class="card-text">File in JSON format that replace words during NEURONE execution.</p>
                     <!-- <button class="btn btn-secondary btn-block" (click)="example(1)">Example</button> -->
                     <button class="btn btn-secondary btn-block" (click)="example(1)">Example</button>

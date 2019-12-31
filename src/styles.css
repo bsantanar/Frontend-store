@@ -44,3 +44,8 @@
 .body {
     padding-bottom: 50px;
 }
+
+.btn-outline-light {
+    float: right; 
+    color: cornflowerblue;
+}

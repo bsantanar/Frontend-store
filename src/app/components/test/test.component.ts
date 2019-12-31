@@ -12,6 +12,8 @@ import { QuestionnairesService } from 'src/app/services/questionnaires.service';
 import Swal from 'sweetalert2';
 import { TestDetailComponent } from './test-detail/test-detail.component';
 import { AddTestStoreComponent } from './add-test-store/add-test-store.component';
+import { CreatedQuestionsComponent } from './created-questions/created-questions.component';
+import { TestStoreComponent } from './test-store/test-store.component';
 
 @Component({
   selector: 'app-test',
@@ -20,60 +22,16 @@ import { AddTestStoreComponent } from './add-test-store/add-test-store.component
 })
 export class TestComponent implements OnInit {
 
-  typesQuestions:any[] = [
-    {
-      type: 'Text',
-      typeId: 1
-    },
-    {
-      type: 'Paragraph',
-      typeId: 2
-    },
-    {
-      type: 'Multiple Choice',
-      typeId: 3
-    },
-    {
-      type: 'Checkbox',
-      typeId: 4
-    },
-    {
-      type: 'List',
-      typeId: 5
-    },
-    {
-      type: 'Scale',
-      typeId: 6
-    },
-    {
-      type: 'Rating',
-      typeId: 7
-    },
-    {
-      type: 'Date',
-      typeId: 8
-    },
-    {
-      type: 'Time',
-      typeId: 9
-    }];
-
   editQuestionnaire: Boolean = false;
   editQuestId: String = null;
 
   idAux:number = 0;
 
   questions:any[] = [];
-
-  questionsDB:any[] = [];
   questionnairesDB: any[] = [];
-  createdQuestions:any[] = [];
-  storeQuestionnaires:any[] = [];
-  filterStore:any[] = [];
   showNewQuestion: boolean = false;
   showRepository: boolean = false;
   showStore: boolean = false;
-  showHide: boolean = false;
 
   questionnaireForm: FormGroup;
 
@@ -89,21 +47,7 @@ export class TestComponent implements OnInit {
       tags: new FormControl()
     });
     this.questionnaireForm.controls['questions'].setValidators([Validators.required]);
-    this.getMyQuestions();
     this.getQuestionnairesDB();
-    this.getStoreQuestionnaires();
-  }
-
-  getMyQuestions(){
-    this.questionsService.getMyQuestions().subscribe(
-      res => {
-        this.questionsDB = res['questions'];
-        this.createdQuestions = this.questionsDB;
-      },
-      err => {
-        //console.log(err);
-      }
-    );
   }
 
   getQuestionnairesDB(){
@@ -117,58 +61,73 @@ export class TestComponent implements OnInit {
     );
   }
 
-  getStoreQuestionnaires(){
-    this.questionnaireService.getPublicQuestionnaires().subscribe(
-      res => {
-        //console.log(res);
-        this.storeQuestionnaires = res['public'].filter(
-          q => q.createdBy != localStorage.getItem('userId')
-        );
-        this.filterStore = this.storeQuestionnaires;
-      },
-      err => {
-        //console.log(err);
-      }
-    );
-  }
-
   activateNewQuestion(){
     if(this.showNewQuestion){
-      this.showNewQuestion = this.showRepository = this.showStore = this.showHide = false;
+      this.showNewQuestion = this.showRepository = this.showStore = false;
     } else{
-      this.showNewQuestion = this.showHide = true;
+      this.showNewQuestion = true;
       this.showRepository = this.showStore = false;
     }
   }
 
-  activateRepository(){
-    if(this.showRepository){
-      this.showNewQuestion = this.showRepository = this.showStore = this.showHide = false;
-    } else{
-      this.showRepository = this.showHide = true;
-      this.showNewQuestion = this.showStore = false;
-    }
+  openRepository(){
+    const dialogRef = this.dialog.open(CreatedQuestionsComponent, {
+      width: '800px',
+      data: 1
+    });
+    dialogRef.afterClosed().subscribe((question) => {
+      if(question){
+          if(question.edited){
+            this.editQuestion(question);
+            this.questions = this.questions.filter(q => q._id !== question._id);
+            return;
+          }
+          if(question.deleted){
+            this.questions = this.questions.filter(q => q._id !== question._id);
+            return;
+          }
+          question.idAux = this.idAux;
+          //console.log(question);
+          this.idAux++;
+          if(this.questions.includes(question._id)){
+            let idx = this.questions.indexOf(question._id);
+            this.questions[idx] = question;
+          } else{
+            this.questions.push(question);
+          }
+          this.getQuestions.push(new FormControl(question._id));
+      }
+    });
+  }
+
+  openStore(){
+    const dialogRef = this.dialog.open(TestStoreComponent, {
+      width: '800px'
+    });
+    dialogRef.afterClosed().subscribe((questionnaire) => {
+      if(questionnaire){
+        if(questionnaire.add){
+          this.addTestStore(questionnaire);
+        }
+        if(questionnaire.details){
+          this.viewTestStore(questionnaire);
+        }
+      }
+    });
+
   }
 
   activateStore(){
     if(this.showStore){
-      this.showNewQuestion = this.showRepository = this.showStore = this.showHide = false;
+      this.showNewQuestion = this.showRepository = this.showStore = false;
     } else{
-      this.showStore = this.showHide = true;
+      this.showStore = true;
       this.showRepository = this.showNewQuestion = false;
     }
   }
 
-  hideQuestions(){
-    this.showNewQuestion = this.showRepository = this.showStore = this.showHide = false;
-  }
-
   saveTitle(value:string){
     this.questionnaireForm.controls['questionnaireId'].setValue(value);
-  }
-
-  backClicked() {
-    this.location.back();
   }
 
   makePublic(){
@@ -182,22 +141,6 @@ export class TestComponent implements OnInit {
     this.questionnaireForm.controls['tags'].clearValidators();
     this.questionnaireForm.controls['tags'].updateValueAndValidity();
     //console.log(this.questionnaireForm);
-  }
-
-  searchQuestion(name: string){
-    this.createdQuestions = this.questionsDB.filter(
-      q => q.title.toLowerCase().includes(name.toLowerCase())
-      );
-  }
-
-  searchTagStore(name: string){
-    if(name == ''){
-      this.filterStore = this.storeQuestionnaires;
-      return;
-    }
-    this.filterStore = this.storeQuestionnaires.filter(
-      q => q.tags.includes(name)
-    );
   }
 
   viewTestStore(questionnaire: any){
@@ -237,10 +180,10 @@ export class TestComponent implements OnInit {
     return this.questionnaireForm.get('questions') as FormArray;
   }
 
-  addQuestion(type:any){
+  addQuestion(){
     const dialogRef = this.dialog.open(NewQuestionComponent, {
       width: '600px',
-      data: type
+      data: 1
     });
     dialogRef.afterClosed().subscribe(newQuestion => {
       if(newQuestion){
@@ -248,7 +191,6 @@ export class TestComponent implements OnInit {
           newQuestion['idAux'] = this.idAux;
           this.idAux++;
           this.questions.push(newQuestion);
-          this.getMyQuestions();
           this.getQuestions.push(new FormControl(newQuestion._id));
         }, 500)
       }
@@ -277,14 +219,13 @@ export class TestComponent implements OnInit {
     this.getQuestions.push(new FormControl(question._id));
   }
 
-  editQuestionDB(question:any){
+  editQuestion(question){
     const dialogRef = this.dialog.open(NewQuestionComponent, {
       width: '600px',
       data: question
     });
     dialogRef.afterClosed().subscribe(newQuestion => {
       if(newQuestion){
-        this.getMyQuestions();
         this.questions = this.questions.filter(q => q._id !== question._id);
       }
     });
@@ -358,26 +299,6 @@ export class TestComponent implements OnInit {
       });
   }
 
-  deleteQuestionDB(question: any){
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      width: '350px',
-      data: question.questionId
-    });
-    dialogRef.afterClosed().subscribe(result => {
-        if(result) {
-          this.questionsService.deleteQuestion(question._id).subscribe(
-            res => {
-              this.createdQuestions = this.createdQuestions.filter(q => q._id !== question._id);
-              this.questions = this.questions.filter(q => q._id !== question._id);
-            },
-            err => {
-              console.log(err);
-            }
-          );
-        }
-      });
-  }
-
   deleteQuestionnaire(questionnaire: any) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         width: '350px',
@@ -399,8 +320,6 @@ export class TestComponent implements OnInit {
         }
       });
   }
-
-
 
   submitQuestionnaire(id?: String){
     //questions en orden dejado por el usuario

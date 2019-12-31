@@ -2,9 +2,6 @@
     <div class="col">
         <h1>Form Builder</h1>
     </div>
-    <div class="col">
-        <button class="btn btn-danger" (click)="backClicked()" style="float: right">Back</button>
-    </div>
 </div>
 <hr>
 
@@ -21,79 +18,13 @@
     <div class="tab-pane container active" id="question">
         <div class="row mt-2">
             <div class="col">
-                <button class="btn btn-success mr-3" (click)="activateNewQuestion()">New Question</button>
-                <button class="btn btn-secondary mr-3" (click)="activateRepository()">Repository</button>
-                <button class="btn btn-info" (click)="activateStore()">Neurone Store</button>
-            </div>
-            <div class="col">
-                <button class="btn btn-danger" (click)="hideQuestions()" style="float: right" *ngIf="showHide">Hide</button>
+                <button mat-stroked-button color="primary" class="mr-2" (click)="addQuestion()">NEW QUESTION</button>
+                <button mat-stroked-button color="primary" class="mr-2" (click)="openRepository()">CREATED QUESTIONS</button>
+                <button mat-stroked-button color="primary" (click)="openStore()">NEURONE STORE</button>
             </div>
         </div>
 
         <hr>
-        <div class="fast fadeIn" *ngIf="showNewQuestion">
-            <div class="row ml-2 mt-2">
-
-                <div class="mb-2" *ngFor="let type of typesQuestions; let i = index">
-                    <div>
-                        <div class="mr-1">
-                            <button class="btn btn-success d-flex justify-content-center" (click)="addQuestion(type)"><i class="material-icons">
-                                                                  add
-                                                                  </i>{{type.type}}</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <hr>
-        </div>
-
-        <div class="fast fadeIn" *ngIf="showRepository">
-            <input class="form-control mr-2" type="text" placeholder="Search question name.." aria-label="Search" (keyup)="searchQuestion(search.value)" #search>
-            <hr>
-            <div class="limit-tab">
-                <div class="ml-2 list-group-item row" *ngFor="let created of createdQuestions">
-                    <div class="col">
-
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">{{created.title}}</h5>
-                        </div>
-                        <p class="mb-1"><b>Type:</b> {{created.type}}. <b>Id:</b> {{created.questionId}}</p>
-                    </div>
-                    <div class="col">
-                        <button class="btn btn-sm btn-success mr-1" (click)="addQuestionDB(created)">Add</button>
-                        <button class="btn btn-sm btn-info mr-1" (click)="editQuestionDB(created)">Edit</button>
-                        <button class="btn btn-sm btn-danger mt-1" (click)="deleteQuestionDB(created)">Delete</button>
-                    </div>
-                </div>
-            </div>
-            <hr>
-        </div>
-
-        <div class="fadeIn fast" *ngIf="showStore">
-            <div class="row">
-                <div class="col-8">
-                    <input class="form-control mr-2" type="text" placeholder="Search a questionnaire by a tag. Example: 'countries' 'numbers'" (keyup)="searchTagStore(searchStore.value)" aria-label="Search" #searchStore>
-                </div>
-            </div>
-            <hr>
-            <div class="limit-tab">
-                <div class="ml-2 list-group-item row" *ngFor="let sQ of filterStore">
-                    <div class="col">
-
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">{{sQ.questionnaireId}}</h5>
-                        </div>
-                        <p class="mb-1"><b>Instructions:</b> {{sQ.instructions}}. <b>Tags: </b>{{sQ.tags}}. <b>{{sQ.questions.length}} questions.</b></p>
-                    </div>
-                    <div class="col">
-                        <button class="btn btn-info mr-1" (click)="viewTestStore(sQ)">View</button>
-                        <button class="btn btn-success mr-1" (click)="addTestStore(sQ)">Add To Your Questionnaires</button>
-                    </div>
-                </div>
-            </div>
-            <hr>
-        </div>
         <div class="mt-3">
             <div class="row fast fadeIn">
                 <div class="col">
@@ -124,8 +55,8 @@
                             <hr>
                             <div class="form-row">
                                 <div class="col-2">
-                                    <button type="button" class="btn btn-info" (click)="makePublic()" *ngIf="!questionnaireForm.get('public').value">Public</button>
-                                    <button type="button" class="btn btn-danger" (click)="cancelPublic()" *ngIf="questionnaireForm.get('public').value">Cancel</button>
+                                    <button type="button" mat-stroked-button (click)="makePublic()" *ngIf="!questionnaireForm.get('public').value">PUBLIC</button>
+                                    <button type="button" mat-stroked-button color="warn" (click)="cancelPublic()" *ngIf="questionnaireForm.get('public').value">CANCEL</button>
                                 </div>
                                 <div class="form-group col">
 
@@ -151,13 +82,13 @@
                                         <small><b>Id Question: </b>{{question.questionId}}</small>
                                     </div>
                                     <div class="col">
-                                        <button type="button" class="btn btn-danger" (click)="deleteQuestion(question)">Delete</button>
+                                        <button type="button" mat-stroked-button color="warn" (click)="deleteQuestion(question)">Delete</button>
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-success float-right mt-3" *ngIf="!editQuestionnaire" [ngClass]="{'disabled': !questionnaireForm.valid}">Create</button>
-                            <button type="submit" class="btn btn-success float-right mt-3" *ngIf="editQuestionnaire" [ngClass]="{'disabled': !questionnaireForm.valid}">Edit</button>
-                            <button type="button" class="btn btn-danger float-right mt-3 mr-1" *ngIf="editQuestionnaire" (click)="clearForm()">Cancel</button>
+                            <button type="submit" mat-raised-button color="primary" class="mt-2" style="float: right;" *ngIf="!editQuestionnaire" [ngClass]="{'disabled': !questionnaireForm.valid}">SAVE</button>
+                            <button type="submit" mat-raised-button color="primary" class="mt-2" style="float: right;" *ngIf="editQuestionnaire" [ngClass]="{'disabled': !questionnaireForm.valid}">SAVE</button>
+                            <button type="button" mat-button color="warn" class="float-right mt-2 mr-1" *ngIf="editQuestionnaire" (click)="clearForm()">CANCEL</button>
                         </form>
                     </div>
                 </div>
@@ -185,9 +116,9 @@
                             <p class="mb-1">{{q.instructions}}</p>
                         </div>
                         <div class="col">
-                            <button class="btn btn-success mr-1" (click)="loadQuestionnaire(q, false)">Load</button>
-                            <button class="btn btn-info mr-1" (click)="loadQuestionnaire(q, true)">Edit</button>
-                            <button class="btn btn-danger" (click)="deleteQuestionnaire(q)">Delete</button>
+                            <button mat-stroked-button color="primary" class="mr-1" (click)="loadQuestionnaire(q, false)">Load</button>
+                            <button mat-stroked-button color="primary" class="mr-1" (click)="loadQuestionnaire(q, true)">Edit</button>
+                            <button mat-stroked-button color="warn" (click)="deleteQuestionnaire(q)">Delete</button>
                         </div>
                     </div>
                 </div>

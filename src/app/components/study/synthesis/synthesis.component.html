@@ -65,6 +65,6 @@
 </div>
 <hr>
 <div mat-dialog-actions align="end">
-    <button class="btn btn-danger mr-2" (click)="onNoClick()" cdkFocusInitial>Cancel</button>
-    <button class="btn btn-success " (click)="save()" [ngClass]="{'disabled': !synthesisForm.valid}">Save</button>
+    <button mat-button color="warn" class="btn btn-danger mr-2" (click)="onNoClick()" cdkFocusInitial>CANCEL</button>
+    <button mat-raised-button color="primary" (click)="save()" [ngClass]="{'disabled': !synthesisForm.valid}">SAVE</button>
 </div>

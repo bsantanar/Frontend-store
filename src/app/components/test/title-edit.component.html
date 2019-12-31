@@ -3,6 +3,5 @@
         <input matInput placeholder="New Title" value="{{data.title}}" formControlName="title">
     </mat-form-field>
 
-    <button (click)="saveTitle()" class="btn btn-success" style="float: right">Save</button>
-    <button (click)="onNoClick()" type="button" class="btn btn-danger">Cancel</button>
+    <button (click)="saveTitle()" mat-raised-button color="primary" style="float: right">Save</button>
 </form>

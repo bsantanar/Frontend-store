@@ -14,9 +14,6 @@ export class CustomComponent implements OnInit {
   ngOnInit() {
   }
 
-  backClicked() {
-    this.location.back();
-  }
 
   newTest(){
     this.router.navigate(['test']);

@@ -12,7 +12,7 @@ export class UploadComponent implements OnInit {
 
   serviceUsed;
   canBeClosed = true
-  primaryButtonText = 'Upload'
+  primaryButtonText = 'UPLOAD'
   showCancelButton = true
   uploading = false
   uploadSuccessful = false

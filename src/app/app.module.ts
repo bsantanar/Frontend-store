@@ -57,6 +57,8 @@ import { StoreAssetsComponent } from './components/template/store-assets/store-a
 import { PreviewAssetComponent } from './components/template/preview-asset/preview-asset.component';
 import { PreviewComponent } from './components/document/preview/preview.component';
 import { PublishComponent } from './components/publish/publish.component';
+import { CreatedQuestionsComponent } from './components/test/created-questions/created-questions.component';
+import { TestStoreComponent } from './components/test/test-store/test-store.component';
 
 @NgModule({
   entryComponents: [
@@ -82,7 +84,9 @@ import { PublishComponent } from './components/publish/publish.component';
     AddStudyStoreComponent,
     CreatedStagesComponent,
     PreviewAssetComponent,
-    PreviewComponent
+    PreviewComponent,
+    CreatedQuestionsComponent,
+    TestStoreComponent
   ],
   declarations: [
     AppComponent,
@@ -121,31 +125,16 @@ import { PublishComponent } from './components/publish/publish.component';
     StoreAssetsComponent,
     PreviewAssetComponent,
     PreviewComponent,
-    PublishComponent
+    PublishComponent,
+    CreatedQuestionsComponent,
+    TestStoreComponent
   ],
   imports: [
-    HttpClientModule,
-    BrowserModule,
-    AppRoutingModule,
-    MatStepperModule,
-    MatButtonModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatProgressBarModule,
-    MatListModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgbModalModule,
-    MatDialogModule, 
-    DragDropModule,
-    MatSelectModule, 
-    MatOptionModule,
-    CodemirrorModule,
-    QuillModule,
-    TagInputModule,
-    MatCheckboxModule,
-    MatButtonToggleModule
+    HttpClientModule, BrowserModule, AppRoutingModule, MatStepperModule, MatButtonModule, MatInputModule,
+    MatFormFieldModule,MatProgressBarModule,MatListModule,BrowserAnimationsModule,
+    FormsModule,ReactiveFormsModule,NgbModalModule,MatDialogModule, DragDropModule,
+    MatSelectModule, MatOptionModule,CodemirrorModule,QuillModule,TagInputModule,
+    MatCheckboxModule,MatButtonToggleModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

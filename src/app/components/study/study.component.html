@@ -2,9 +2,6 @@
     <div class="col">
         <h1>Study Manager</h1>
     </div>
-    <div class="col">
-        <button class="btn btn-danger" (click)="backClicked()" style="float: right">Back</button>
-    </div>
 </div>
 <div class="row">
     <div class="col">
@@ -19,13 +16,9 @@
 <div class="row ml-3">
     <div class="col">
 
-        <button class="btn btn-success mr-3" (click)="activateNewStage()">New Stage</button>
-        <button class="btn btn-secondary mr-3" (click)="activateRepository()">Repository</button>
-        <button class="btn btn-info" (click)="activateStore()">Neurone Store</button>
-    </div>
-    <div class="col">
-
-        <button class="btn btn-danger" (click)="hideStages()" style="float: right" *ngIf="showHide">Hide</button>
+        <button mat-stroked-button color="primary" class="mr-3" (click)="activateNewStage()">NEW STAGE</button>
+        <button mat-stroked-button color="primary" class="mr-3" (click)="activateRepository()">REPOSITORY</button>
+        <button mat-stroked-button color="primary" (click)="activateStore()">NEURONE STORE</button>
     </div>
 </div>
 
@@ -127,8 +120,8 @@
                     <hr>
                     <div class="row">
                         <div class="col-2">
-                            <button class="btn btn-info" type="button" (click)="makePublic()" *ngIf="!studyForm.get('public').value">Public</button>
-                            <button class="btn btn-danger" type="button" (click)="cancelPublic()" *ngIf="studyForm.get('public').value">Cancel</button>
+                            <button mat-stroked-button type="button" (click)="makePublic()" *ngIf="!studyForm.get('public').value">PUBLIC</button>
+                            <button mat-stroked-button color="warn" type="button" (click)="cancelPublic()" *ngIf="studyForm.get('public').value">CANCEL</button>
                         </div>
                         <div class="form-group col">
 
@@ -242,14 +235,14 @@
                                 <small *ngIf="stage.time != -1">Time: {{stage.time}} minutes</small>
                             </div>
                             <div class="col">
-                                <button class="btn btn-info mr-2" type="button" (click)="newStage(stage.state, stage)">Edit</button>
-                                <button class="btn btn-danger" type="button" (click)="deleteStage(stage)">Delete</button>
+                                <button mat-stroked-button color="primary" class="mr-2" type="button" (click)="newStage(stage.state, stage)">Edit</button>
+                                <button mat-stroked-button color="warn" type="button" (click)="deleteStage(stage)">Delete</button>
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-success float-right mt-3" *ngIf="!isEdit" type="submit" [ngClass]="{'disabled': !studyForm.valid}">Create</button>
-                    <button class="btn btn-success float-right mt-3 ml-1" *ngIf="isEdit" type="button" (click)="editStudy()" [ngClass]="{'disabled': !studyForm.valid}">Save</button>
-                    <button class="btn btn-danger float-right mt-3" *ngIf="isEdit" type="button" (click)="clearForm()">Cancel</button>
+                    <button mat-raised-button color="primary" class="float-right mt-3" *ngIf="!isEdit" type="submit" [ngClass]="{'disabled': !studyForm.valid}">SAVE</button>
+                    <button mat-raised-button color="primary" class="float-right mt-3 ml-1" *ngIf="isEdit" type="button" (click)="editStudy()" [ngClass]="{'disabled': !studyForm.valid}">SAVE</button>
+                    <button mat-button color="warn" class="float-right mt-3" *ngIf="isEdit" type="button" (click)="clearForm()">CANCEL</button>
                 </form>
             </div>
         </div>
@@ -275,8 +268,8 @@
                 <p class="mb-1">Task: <b>{{study.task.name}}</b>. Domain: <b>{{study.domain.name}}</b>. Locale: <b>{{study.locale.name}}</b>. With <b>{{study.stages.length}} stages</b>.</p>
             </div>
             <div class="col">
-                <button class="btn btn-success mr-3" (click)="loadStudy(study)">Edit</button>
-                <button class="btn btn-danger" (click)="deleteStudy(study)">Delete</button>
+                <button mat-stroked-button color="primary" class="mr-3" (click)="loadStudy(study)">Edit</button>
+                <button mat-stroked-button color="warn" (click)="deleteStudy(study)">Delete</button>
             </div>
         </div>
     </div>

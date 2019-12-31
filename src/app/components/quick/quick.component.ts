@@ -215,10 +215,6 @@ export class QuickComponent implements OnInit {
     });
   }
 
-  backClicked() {
-    this.location.back();
-  }
-
   createdStages(){
     let dialogRef = this.dialog.open(CreatedStagesComponent, {
       width: '700px'

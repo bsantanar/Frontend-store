@@ -84,7 +84,6 @@ export class StudyComponent implements OnInit {
   showNewStage: boolean;
   showRepository: boolean;
   showStore: boolean;
-  showHide: boolean;
   storeStudies = [];
   filterStore = [];
   myLocales = [];
@@ -106,7 +105,7 @@ export class StudyComponent implements OnInit {
     this.getMyModals();
     this.getMyStudies();
     this.getPublicStudies();
-    this.showNewStage = this.showRepository = this.showStore = this.showHide = false;
+    this.showNewStage = this.showRepository = this.showStore = false;
     this.studyForm = this.fb.group({
       id: ['New Study Title', Validators.required],
       locale: ['', Validators.required],
@@ -247,33 +246,29 @@ export class StudyComponent implements OnInit {
 
   activateNewStage(){
     if(this.showNewStage){
-      this.showNewStage = this.showRepository = this.showStore = this.showHide = false;
+      this.showNewStage = this.showRepository = this.showStore = false;
     } else{
-      this.showNewStage = this.showHide = true;
+      this.showNewStage = true;
       this.showRepository = this.showStore = false;
     }
   }
 
   activateRepository(){
     if(this.showRepository){
-      this.showNewStage = this.showRepository = this.showStore = this.showHide = false;
+      this.showNewStage = this.showRepository = this.showStore = false;
     } else{
-      this.showRepository = this.showHide = true;
+      this.showRepository = true;
       this.showNewStage = this.showStore = false;
     }
   }
 
   activateStore(){
     if(this.showStore){
-      this.showNewStage = this.showRepository = this.showStore = this.showHide = false;
+      this.showNewStage = this.showRepository = this.showStore = false;
     } else{
-      this.showStore = this.showHide = true;
+      this.showStore = true;
       this.showRepository = this.showNewStage = false;
     }
-  }
-
-  hideStages(){
-    this.showNewStage = this.showRepository = this.showStore = this.showHide = false;
   }
 
   clearForm(){
@@ -284,10 +279,6 @@ export class StudyComponent implements OnInit {
     while (this.getStagesForm.length > 0){
       this.getStagesForm.removeAt(0);
     }
-  }
-
-  backClicked() {
-    this.location.back();
   }
 
   makePublic(){

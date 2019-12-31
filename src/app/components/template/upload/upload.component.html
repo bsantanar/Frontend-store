@@ -1,8 +1,9 @@
 <input type="file" #file style="display: none" (change)="onFilesAdded()" multiple />
 <h1>Upload Files</h1>
+<hr>
 <div>
-    <button [disabled]="uploading || uploadSuccessful" class="add-files-btn btn btn-success" (click)="addFiles()">
-        Add Files
+    <button [disabled]="uploading || uploadSuccessful" mat-raised-button color="primary" (click)="addFiles()">
+        ADD FILES
       </button>
 </div>
 
@@ -23,8 +24,8 @@
 </div>
 <!-- This are the actions of the dialog, containing the primary and the cancel button-->
 <mat-dialog-actions align="end" class="mt-3">
-    <button *ngIf="showCancelButton" class="btn btn-danger mr-2" mat-dialog-close>Cancel</button>
-    <button class="btn btn-success" [disabled]="!canBeClosed" (click)="closeDialog()">
+    <button *ngIf="showCancelButton" mat-button color="warn" mat-dialog-close>CANCEL</button>
+    <button mat-button color="primary" [disabled]="!canBeClosed" (click)="closeDialog()">
         {{primaryButtonText}}
       </button>
 </mat-dialog-actions>
