@@ -120,7 +120,8 @@ export class StoreAssetsComponent implements OnInit {
         width: '900px',
         data: {
           fileName,
-          type
+          type,
+          public: true
         }
       });
       dialogRef.afterClosed().subscribe();

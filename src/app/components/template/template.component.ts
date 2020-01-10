@@ -8,6 +8,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import Swal from 'sweetalert2';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { ExampleComponent } from './example/example.component';
+import { PreviewAssetComponent } from './preview-asset/preview-asset.component';
 
 @Component({
   selector: 'app-template',
@@ -141,6 +142,18 @@ export class TemplateComponent implements OnInit, AfterViewInit {
         break;
       }
     }
+  }
+
+  previewAsset(fileName: string, type: number){
+    const dialogRef = this.dialog.open(PreviewAssetComponent, {
+        width: '900px',
+        data: {
+          fileName,
+          type,
+          public: false
+        }
+      });
+      dialogRef.afterClosed().subscribe();
   }
 
   downloadAsset(name: string){

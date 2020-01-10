@@ -17,7 +17,7 @@
         </mat-button-toggle-group>
     </div>
     <div class="col">
-        <button style="float: right" type="button" class="btn btn-info" (click)="loadAssetsStore()">Refresh Store</button>
+        <button style="float: right" type="button" mat-stroked-button (click)="loadAssetsStore()">Refresh Store</button>
     </div>
 </div>
 <input type="text" name="search" id="search" class="form-control mt-3" *ngIf="group.value" placeholder="Search asset by name..." (keyup)="searchAssetStore(searchStore.value)" #searchStore>
@@ -32,8 +32,8 @@
             <p class="mb-1"><b>Info...</b></p>
         </div>
         <div class="col">
-            <button class="btn btn-info mr-1" (click)="previewAsset(image, 4)">Preview</button>
-            <button class="btn btn-success mr-1" (click)="addAssetStore(image, 4)">Add To Your Assets</button>
+            <button mat-stroked-button color="primary" class="mr-1" (click)="previewAsset(image, 4)">Preview</button>
+            <button mat-raised-button color="primary" class="mr-1" (click)="addAssetStore(image, 4)">Add To Your Assets</button>
         </div>
     </div>
 </div>
@@ -47,8 +47,8 @@
             <p class="mb-1"><b>Info...</b></p>
         </div>
         <div class="col">
-            <button class="btn btn-info mr-1" (click)="previewAsset(modal, 2)">Preview</button>
-            <button class="btn btn-success mr-1" (click)="addAssetStore(modal, 2)">Add To Your Assets</button>
+            <button mat-stroked-button color="primary" class="mr-1" (click)="previewAsset(modal, 2)">Preview</button>
+            <button mat-raised-button color="primary" class="mr-1" (click)="addAssetStore(modal, 2)">Add To Your Assets</button>
         </div>
     </div>
 </div>
@@ -62,8 +62,8 @@
             <p class="mb-1"><b>Info...</b></p>
         </div>
         <div class="col">
-            <button class="btn btn-info mr-1" (click)="previewAsset(template, 3)">Preview</button>
-            <button class="btn btn-success mr-1" (click)="addAssetStore(template, 3)">Add To Your Assets</button>
+            <button mat-stroked-button color="primary" class="mr-1" (click)="previewAsset(template, 3)">Preview</button>
+            <button mat-raised-button color="primary" class="mr-1" (click)="addAssetStore(template, 3)">Add To Your Assets</button>
         </div>
     </div>
 </div>
@@ -77,8 +77,8 @@
             <p class="mb-1"><b>Info...</b></p>
         </div>
         <div class="col">
-            <button class="btn btn-info mr-1" (click)="previewAsset(locale, 1)">Preview</button>
-            <button class="btn btn-success mr-1" (click)="addAssetStore(locale, 1)">Add To Your Assets</button>
+            <button mat-stroked-button color="primary" class="mr-1" (click)="previewAsset(locale, 1)">Preview</button>
+            <button mat-raised-button color="primary" class="mr-1" (click)="addAssetStore(locale, 1)">Add To Your Assets</button>
         </div>
     </div>
 </div>

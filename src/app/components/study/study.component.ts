@@ -6,6 +6,9 @@ import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@ang
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { TitleEditComponent } from '../test/title-edit.component';
 
+//utils
+import { UtilsService } from '../../services/utils.service';
+
 //Stages
 import { AffectiveComponent } from './affective/affective.component';
 import { CollectionComponent } from './collection/collection.component';
@@ -23,6 +26,9 @@ import { UploadService } from 'src/app/services/upload.service';
 import { StudyService } from 'src/app/services/study.service';
 import { StudyDetailComponent } from './study-detail/study-detail.component';
 import { AddStudyStoreComponent } from './add-study-store/add-study-store.component';
+import { NewStageComponent } from './new-stage/new-stage.component';
+import { CreatedStagesComponent } from '../quick/created-stages/created-stages.component';
+import { ListStudyStoreComponent } from './list-study-store/list-study-store.component';
 
 @Component({
   selector: 'app-study',
@@ -30,44 +36,6 @@ import { AddStudyStoreComponent } from './add-study-store/add-study-store.compon
   styleUrls: ['./study.component.css']
 })
 export class StudyComponent implements OnInit {
-
-  typesStages:any[] = [
-    {
-      type: 'Affective(SAM)',
-      id: 1
-    },
-    {
-      type: 'Task Questions',
-      id: 2
-    },
-    {
-      type: 'Instructions',
-      id: 3
-    },
-    {
-      type: 'Tutorial',
-      id: 4
-    },
-    {
-      type: 'Search',
-      id: 5
-    },
-    {
-      type: 'Collection',
-      id: 6
-    },
-    {
-      type: 'Critical Evaluation',
-      id: 7
-    },
-    {
-      type: 'Synthesis',
-      id: 8
-    },
-    {
-      type: 'End',
-      id: 9
-    }];
 
   stagesDB:any[] = [];
   createdStages;
@@ -95,7 +63,7 @@ export class StudyComponent implements OnInit {
 
   constructor(private location: Location, public dialog: MatDialog, private stageService: StagesService, 
     private fb: FormBuilder, private assetsService: AssetsService, private uploadService: UploadService,
-    private studyService: StudyService) {}
+    private studyService: StudyService, private utils: UtilsService) {}
 
   ngOnInit() {
     this.getMyStages();
@@ -179,6 +147,7 @@ export class StudyComponent implements OnInit {
         }
       );
     }
+    //console.log(this.studyForm.value);
     //console.log(this.stages);
   }
 
@@ -244,33 +213,6 @@ export class StudyComponent implements OnInit {
     );
   }
 
-  activateNewStage(){
-    if(this.showNewStage){
-      this.showNewStage = this.showRepository = this.showStore = false;
-    } else{
-      this.showNewStage = true;
-      this.showRepository = this.showStore = false;
-    }
-  }
-
-  activateRepository(){
-    if(this.showRepository){
-      this.showNewStage = this.showRepository = this.showStore = false;
-    } else{
-      this.showRepository = true;
-      this.showNewStage = this.showStore = false;
-    }
-  }
-
-  activateStore(){
-    if(this.showStore){
-      this.showNewStage = this.showRepository = this.showStore = false;
-    } else{
-      this.showStore = true;
-      this.showRepository = this.showNewStage = false;
-    }
-  }
-
   clearForm(){
     this.studyForm.reset();
     this.isEdit = false;
@@ -307,16 +249,33 @@ export class StudyComponent implements OnInit {
     //console.log(this.stages);
   }
 
+  openRepository(){
+    let dialogRef = this.dialog.open(CreatedStagesComponent, {
+      width: '700px'  
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        if(result.editable){
+          this.editStage(result);
+        } else if(result.delete){
+          this.deleteStageDB(result);
+        } else {
+          this.addStageDB(result);
+        }
+      }
+    });
+  }
+
   addStageDB(stage){
     let aux = stage;
-    aux['idAux'] = this.idAux;
+    aux.idAux = this.idAux;
     this.idAux++;
     this.stages.push(aux);
     this.getStagesForm.push(new FormControl(stage._id));
   }
 
-  newStage(typeName:string, stage = undefined){
-    let stageComp, dialogRef;
+  assignComponentStage(typeName){
+    let stageComp;
     switch (typeName){
       case 'Affective(SAM)':
         stageComp = AffectiveComponent;
@@ -346,48 +305,65 @@ export class StudyComponent implements OnInit {
         stageComp = TutorialComponent;
         break;
     }
-    if(stage != undefined){
-      dialogRef = this.dialog.open(stageComp, {
-        width: '600px',
-        data: {
-          typeName,
-          isEdit: true,
-          stage
-        }
-      });
-    } else {
-      dialogRef = this.dialog.open(stageComp, {
-        width: '600px',
-        data: {
-          typeName,
-          isEdit: false
-        }
-      });
-    }
+    return stageComp;
+  }
+
+  newStage(typeName:string = ''){
+    let stageComp, dialogType, dialogRef;
+    dialogType = this.dialog.open(NewStageComponent, {
+      width: '600px'
+    });
+    dialogType.afterClosed().subscribe(result => {
+      if(result){
+        typeName = result;
+        stageComp = this.assignComponentStage(typeName);
+        dialogRef = this.dialog.open(stageComp, {
+          width: '600px',
+          data: {
+            typeName,
+            isEdit: false
+          }
+        });
+        dialogRef.afterClosed().subscribe(result => {
+          if(result){
+              //console.log(result);
+              let aux = result;
+              aux['idAux'] = this.idAux;
+              this.idAux++;
+              this.stages.push(aux);
+              this.getMyStages();
+              this.getStagesForm.push(new FormControl(aux._id));
+          }
+        });
+      }
+    });
+  }
+
+  editStage(stage){
+    let stageComp, dialogRef;
+    stageComp = this.assignComponentStage(stage.state);
+    dialogRef = this.dialog.open(stageComp, {
+      width: '600px',
+      data: {
+        typeName: stage.state,
+        isEdit: true,
+        stage
+      }
+    });
     dialogRef.afterClosed().subscribe(result => {
       if(result){
-        if(stage != undefined){
-          this.getMyStages();
-          if(stage.user != this.currentUserId){
-            let index = this.stages.map( a => {
-                return a.idAux;
-              } ).indexOf(stage.idAux);
-            this.stages.splice(index, 1);
-            this.getStagesForm.removeAt(this.getStagesForm.value.findIndex(q => q == stage._id));
-            result.idAux = this.idAux++;
-            this.stages.push(result);
-            this.getStagesForm.push(new FormControl(result._id));
-          } else {
-            this.loadStudy(this.loadedStudy);
-          }
+        this.getMyStages();
+        if(stage.user != this.currentUserId){
+          let index = this.stages.map( a => {
+              return a.idAux;
+            } ).indexOf(stage.idAux);
+          this.stages.splice(index, 1);
+          this.getStagesForm.removeAt(this.getStagesForm.value.findIndex(q => q == stage._id));
+          result.idAux = this.idAux++;
+          this.stages.push(result);
+          this.getStagesForm.push(new FormControl(result._id));
         } else {
-          //console.log(result);
-          let aux = result;
-          aux['idAux'] = this.idAux;
-          this.idAux++;
-          this.stages.push(aux);
-          this.getMyStages();
-          this.getStagesForm.push(new FormControl(aux._id));
+          this.loadStudy(this.loadedStudy);
         }
       }
     });
@@ -410,22 +386,15 @@ export class StudyComponent implements OnInit {
     this.createdStages = this.stagesDB.filter(obj => obj.id.includes(name));
   }
 
-  searchTagStore(name: string){
-    if(name == ''){
-      this.filterStore = this.storeStudies;
-      return;
-    }
-    this.filterStore = this.storeStudies.filter(
-      q => q.tags.includes(name)
-    );
-  }
-
-  viewStudyStore(study: any){
-    const dialogRef = this.dialog.open(StudyDetailComponent, {
-      width: '900px',
-      data: study
+  openStore(){
+    const dialogRef = this.dialog.open(ListStudyStoreComponent, {
+      width: '800px'
     });
-    dialogRef.afterClosed().subscribe();
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.addStudyStore(result);
+      }
+    });
   }
 
   addStudyStore(study: any){
@@ -461,6 +430,7 @@ export class StudyComponent implements OnInit {
               this.stages.splice(index, 1);
             }
             this.getMyStages();
+            this.openRepository();
           }
         );
       }

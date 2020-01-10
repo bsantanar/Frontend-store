@@ -59,6 +59,8 @@ import { PreviewComponent } from './components/document/preview/preview.componen
 import { PublishComponent } from './components/publish/publish.component';
 import { CreatedQuestionsComponent } from './components/test/created-questions/created-questions.component';
 import { TestStoreComponent } from './components/test/test-store/test-store.component';
+import { NewStageComponent } from './components/study/new-stage/new-stage.component';
+import { ListStudyStoreComponent } from './components/study/list-study-store/list-study-store.component';
 
 @NgModule({
   entryComponents: [
@@ -86,7 +88,9 @@ import { TestStoreComponent } from './components/test/test-store/test-store.comp
     PreviewAssetComponent,
     PreviewComponent,
     CreatedQuestionsComponent,
-    TestStoreComponent
+    TestStoreComponent,
+    NewStageComponent,
+    ListStudyStoreComponent
   ],
   declarations: [
     AppComponent,
@@ -127,7 +131,9 @@ import { TestStoreComponent } from './components/test/test-store/test-store.comp
     PreviewComponent,
     PublishComponent,
     CreatedQuestionsComponent,
-    TestStoreComponent
+    TestStoreComponent,
+    NewStageComponent,
+    ListStudyStoreComponent
   ],
   imports: [
     HttpClientModule, BrowserModule, AppRoutingModule, MatStepperModule, MatButtonModule, MatInputModule,

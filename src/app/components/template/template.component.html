@@ -171,8 +171,9 @@
                     </div>
                 </div>
                 <div class="col">
-                    <button class="btn btn-success mr-3" (click)="downloadAsset(asset)">Download</button>
-                    <button class="btn btn-danger" (click)="deleteAsset(asset)">Delete</button>
+                    <button mat-stroked-button color="primary" class="mr-3" (click)="downloadAsset(asset)">Download</button>
+                    <button mat-stroked-button color="primary" class="mr-3" (click)="previewAsset(asset, assetType)">Preview</button>
+                    <button mat-stroked-button color="warn" (click)="deleteAsset(asset)">Delete</button>
                 </div>
             </div>
         </div>

@@ -16,7 +16,7 @@ export class PreviewAssetComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data, private uploadService: UploadService) { }
 
   ngOnInit() {
-    this.uploadService.downloadFile(this.data.fileName, this.data.type, true).subscribe(
+    this.uploadService.downloadFile(this.data.fileName, this.data.type, this.data.public).subscribe(
       res => {
         let blob;
         switch (this.data.type){

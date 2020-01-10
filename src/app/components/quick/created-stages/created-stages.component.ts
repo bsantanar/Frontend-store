@@ -27,6 +27,16 @@ export class CreatedStagesComponent implements OnInit {
     this.dialogRef.close(stage);
   }
 
+  editStage(stage:any){
+    stage.editable = true;
+    this.dialogRef.close(stage);
+  }
+
+  deleteStage(stage:any){
+    stage.delete = true;
+    this.dialogRef.close(stage);
+  }
+
   searchStage(name: string){
     this.stageFilter = this.myStages.filter(obj => obj.id.includes(name));
   }

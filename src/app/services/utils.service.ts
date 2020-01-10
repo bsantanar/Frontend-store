@@ -5,7 +5,43 @@ import { Injectable } from '@angular/core';
 })
 export class UtilsService {
 
-  
+  typesStages:any[] = [
+    {
+      type: 'Affective(SAM)',
+      id: 1
+    },
+    {
+      type: 'Task Questions',
+      id: 2
+    },
+    {
+      type: 'Instructions',
+      id: 3
+    },
+    {
+      type: 'Tutorial',
+      id: 4
+    },
+    {
+      type: 'Search',
+      id: 5
+    },
+    {
+      type: 'Collection',
+      id: 6
+    },
+    {
+      type: 'Critical Evaluation',
+      id: 7
+    },
+    {
+      type: 'Synthesis',
+      id: 8
+    },
+    {
+      type: 'End',
+      id: 9
+    }];
 
   typesQuestions:any[] = [
     {
@@ -49,6 +85,10 @@ export class UtilsService {
 
   getTypesQuestion(){
     return this.typesQuestions;
+  }
+
+  getTypesStages(){
+    return this.typesStages;
   }
 
 }

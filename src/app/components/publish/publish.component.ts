@@ -20,11 +20,13 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
 export class PublishComponent implements OnInit {
 
   clicked:boolean = false;
+  errorLoad:boolean = false;
   published:boolean = false;
   myStudies = [];
   myPublishes = [];
   activeStudy:any = null;
-  stateStudy:string = "This study is not published";
+  stateStudy:string = "Click to load components and publish the study";
+  errorMessage: string = "";
   publish:any = {};
   loadedItems:number = 0;
   totalItems:number = 2;
@@ -69,12 +71,24 @@ export class PublishComponent implements OnInit {
     let stage = this.activeStudy.stages[index];
     this.testService.getQuestionnaire(stage['questionnaire']).subscribe(
       res => {
+        if(stage['questionnaire'] == null){
+          this.errorMessage = "Questionnaire not found!";
+          this.errorLoad = true;
+          this.loadedItems--;
+          return;
+        }
         stage['questionnaire'] = res['questionnaire'];
         this.loadedItems++;
         this.totalItems += stage['questionnaire']['questions'].length;
         for (let i = 0; i < stage['questionnaire']['questions'].length; i++) {
           this.questionService.getQuestion(stage['questionnaire']['questions'][i]).subscribe(
             res => {
+              if(res['question'] == null){
+                this.errorMessage = "Question not found!";
+                this.errorLoad = true;
+                this.loadedItems--;
+                return;
+              }
               stage['questionnaire']['questions'][i] = res['question'];
               this.loadedItems++;
             }
@@ -89,6 +103,13 @@ export class PublishComponent implements OnInit {
     this.totalItems++;
     this.stageService.getStage(this.activeStudy.stages[index]).subscribe(
       res => {
+        console.log(res);
+        if(res['stage'] == null){
+          this.errorLoad = true;
+          this.errorMessage = "Stage not found!";
+          this.loadedItems--;
+          return;
+        }
         this.activeStudy.stages[index] = res['stage'];
         this.loadedItems++;
         if(res['stage']['questionnaire']) {
@@ -201,10 +222,11 @@ export class PublishComponent implements OnInit {
   }
 
   loadStudy(study: any){
-    this.clicked = this.published = false;
+    this.clicked = this.published = this.errorLoad = false;
     this.activeStudy = study;
     this.publish = {};
-    this.stateStudy = "This study is not published";
+    this.stateStudy = "Click to load components and publish the study";
+    this.errorMessage = "";
     this.loadedItems = 0;
     this.totalItems = 2;
   }
