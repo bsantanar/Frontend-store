@@ -207,6 +207,7 @@ export class PublishComponent implements OnInit {
         delete stage.stage;
       }
     }
+    this.publish.study.locale.path = `${this.publish.study.user}/application/locale-${this.publish.study.locale.code}.json`;
   }
 
   publishStudy(){

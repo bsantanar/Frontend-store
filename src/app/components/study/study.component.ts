@@ -147,7 +147,7 @@ export class StudyComponent implements OnInit {
         }
       );
     }
-    //console.log(this.studyForm.value);
+    console.log(this.studyForm.value);
     //console.log(this.stages);
   }
 
