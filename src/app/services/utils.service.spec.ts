@@ -2,11 +2,21 @@ import { TestBed } from '@angular/core/testing';
 
 import { UtilsService } from './utils.service';
 
-describe('UtilsService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+fdescribe('UtilsService', () => {
+  let service: UtilsService;
+  beforeEach( () =>{
+    service = new UtilsService();
+  });
 
   it('should be created', () => {
-    const service: UtilsService = TestBed.get(UtilsService);
     expect(service).toBeTruthy();
+  });
+
+  it('should receive list of types questions', () => {
+    expect(service.getTypesQuestion().length).toBeGreaterThan(0);
+  });
+
+  it('should receive list of stages', () => {
+    expect(service.getTypesStages().length).toBeGreaterThan(0);
   });
 });

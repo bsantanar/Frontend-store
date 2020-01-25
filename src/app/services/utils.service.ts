@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class UtilsService {
 
-  typesStages:any[] = [
+  private typesStages:any[] = [
     {
       type: 'Affective(SAM)',
       id: 1
@@ -43,7 +43,7 @@ export class UtilsService {
       id: 9
     }];
 
-  typesQuestions:any[] = [
+  private typesQuestions:any[] = [
     {
       type: 'Text',
       typeId: 1

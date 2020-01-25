@@ -33,7 +33,8 @@
                     <div class="col">
 
                         <select formControlName="localeCode" class="form-control" [ngClass]="{ 'is-invalid': f.localeCode.errors, 'is-valid': !f.localeCode.errors }">
-                                <option *ngFor="let locale of myLocales" [ngValue]="locale.code">{{locale.code}}</option>
+                            <option *ngIf="documentForm.value.localeCode" [ngValue]="documentForm.value.localeCode" selected>{{documentForm.value.localeCode}}</option>
+                            <option *ngFor="let locale of myLocales" [ngValue]="locale.code">{{locale.code}}</option>
                         </select>
                         <div *ngIf="f.localeCode.errors" class="invalid-feedback">
                             <div *ngIf="f.localeCode.errors.required">Locale Code is required</div>

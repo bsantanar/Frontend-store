@@ -16,7 +16,7 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.authService.profile().subscribe(
       res => {
-        this.user = res['user'];
+        this.user = (res as any).user;
         this.loggedIn = true;
       },
       err => {
