@@ -22,6 +22,7 @@ export class PublishComponent implements OnInit {
   clicked:boolean = false;
   errorLoad:boolean = false;
   published:boolean = false;
+  loading: boolean = false;
   myStudies = [];
   myPublishes = [];
   activeStudy:any = null;
@@ -36,6 +37,7 @@ export class PublishComponent implements OnInit {
     private stageService: StagesService, private publishService: PublishesService, private questionService: QuestionsService) { }
 
   ngOnInit() {
+    this.loading = true;
     this.getMyStudies();
     this.getMyPublishes();
   }
@@ -52,6 +54,7 @@ export class PublishComponent implements OnInit {
     this.studyService.getMyStudies().subscribe(
       res => {
         this.myStudies = res['studies'];
+        this.loading = false;
       }
     );
   }
@@ -103,8 +106,7 @@ export class PublishComponent implements OnInit {
     this.totalItems++;
     this.stageService.getStage(this.activeStudy.stages[index]).subscribe(
       res => {
-        console.log(res);
-        if(res['stage'] == null){
+        if(res == null || res['stage'] == null){
           this.errorLoad = true;
           this.errorMessage = "Stage not found!";
           this.loadedItems--;
@@ -123,7 +125,9 @@ export class PublishComponent implements OnInit {
   getDocs(){
     this.docService.getMyDocs().subscribe(
       res => {
-        this.publish.docs = res['documents'];
+        if((res as any)){
+          this.publish.docs = res['documents'];
+        }
         this.loadedItems++;
       },
       err => {}

@@ -6,7 +6,7 @@
 <hr>
 
 <h3>Your Study Flows</h3>
-<div class="text-center" *ngIf="myStudies.length == 0; else myStudiesList">
+<div class="text-center" *ngIf="loading; else myStudiesList">
     <div class="spinner-border" role="status">
         <span class="sr-only">Loading...</span>
     </div>
@@ -16,18 +16,20 @@
         <div class="col-4">
             <div class="limit-tab pl-3 pr-3">
                 <div class="list-group mt-3">
-                    <div class="list-group-item row" *ngFor="let study of myStudies">
-                        <div class="col">
-            
-                            <div class="d-flex w-100 justify-content-between">
-                                <h4 class="mb-1">{{study.id}}</h4>
+                    <div *ngIf="myStudies?.length > 0">
+                        <div class="list-group-item row" *ngFor="let study of myStudies">
+                            <div class="col">
+                
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h4 class="mb-1">{{study.id}}</h4>
+                                </div>
+                                <b></b>
+                                <p class="mb-1">Language file: <b>{{study.locale.name}}</b>. With <b>{{study.stages.length}} stages</b>.</p>
                             </div>
-                            <b></b>
-                            <p class="mb-1">Language file: <b>{{study.locale.name}}</b>. With <b>{{study.stages.length}} stages</b>.</p>
-                        </div>
-                        <div class="col">
-                            <button mat-stroked-button class="mr-3" (click)="viewStudyDetails(study)">Details</button>
-                            <button mat-stroked-button color="primary" class="mr-3" (click)="loadStudy(study)">Load</button>
+                            <div class="col">
+                                <button mat-stroked-button class="mr-3" (click)="viewStudyDetails(study)">Details</button>
+                                <button mat-stroked-button color="primary" class="mr-3" (click)="loadStudy(study)">Load</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -73,17 +75,19 @@
 
             <div class="limit-tab pl-3 pr-3">
                 <div class="list-group mt-3">
-                    <div class="list-group-item row" *ngFor="let publish of myPublishes">
-                        <div class="col">
-            
-                            <div class="d-flex w-100 justify-content-between">
-                                <h4 class="mb-1">{{publish.study.id}}</h4>
+                    <div *ngIf="myPublishes?.length > 0">
+                        <div class="list-group-item row" *ngFor="let publish of myPublishes">
+                            <div class="col">
+                
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h4 class="mb-1">{{publish.study.id}}</h4>
+                                </div>
+                                <b></b>
+                                <p class="mb-1">Language file: <b>{{publish.study.locale.name}}</b>. With <b>{{publish.stages.length}} stages</b>.</p>
                             </div>
-                            <b></b>
-                            <p class="mb-1">Language file: <b>{{publish.study.locale.name}}</b>. With <b>{{publish.stages.length}} stages</b>.</p>
-                        </div>
-                        <div class="col">
-                            <button mat-stroked-button color="warn" class="mr-3" (click)="deletePublish(publish)">Delete</button>
+                            <div class="col">
+                                <button mat-stroked-button color="warn" class="mr-3" (click)="deletePublish(publish)">Delete</button>
+                            </div>
                         </div>
                     </div>
                 </div>
