@@ -112,6 +112,7 @@ export class PublishComponent implements OnInit {
       res => {
         let synthesis = res['synthesis'].filter(a => stage.form == a._id);
         this.publish.synthesis.push(synthesis[0]);
+        stage.form = synthesis[0].synthesisId;
         this.loadedItems++;
       }, err => {}
     );
@@ -203,6 +204,7 @@ export class PublishComponent implements OnInit {
           this.publish.questions.push(stage.form.questions[i]);
           stage.form.questions[i] = stage.form.questions[i].questionId;
         }
+        stage.form = stage.form.questionnaireId;
       }
       if(stage.slides){
         for (let i = 0; i < stage.slides.length; i++) {
