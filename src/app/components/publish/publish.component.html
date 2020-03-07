@@ -58,7 +58,7 @@
             </div>
             <div class="progress" *ngIf="loadedItems > 0">
                 <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" [style.width]="(loadedItems/totalItems)*100 + '%'">
-                    {{(loadedItems/totalItems)*100}}%
+                    {{formatNumber(loadedItems/totalItems)}}%
                 </div>
             </div>
             <div class="alert alert-danger" role="alert" *ngIf="errorLoad">

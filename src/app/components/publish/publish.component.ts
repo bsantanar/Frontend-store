@@ -11,6 +11,7 @@ import { StagesService } from 'src/app/services/stages.service';
 import { PublishesService } from 'src/app/services/publishes.service';
 import { QuestionsService } from 'src/app/services/questions.service';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { SynthesisService } from 'src/app/services/synthesis.service';
 
 @Component({
   selector: 'app-publish',
@@ -34,7 +35,8 @@ export class PublishComponent implements OnInit {
 
   constructor(private location: Location, private studyService: StudyService, private dialog: MatDialog,
     private userService: AuthService, private docService: DocumentsService, private testService: QuestionnairesService,
-    private stageService: StagesService, private publishService: PublishesService, private questionService: QuestionsService) { }
+    private stageService: StagesService, private publishService: PublishesService, private questionService: QuestionsService,
+    private synthService: SynthesisService) { }
 
   ngOnInit() {
     this.loading = true;
@@ -72,19 +74,20 @@ export class PublishComponent implements OnInit {
   getTestInfo(index: number){
     this.totalItems++;
     let stage = this.activeStudy.stages[index];
-    this.testService.getQuestionnaire(stage['questionnaire']).subscribe(
+    console.log(stage);
+    this.testService.getQuestionnaire(stage['form']).subscribe(
       res => {
-        if(stage['questionnaire'] == null){
+        if(res['questionnaire'] == null){
           this.errorMessage = "Questionnaire not found!";
           this.errorLoad = true;
           this.loadedItems--;
           return;
         }
-        stage['questionnaire'] = res['questionnaire'];
+        stage['form'] = res['questionnaire'];
         this.loadedItems++;
-        this.totalItems += stage['questionnaire']['questions'].length;
-        for (let i = 0; i < stage['questionnaire']['questions'].length; i++) {
-          this.questionService.getQuestion(stage['questionnaire']['questions'][i]).subscribe(
+        this.totalItems += stage['form']['questions'].length;
+        for (let i = 0; i < stage['form']['questions'].length; i++) {
+          this.questionService.getQuestion(stage['form']['questions'][i]).subscribe(
             res => {
               if(res['question'] == null){
                 this.errorMessage = "Question not found!";
@@ -92,7 +95,7 @@ export class PublishComponent implements OnInit {
                 this.loadedItems--;
                 return;
               }
-              stage['questionnaire']['questions'][i] = res['question'];
+              stage['form']['questions'][i] = res['question'];
               this.loadedItems++;
             }
           );  
@@ -102,10 +105,24 @@ export class PublishComponent implements OnInit {
     );
   }
 
+  getSynthInfo(index: number){
+    this.totalItems++;
+    let stage = this.activeStudy.stages[index];
+    this.synthService.getMySynthesis().subscribe(
+      res => {
+        let synthesis = res['synthesis'].filter(a => stage.form == a._id);
+        this.publish.synthesis.push(synthesis);
+        this.loadedItems++;
+      }, err => {}
+    );
+
+  }
+
   getStageInfo(index: number){
     this.totalItems++;
     this.stageService.getStage(this.activeStudy.stages[index]).subscribe(
       res => {
+        //console.log(res);
         if(res == null || res['stage'] == null){
           this.errorLoad = true;
           this.errorMessage = "Stage not found!";
@@ -114,8 +131,12 @@ export class PublishComponent implements OnInit {
         }
         this.activeStudy.stages[index] = res['stage'];
         this.loadedItems++;
-        if(res['stage']['questionnaire']) {
-          this.getTestInfo(index);
+        if(res['stage']['form']) {
+          if(res['stage']['state'] === 'Synthesis'){
+            this.getSynthInfo(index);
+          } else {
+            this.getTestInfo(index);
+          }
         }
       },
       err => {}
@@ -149,6 +170,7 @@ export class PublishComponent implements OnInit {
     //this.publish.password = this.activeStudy._id;
     this.publish.questionnaires = [];
     this.publish.questions = [];
+    this.publish.synthesis = [];
     this.publish.user = localStorage.getItem('userId');
     this.getUserInfo();
     this.getDocs();
@@ -221,6 +243,7 @@ export class PublishComponent implements OnInit {
       res => {
         this.published = true;
         this.getMyPublishes();
+        console.log(res);
       },
       err => {}
     );
@@ -250,6 +273,10 @@ export class PublishComponent implements OnInit {
         );
       }
     });
+  }
+
+  formatNumber(percentage: number){
+    return Math.round(percentage*100);
   }
 
 }
