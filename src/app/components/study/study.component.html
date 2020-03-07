@@ -67,27 +67,28 @@
                         <div class="form-group col">
                             <label for="">Flow Language (Locale File)</label>
                             <select formControlName="locale" class="form-control" [ngClass]="{ 'is-invalid': studyForm.controls.locale.errors, 'is-valid': !studyForm.controls.locale.errors }">
-                                <option *ngIf="studyForm.value.locale" [ngValue]="studyForm.value.locale" selected>{{studyForm.value.locale.name}} ({{studyForm.value.locale.code}})</option>
+                                <option value="" disabled>Choose a language</option>
                                 <option *ngFor="let local of myLocales" [ngValue]="local">{{local.name}} ({{local.code}})</option>
                             </select>
                         </div>
                         <div class="form-group col">
                             <label for="">Flow Domain</label>
                             <select formControlName="domain" class="form-control" [ngClass]="{ 'is-invalid': studyForm.controls.domain.errors, 'is-valid': !studyForm.controls.domain.errors }">
-                                <option *ngIf="studyForm.value.domain" [ngValue]="studyForm.value.domain" selected>{{studyForm.value.domain.name}}</option>
+                                <option value="" disabled>Choose a domain</option>
                                 <option *ngFor="let domain of myDomains" [ngValue]="domain">{{domain.name}}</option>
                             </select>
                         </div>
                         <div class="form-group col">
                             <label for="">Flow Task</label>
                             <select formControlName="task" class="form-control" [ngClass]="{ 'is-invalid': studyForm.controls.task.errors, 'is-valid': !studyForm.controls.task.errors }">
-                                <option *ngIf="studyForm.value.task" [ngValue]="studyForm.value.task" selected>{{studyForm.value.task.name}}</option>
+                                <option value="" disabled>Choose a task</option>
                                 <option *ngFor="let tsk of myTasks" [ngValue]="tsk">{{tsk.name}}</option>
                             </select>
                         </div>
                         <div class="form-group col">
                             <label for="">Flow Default Modal</label>
                             <select formControlName="taskPage" class="form-control" [ngClass]="{ 'is-invalid': studyForm.controls.taskPage.errors, 'is-valid': !studyForm.controls.taskPage.errors }">
+                                <option value="" disabled>Choose a modal</option>
                                 <option *ngFor="let modal of myModals" [ngValue]="modal">{{modal}}</option>
                             </select>
                         </div>
@@ -168,7 +169,7 @@
                                 <small *ngIf="stage.time != -1">Time: {{stage.time}} minutes</small>
                             </div>
                             <div class="col">
-                                <button mat-stroked-button color="primary" class="mr-2" type="button" (click)="editStage(stage.state, stage)">Edit</button>
+                                <button mat-stroked-button color="primary" class="mr-2" type="button" (click)="editStage(stage)">Edit</button>
                                 <button mat-stroked-button color="warn" type="button" (click)="deleteStage(stage)">Delete</button>
                             </div>
                         </div>
@@ -201,7 +202,7 @@
                 <p class="mb-1">Task: <b>{{study.task.name}}</b>. Domain: <b>{{study.domain.name}}</b>. Locale: <b>{{study.locale.name}}</b>. With <b>{{study.stages.length}} stages</b>.</p>
             </div>
             <div class="col">
-                <button mat-stroked-button color="primary" class="mr-3" (click)="loadStudy(study)">Edit</button>
+                <button type="button" mat-stroked-button color="primary" class="mr-3" (click)="loadStudy(study)">Edit</button>
                 <button mat-stroked-button color="warn" (click)="deleteStudy(study)">Delete</button>
             </div>
         </div>

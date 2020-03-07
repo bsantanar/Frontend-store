@@ -74,7 +74,7 @@ export class PublishComponent implements OnInit {
   getTestInfo(index: number){
     this.totalItems++;
     let stage = this.activeStudy.stages[index];
-    console.log(stage);
+    //console.log(stage);
     this.testService.getQuestionnaire(stage['form']).subscribe(
       res => {
         if(res['questionnaire'] == null){
@@ -195,13 +195,13 @@ export class PublishComponent implements OnInit {
     }
     for (const stage of this.publish.study.stages) {
       delete stage._id;
-      if(stage.questionnaire){
-        delete stage.questionnaire._id;
-        this.publish.questionnaires.push(stage.questionnaire);
-        for (let i = 0; i < stage.questionnaire.questions.length; i++) {
-          delete stage.questionnaire.questions[i]._id;
-          this.publish.questions.push(stage.questionnaire.questions[i]);
-          stage.questionnaire.questions[i] = stage.questionnaire.questions[i].questionId;
+      if(stage.form && stage.state != 'Synthesis'){
+        delete stage.form._id;
+        this.publish.questionnaires.push(stage.form);
+        for (let i = 0; i < stage.form.questions.length; i++) {
+          delete stage.form.questions[i]._id;
+          this.publish.questions.push(stage.form.questions[i]);
+          stage.form.questions[i] = stage.form.questions[i].questionId;
         }
       }
       if(stage.slides){
@@ -238,7 +238,7 @@ export class PublishComponent implements OnInit {
 
   publishStudy(){
     this.cleanPublish();
-    //console.log(this.publish);
+    console.log(this.publish);
     this.publishService.newPublish(this.publish).subscribe(
       res => {
         this.published = true;
