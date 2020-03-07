@@ -111,7 +111,7 @@ export class PublishComponent implements OnInit {
     this.synthService.getMySynthesis().subscribe(
       res => {
         let synthesis = res['synthesis'].filter(a => stage.form == a._id);
-        this.publish.synthesis.push(synthesis);
+        this.publish.synthesis.push(synthesis[0]);
         this.loadedItems++;
       }, err => {}
     );
