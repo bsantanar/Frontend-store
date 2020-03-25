@@ -14,11 +14,14 @@ export class NewStageComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<NewStageComponent>, private utils: UtilsService) { }
 
   ngOnInit() {
+    //Carga de tipos de etapas
     this.typesStages = this.utils.getTypesStages();
   }
+  //Cierre de componente
   onNoClick(){
     this.dialogRef.close();
   }
+  //Eleccion de tipo de etapa y envio de dato al padre
   loadStageType(){
     this.dialogRef.close(this.selectedType.type);
   }

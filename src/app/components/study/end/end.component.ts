@@ -17,6 +17,7 @@ export class EndComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data, private stageService: StagesService) { }
 
   ngOnInit() {
+    //Formulario de etapa 'end'
     this.endForm = this.fb.group({
       id: ['', Validators.compose([Validators.required, Validators.minLength(3)])],
       time: [-1, Validators.compose([Validators.required, Validators.min(-1)])]

@@ -308,15 +308,20 @@ export class StudyComponent implements OnInit {
     return stageComp;
   }
 
+  //Funcion que intercambia data con dos componentes instanciados desde la misma
   newStage(typeName:string = ''){
     let stageComp, dialogType, dialogRef;
+    //Componente instanciado para obtener el tipo de etapa
     dialogType = this.dialog.open(NewStageComponent, {
       width: '600px'
     });
+    //Apertura del componente
     dialogType.afterClosed().subscribe(result => {
+      //Si recibe un tipo de etapa se genera un nuevo componente con el formulario correspondiente
       if(result){
         typeName = result;
         stageComp = this.assignComponentStage(typeName);
+        //Nueva llamada al componente en base al tipo de etapa
         dialogRef = this.dialog.open(stageComp, {
           width: '600px',
           data: {
@@ -324,6 +329,7 @@ export class StudyComponent implements OnInit {
             isEdit: false
           }
         });
+        //Cuando es completada la data y enviada al padre se guarda la nueva etapa
         dialogRef.afterClosed().subscribe(result => {
           if(result){
               //console.log(result);
